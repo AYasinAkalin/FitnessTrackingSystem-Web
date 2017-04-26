@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python   
 # -*- coding: utf-8 -*-
 
 from flask import Flask,render_template,request,session
@@ -33,7 +33,12 @@ def login():
             session["trainers"]=trainers
             return render_template("adminprofile.html",admin=response,trainers=trainers)
         elif role==1: #the user is trainer
-            return "trainer page"
+
+            cursor.execute("select id,name,surname from trainees ") # get trainees sql
+            trainees = cursor.fetchall()
+            session["user"] = response
+            session["trainees"] = trainees
+            return render_template("trainerprofile.html" , trainer = response , trainees = trainees)
 
 @app.route("/addtrainer",methods=["GET","POST"])
 def addtrainer():
@@ -55,6 +60,37 @@ def addtrainer():
         trainers=cursor.fetchall()
         session["trainers"]=trainers
     return render_template("adminprofile.html",admin=session["user"],trainers=session["trainers"])
+
+@app.route("/addtrainee",methods=["GET","POST"])
+def addtrainee():
+    if request.method=='GET':
+        return render_template("addtrainee.html")
+    else:
+        name = request.form["name"]
+        surname = request.form["surname"]
+        email = request.form["email"]
+        password = request.form["password"]
+        telephone = request.form["telephone"]
+        weight = request.form["weight"]
+        height = request.form["height"]
+        additional_info = request.form["info"]
+        cursor=mysql.get_db().cursor()
+        sql="Insert into trainees(name,surname,email,telephone,weight,height,info) values('%s','%s','%s','%s',%s,%s,'%s')" %(name,surname,email,telephone,weight,height,additional_info)
+        print sql
+        cursor.execute(sql)
+        mysql.get_db().commit()
+        
+        cursor.execute("select id,name,surname from trainees") #get trainees sql
+        trainers=cursor.fetchall()
+        session["trainees"]=trainees
+    return render_template("trainerprofile.html",trainers=session["user"],trainees=session["trainees"])
+
+def add_program() :
+    pass
+
+def add_event() :
+    pass
+
 
 if __name__ == "__main__":
     app.run()
