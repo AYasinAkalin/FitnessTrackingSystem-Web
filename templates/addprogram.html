@@ -1,0 +1,123 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<html>
+<head>
+<title>Add Program</title>
+</head>
+<body>
+
+
+<div class="container">    
+            
+    <div id="signupbox" style=" margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">Add Program</div>
+                <br>
+            </div>  
+            <div class="panel-body" >
+                <form method="post" action="add_program">
+					<form name= "Trainee" method = "get" action= "add_program">
+                  			{% for trainee in trainees %}
+							<tr>
+							<td>{{loop.index}}</td>
+							<td>{{trainee[0]}}</td>
+							<td>{{trainee[1]}}</td>
+							{%endfor%}
+                  </select> 
+                   <br>
+				   <br>
+                	<form  class="form-horizontal" method="post" action="add_program">
+                    	<form name= "Date" method = "get" action= "add_program">
+                    		Year : <select name="Year">
+                    		<option> 2017 </option>
+                    		<option> 2018 </option>
+                    		<option> 2019 </option>
+                    		<option> 2020 </option>
+                    		<option> 2021 </option>
+                    		<option> 2022 </option>
+                    		<option> 2023 </option>
+                    		<option> 2024 </option>
+                    		</select>
+                    		<br>
+                    		<br>
+                    		Month : <select name="Month">
+                    		<option> January </option>
+                    		<option> February </option>
+                    		<option> March </option>
+                    		<option> April </option>
+                    		<option> May </option>
+                    		<option> June </option>
+                    		<option> July </option>
+                    		<option> August </option>
+                    		<option> September </option>
+                    		<option> October </option>
+                    		<option> November </option>
+                    		<option> December </option>                   		
+                    		</select>
+                    		<br>
+                    		<br>
+                    		Day : <select name= "Day">
+                    		<option> 1 </option>
+                    		<option> 2 </option>
+                    		<option> 3 </option>
+                    		<option> 4 </option>
+                    		<option> 5 </option>
+                    		<option> 6 </option>
+                    		<option> 7 </option>
+                    		<option> 8 </option>
+                    		<option> 9 </option>
+                    		<option> 10 </option>
+                    		<option> 11 </option>
+                    		<option> 12 </option>
+                    		<option> 13 </option>
+                    		<option> 14 </option>
+                    		<option> 15 </option>
+                    		<option> 16 </option>
+                    		<option> 17 </option>
+                    		<option> 18 </option>
+                    		<option> 19 </option>
+                    		<option> 20 </option>
+                    		<option> 21 </option>
+                    		<option> 22 </option>
+                    		<option> 23 </option>
+                    		<option> 24 </option>
+                    		<option> 25 </option>
+                    		<option> 26 </option>
+                    		<option> 27 </option>
+                    		<option> 28 </option>
+                    		<option> 29 </option>
+                    		<option> 30 </option>
+                    		<option> 31 </option>                    		
+                    		</select>
+                    		<br>	
+                    		<br>                    		
+                    		Program Name : <input type = "text" name = "program_name" />
+                    		<br>
+                            <br>
+                    		<div class="form-group"> 
+                            <div class="aab controls col-md-4 "></div>
+                            <div class="controls col-md-8 ">
+                                <input type="submit" name="Program" value="Add Program" style="float:left" class="btn btn-primary btn btn-info" id="submit-id-program" />
+                               
+                            </div>
+                        </div> 	
+                       
+                    		</form>  
+                </form>         
+    </div>
+            </div>
+            </div>
+            </div>
+                    
+     
+     
+</body>
+</html>

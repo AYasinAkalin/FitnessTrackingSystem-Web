@@ -1,0 +1,7 @@
+.DS_STORE
+venv/
+*.pyproj
+bin/
+obj/
+web.config
+web.debug.config
