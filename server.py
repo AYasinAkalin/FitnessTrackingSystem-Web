@@ -83,14 +83,32 @@ def addtrainee():
         cursor.execute("select id,name,surname from trainees") #get trainees sql
         trainers=cursor.fetchall()
         session["trainees"]=trainees
-    return render_template("trainerprofile.html",trainers=session["user"],trainees=session["trainees"])
+    return render_template("trainerprofile.html",trainer=session["user"],trainees=session["trainees"])
 
 def add_program() :
     pass
 
+@app.route("/addevent",methods=["GET","POST"])
 def add_event() :
-    pass
-
+    if request.method == "GET" :
+        return render_template("addevent.html")
+    else :
+        year = request.form["year"]
+        month = request.form["month"]
+        day = request.form["day"]
+        starttime = request.form["starttime"]
+        endtime = request.form["endtime"]
+        name = request.form["name"]
+        startdate = "%s-%s-%s %s"%(year,month,day,starttime)
+        enddate = "%s-%s-%s %s"%(year,month,day,endtime)
+        cursor=mysql.get_db().cursor()
+        trainer_id = session["user"][0]
+        sql="Insert into events(startdate,enddate,name,trainerid) values('%s','%s','%s',%s)" %(startdate,enddate,name,trainer_id)
+        print sql
+        cursor.execute(sql)
+        mysql.get_db().commit()
+        print year , month , day , starttime , endtime , name 
+        return render_template("trainerprofile.html",trainer=session["user"],trainees=session["trainees"])
 
 if __name__ == "__main__":
     app.run()
