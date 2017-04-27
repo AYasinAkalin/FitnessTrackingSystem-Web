@@ -40,6 +40,9 @@ def login():
             session["trainees"] = trainees
             return render_template("trainerprofile.html" , trainer = response , trainees = trainees)
 
+        elif role==2:
+            return "You are a trainee. Please use mobile."
+
 @app.route("/addtrainer",methods=["GET","POST"])
 def addtrainer():
     if request.method=='GET':
