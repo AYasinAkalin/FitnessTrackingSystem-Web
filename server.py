@@ -84,7 +84,7 @@ def addtrainee():
         mysql.get_db().commit()
         
         cursor.execute("select id,name,surname from trainees") #get trainees sql
-        trainers=cursor.fetchall()
+        trainees=cursor.fetchall()
         session["trainees"]=trainees
     return render_template("trainerprofile.html",trainer=session["user"],trainees=session["trainees"])
 
