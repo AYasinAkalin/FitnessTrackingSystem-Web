@@ -1,8 +1,9 @@
-.DS_STORE
+.DS_*
 venv/
 *.pyproj
 bin/
 obj/
 web.config
 web.debug.config
-
+.vscode/
+*.pyc
