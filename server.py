@@ -152,7 +152,7 @@ def login_trainee():
 @app.route("/ws/tasks/<int:traineeId>",methods=["GET"])
 def get_tasks(traineeId):
     cursor=mysql.get_db().cursor()
-    sql="select id,taskName,status from tasks where traineeId=%d" % traineeId
+    sql="select id,taskName,info,status from tasks where traineeId=%d" % traineeId
     cursor.execute(sql)
     tasks=cursor.fetchall()
 
