@@ -1,7 +1,7 @@
 #!/usr/bin/env python   
 # -*- coding: utf-8 -*-
 
-from flask import Flask,render_template,request,session,json ,jsonify
+from flask import Flask,render_template,request,session,json ,jsonify ,redirect,url_for
 from flaskext.mysql import MySQL
 mysql=MySQL()
 app = Flask(__name__)
@@ -25,23 +25,27 @@ def login():
     response=cursor.fetchone() #  if one value -> fetchone()
     
     if response: # there is a user with given info
-        role=response[4]        
-        if role==0: #the user is admin
-            cursor.execute("select name,surname,email,telephone from users where role=1") #get trainers sql
-            trainers=cursor.fetchall()#if multiple values -> fetchall()
-            session["user"]=response
-            session["trainers"]=trainers
-            return render_template("adminprofile.html",admin=response,trainers=trainers)
-        elif role==1: #the user is trainer
+        session["user"]=response
+        return redirect("/dashboard")
+        
 
-            cursor.execute("select id,name,surname from trainees ") # get trainees sql
-            trainees = cursor.fetchall()
-            session["user"] = response
-            session["trainees"] = trainees
-            return render_template("trainerprofile.html" , trainer = response , trainees = trainees)
+@app.route("/dashboard",methods=["GET"])
+def dashboard():
+    cursor=mysql.get_db().cursor()
+    if session["user"][4]==0: #user role is admin
+        cursor.execute("select name,surname,email,telephone from users where role=1") #get trainers sql
+        trainers=cursor.fetchall()#if multiple values -> fetchall()
+        session["trainers"]=trainers
+        return render_template("adminprofile.html",admin=session["user"],trainers=session["trainers"])
+    elif session["user"][4]==1: #user role is trainer
+        cursor.execute("select id,name,surname,weight,height from trainees where trainerId=%s"%session["user"][0]) #my user id
+        trainees=cursor.fetchall()
+        session["trainees"]=trainees
+        return render_template("trainerprofile.html" , trainer = session["user"] , trainees = session["trainees"])
+        
 
-        elif role==2:
-            return "You are a trainee. Please use mobile."
+    else: #user role is trainee
+        return "You are a trainee. Please use mobile."
 
 @app.route("/addtrainer",methods=["GET","POST"])
 def addtrainer():
@@ -58,11 +62,8 @@ def addtrainer():
       
         cursor.execute(sql)
         mysql.get_db().commit()
-        
-        cursor.execute("select name,surname,email,telephone from users where role=1") #get trainers sql
-        trainers=cursor.fetchall()
-        session["trainers"]=trainers
-    return render_template("adminprofile.html",admin=session["user"],trainers=session["trainers"])
+    
+        return redirect("/dashboard")
 
 @app.route("/addtrainee",methods=["GET","POST"])
 def addtrainee():
@@ -84,10 +85,7 @@ def addtrainee():
         cursor.execute(sql)
         mysql.get_db().commit()
         
-        cursor.execute("select id,name,surname from trainees where trainerId=%s" %trainerId) #get trainees sql
-        trainees=cursor.fetchall()
-        session["trainees"]=trainees
-        return render_template("trainerprofile.html",trainer=session["user"],trainees=session["trainees"])
+        return redirect("/dashboard")
 
 def add_program() :
     pass
@@ -112,7 +110,7 @@ def add_event() :
         cursor.execute(sql)
         mysql.get_db().commit()
         print year , month , day , starttime , endtime , name 
-        return render_template("trainerprofile.html",trainer=session["user"],trainees=session["trainees"])
+        return redirect("dashboard")
 
 @app.route("/addtask",methods=["POST"])
 def add_task():
@@ -123,7 +121,7 @@ def add_task():
     cursor=mysql.get_db().cursor()
     cursor.execute(sql)
     mysql.get_db().commit()
-    return render_template("trainerprofile.html",trainer=session["user"],trainees=session["trainees"])
+    return redirect("/dashboard")
 
 #webServices
 @app.route("/ws/login",methods=["POST"])

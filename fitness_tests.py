@@ -12,14 +12,14 @@ class FitnessTestCase(unittest.TestCase):
         rv=self.app.post("/login",data=dict(
             email="admin@fitness.com",
             password="adminpass"
-        ))
+        ),follow_redirects=True)
         assert "dashboard" in rv.data
 
     def test_trainer_login(self):
         rv=self.app.post("/login",data=dict(
             email="trainer@1.com",
             password="asd"
-        ))
+        ),follow_redirects=True)
         assert "dashboard" in rv.data
 
 
@@ -36,7 +36,7 @@ class FitnessTestCase(unittest.TestCase):
         email="testmail@mail",
         password="testpass",
         telephone="123123"
-        ))
+        ),follow_redirects=True)
         assert "dashboard" in rv.data
 
     def test_add_trainee(self):
@@ -50,7 +50,7 @@ class FitnessTestCase(unittest.TestCase):
         weight = "50",
         height = "50",
         info = "testinfo"
-        ))
+        ),follow_redirects=True)
         assert rv.status_code==200
 
 
