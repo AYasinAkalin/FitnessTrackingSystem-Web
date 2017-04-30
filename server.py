@@ -77,13 +77,14 @@ def addtrainee():
         weight = request.form["weight"]
         height = request.form["height"]
         additional_info = request.form["info"]
+        trainerId=session["user"][0]
         cursor=mysql.get_db().cursor()
-        sql="Insert into trainees(name,surname,email,telephone,weight,height,info) values('%s','%s','%s','%s',%s,%s,'%s')" %(name,surname,email,telephone,weight,height,additional_info)
+        sql="Insert into trainees(name,surname,email,telephone,weight,height,info,trainerId) values('%s','%s','%s','%s','%s','%s','%s',%s)" %(name,surname,email,telephone,weight,height,additional_info,trainerId)
         
         cursor.execute(sql)
         mysql.get_db().commit()
         
-        cursor.execute("select id,name,surname from trainees") #get trainees sql
+        cursor.execute("select id,name,surname from trainees where trainerId=%s" %trainerId) #get trainees sql
         trainees=cursor.fetchall()
         session["trainees"]=trainees
         return render_template("trainerprofile.html",trainer=session["user"],trainees=session["trainees"])
@@ -117,7 +118,8 @@ def add_event() :
 def add_task():
     taskName=request.form["taskName"]
     traineeId=request.form["traineeId"]
-    sql="INSERT INTO `tasks`(`taskName`, `traineeId`, `status`) VALUES ('%s',%s,0)" %(taskName,traineeId)
+    info=request.form["info"]
+    sql="INSERT INTO `tasks`(`taskName`, `traineeId`,`info`, `status`) VALUES ('%s',%s,'%s',0)" %(taskName,traineeId,info)
     cursor=mysql.get_db().cursor()
     cursor.execute(sql)
     mysql.get_db().commit()
@@ -160,7 +162,7 @@ def get_tasks(traineeId):
         tasks=tasks
     )
 
-@app.route("/ws/task/<int:taskId>/complete",methods=["POST"])
+@app.route("/ws/task/<int:taskId>/complete",methods=["GET"])
 def complete_task(taskId):
     cursor=mysql.get_db().cursor()
     sql="update tasks set status=1 where id=%d" %taskId

@@ -60,7 +60,8 @@ class FitnessTestCase(unittest.TestCase):
         rv=self.app.post("/addtask",data=dict(
             taskName="testTask",
             traineeId=10,
-            status=0
+            status=0,
+            info="testinfo"
         ))
         assert "dashboard" in rv.data
 
@@ -102,7 +103,7 @@ class FitnessTestCase(unittest.TestCase):
         assert tasks["tasks"][0][1]=="mytask1"
 
     def test_web_complete_task(self):
-        rv=self.app.post("/ws/task/1/complete")
+        rv=self.app.get("/ws/task/1/complete")
        
         assert rv.data=="OK"
         
