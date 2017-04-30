@@ -107,7 +107,6 @@ class FitnessTestCase(unittest.TestCase):
        
         assert rv.data=="OK"
         
-        
     
 if __name__=="__main__":
     unittest.main()

@@ -1,6 +1,6 @@
 # Fitness Training Using Python
 
-## setup
+## Setup
 
 This code runs on python. Unix systems have python by default. To install dependencies on Mac OS X or on ubuntu bash:
 
@@ -16,3 +16,9 @@ You can visit the website on `http://locahost:5000`.
 To stop the program **ctrl+c** on terminal.
 
 We are using a single database that can be accessed from `http://45.55.252.17/phpmyadmin`. user and password info is in *dbconfig.cfg* file.
+
+## Test
+To test the program:
+
+    python fitness_tests.py
+
