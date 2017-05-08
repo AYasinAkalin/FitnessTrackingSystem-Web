@@ -1,0 +1,72 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<title>Fitness Yeah!</title>
+</head>
+<body>
+
+
+<div class="container">    
+            
+    <div id="signupbox" style=" margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">Trainer Form</div>
+            </div>  
+            <div class="panel-body" >
+                <form method="post" action="/addtask">
+                   
+                    <form  class="form-horizontal" method="post" action="/addtask">
+                        
+                        
+                         <div id="div_id_name" class="form-group required"> 
+                            <label for="id_name" class="control-label col-md-4  requiredField"> Trainee Name<span class="asteriskField">*</span> </label> 
+                            <div class="controls col-md-8 "> 
+                                <select  name="traineeId" class="input-md form-control">
+                                {% for trainee in trainees %}
+                                <option value="{{trainee[0]}}">{{trainee[1]}} {{trainee[2]}}</option>
+                                {%endfor%}
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                         <div id="div_id_name" class="form-group required"> 
+                            <label for="id_name" class="control-label col-md-4  requiredField"> Task Name<span class="asteriskField">*</span> </label> 
+                            <div class="controls col-md-8 "> 
+                                <input class="input-md textinput textInput form-control" id="id_name" name="taskName" placeholder="Task Name" style="margin-bottom: 10px" type="text" />
+                            </div>
+                        </div>
+                        
+                        <div id="div_id_name" class="form-group required"> 
+                            <label for="id_name" class="control-label col-md-4  requiredField"> Task Info<span class="asteriskField">*</span> </label> 
+                            <div class="controls col-md-8 "> 
+                                <input class="input-md textinput textInput form-control" id="id_name" name="info" placeholder="Task Info" style="margin-bottom: 10px" type="text" />
+                            </div>
+                        </div>
+                     
+                         
+                        <div class="form-group"> 
+                            <div class="aab controls col-md-4 "></div>
+                            <div class="controls col-md-8 ">
+                                <input type="submit" name="Signup" value="Add Task" style="float:right" class="btn btn-primary btn btn-info" id="submit-id-signup" />
+                               
+                            </div>
+                        </div> 
+                            
+                    </form>
+
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+    
+</div>            
+</body>
+</html>

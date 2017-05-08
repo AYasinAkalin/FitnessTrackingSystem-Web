@@ -42,44 +42,51 @@
       </div>
     </nav>
 
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
-          </ul>
-          
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 main">
           <h1 class="page-header">{{trainer[1]}} {{trainer[2]}}</h1>
 
 		<a href="/addtrainee">
           <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
+            <div class="col-xs-6 col-sm-4 placeholder">
               <img src="http://www.dcfitness.club/img/0967/991.jpg?sitetimestamp=636153174470000000" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
               <h4>Add Trainee</h4>
             </div>
             </a>
             <a href="/addevent">
-                <div class="col-xs-6 col-sm-3 placeholder">
+                <div class="col-xs-6 col-sm-4 placeholder">
                     <img src="https://i.ytimg.com/vi/ZEEHTTXctWk/maxresdefault.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
                     <h4>Add Event</h4>
                 </div>
             </a>
-            <div class="col-xs-6 col-sm-3 placeholder">
+            <a href="/addtask">
+            <div class="col-xs-6 col-sm-4 placeholder">
               <img src="http://www.yeahweworkout.com/upload/20150321130230uid1.gif" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Add Program</h4>    
+              <h4>Add Task</h4>    
             </div>
-           <!--   <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>...</h4>
-            </div> -->
+            </a>
+           
           </div>
 
-          <h2 class="sub-header">Trainees List</h2>
+      </div>
+    
+     
+    <div class="row">
+      <div class="col-sm-12 col-md-12 main">
+         
+         {% with messages = get_flashed_messages() %}
+         {% if messages %}
+              {% for message in messages %}
+               <div class="alert alert-success" role="alert">{{message}}</div>
+               {% endfor %}
+         {% endif %}
+      {% endwith %}
+      </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <h2 style="text-align:center">Trainees List</h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -87,8 +94,8 @@
                   <th>#</th>
                   <th>Name</th>
                   <th>Surname</th>
-                  <th>telephone</th>
                   <th>email</th>
+                  <th>telephone</th>
 				  <th>weight</th>
 				  <th>height</th>
 				  <th>additional_info</th>
@@ -99,13 +106,13 @@
                 {% for trainee in trainees %}
                 <tr>
                   <td>{{loop.index}}</td>
-                  <td>{{trainee[0]}}</td>
                   <td>{{trainee[1]}}</td>
                   <td>{{trainee[2]}}</td>
                   <td>{{trainee[3]}}</td>
+				  <td>{{trainee[4]}}</td>
 				  <td>{{trainee[5]}}</td>
 				  <td>{{trainee[6]}}</td>
-				  <td>{{trainee[7]}}</td>
+          <td>{{trainee[7]}}</td>
                 </tr>
                 {%endfor%}
                 
@@ -114,7 +121,8 @@
           </div>
         </div>
       </div>
-    </div>
+
+     
 
    
    
