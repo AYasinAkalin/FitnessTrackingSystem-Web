@@ -7,3 +7,4 @@ web.config
 web.debug.config
 .vscode/
 *.pyc
+/tmp

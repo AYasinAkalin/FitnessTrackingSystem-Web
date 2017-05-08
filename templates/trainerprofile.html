@@ -69,16 +69,27 @@
                     <h4>Add Event</h4>
                 </div>
             </a>
+            <a href="/addtask">
             <div class="col-xs-6 col-sm-3 placeholder">
               <img src="http://www.yeahweworkout.com/upload/20150321130230uid1.gif" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Add Program</h4>    
+              <h4>Add Task</h4>    
             </div>
+            </a>
            <!--   <div class="col-xs-6 col-sm-3 placeholder">
               <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
               <h4>...</h4>
             </div> -->
           </div>
-
+      </div>
+      
+      </div>
+      {% with messages = get_flashed_messages() %}
+         {% if messages %}
+              {% for message in messages %}
+               <h4>{{ message }}</h4>
+               {% endfor %}
+         {% endif %}
+      {% endwith %}
           <h2 class="sub-header">Trainees List</h2>
           <div class="table-responsive">
             <table class="table table-striped">
@@ -87,8 +98,8 @@
                   <th>#</th>
                   <th>Name</th>
                   <th>Surname</th>
-                  <th>telephone</th>
                   <th>email</th>
+                  <th>telephone</th>
 				  <th>weight</th>
 				  <th>height</th>
 				  <th>additional_info</th>
@@ -99,13 +110,13 @@
                 {% for trainee in trainees %}
                 <tr>
                   <td>{{loop.index}}</td>
-                  <td>{{trainee[0]}}</td>
                   <td>{{trainee[1]}}</td>
                   <td>{{trainee[2]}}</td>
                   <td>{{trainee[3]}}</td>
+				  <td>{{trainee[4]}}</td>
 				  <td>{{trainee[5]}}</td>
 				  <td>{{trainee[6]}}</td>
-				  <td>{{trainee[7]}}</td>
+          <td>{{trainee[7]}}</td>
                 </tr>
                 {%endfor%}
                 

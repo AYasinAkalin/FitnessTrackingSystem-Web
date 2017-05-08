@@ -1,13 +1,17 @@
 import unittest
 import server
 from flask import json
+from coverage import coverage
+import os
+cov = coverage(branch=True, omit=['venv/*', 'fitness_tests.py'])
+cov.start()
 class FitnessTestCase(unittest.TestCase):
 
     def setUp(self):
         self.app=server.app.test_client()
         
         
-
+#TODO: update tests to use flash
     def test_admin_login(self):
         rv=self.app.post("/login",data=dict(
             email="admin@fitness.com",
@@ -60,7 +64,7 @@ class FitnessTestCase(unittest.TestCase):
         rv=self.app.post("/addtask",data=dict(
             taskName="testTask",
             traineeId=10,
-            status=0,
+       
             info="testinfo"
         ))
         assert "dashboard" in rv.data
@@ -109,4 +113,14 @@ class FitnessTestCase(unittest.TestCase):
         
     
 if __name__=="__main__":
-    unittest.main()
+    try:
+        unittest.main()
+    except:
+        pass
+    cov.stop()
+    cov.save()
+    print("\n\nCoverage Report:\n")
+    cov.report()
+    print("HTML version: " + os.path.join(".", "tmp/coverage/index.html"))
+    cov.html_report(directory='tmp/coverage')
+    cov.erase()
