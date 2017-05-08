@@ -42,10 +42,6 @@ def dashboard():
         cursor.execute("select users.id,name,surname,email,telephone,weight,height,info from users join trainees on users.id=trainees.id where trainees.trainerId=%s"%session["user"][0]) #my user id
         trainees=cursor.fetchall()
         session["trainees"]=trainees
-        if request.args:
-            if request.args["flash"]=="task":
-                flash("Task added succesfully")
-                print "flashing"
         return render_template("trainerprofile.html" , trainer = session["user"] , trainees = session["trainees"])
         
 
@@ -134,8 +130,8 @@ def add_task():
         cursor=mysql.get_db().cursor()
         cursor.execute(sql)
         mysql.get_db().commit()
-        
-        return redirect(url_for("dashboard",flash="task"))
+        flash("Task added succesfully")
+        return redirect("dashboard")
 
 #webServices
 @app.route("/ws/login",methods=["POST"])
