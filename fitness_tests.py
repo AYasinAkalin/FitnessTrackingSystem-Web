@@ -19,6 +19,21 @@ class FitnessTestCase(unittest.TestCase):
         ),follow_redirects=True)
         assert "dashboard" in rv.data
 
+    def test_not_authorized_login(self):
+        rv=self.app.post("/login",data=dict(
+            email="no_email",
+            password="wrongpass"
+        ),follow_redirects=True)
+
+        assert "Not authorized" in rv.data
+
+    def test_trainee_login(self):
+        rv=self.app.post("/login",data=dict(
+            email="berke@berke",
+            password="berke"   
+        ),follow_redirects=True)
+
+        assert "mobile" in rv.data
 
     def test_trainer_login(self):
         rv=self.app.post("/login",data=dict(
@@ -28,7 +43,12 @@ class FitnessTestCase(unittest.TestCase):
         assert "dashboard" in rv.data
 
 
+        #TODO: add equipment test
+    def test_add_equipment(self):
 
+        #TODO: add event test
+    def test_add_event(self):
+        
     def test_server(self):
         rv=self.app.get("/")
         assert rv.status_code==200
