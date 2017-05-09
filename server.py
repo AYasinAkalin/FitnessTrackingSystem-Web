@@ -93,6 +93,20 @@ def addtrainee():
         
         return redirect("/dashboard")
 
+@app.route("/addequipment",methods=["GET","POST"]) 
+def addequipment() :
+    if request.method == "GET" :
+        return render_template("addequipment.html")
+    else :
+        name = request.form["name"]
+        sql = "Insert into equipments(name) values('%s')" %(name)
+        print sql
+        cursor=mysql.get_db().cursor()
+        cursor.execute(sql)
+        mysql.get_db().commit()
+        print name
+        return redirect("/dashboard")
+
 def add_program() :
     pass
 
