@@ -37,7 +37,10 @@ def dashboard():
         cursor.execute("select name,surname,email,telephone from users where role=1") #get trainers sql
         trainers=cursor.fetchall()#if multiple values -> fetchall()
         session["trainers"]=trainers
-        return render_template("adminprofile.html",admin=session["user"],trainers=session["trainers"])
+        cursor.execute("select name from equipments")
+        equipments = cursor.fetchall()
+        session["equipments"] = equipments 
+        return render_template("adminprofile.html",admin=session["user"],trainers=session["trainers"] , equipments=session["equipments"])
     elif session["user"][4]==1: #user role is trainer
         cursor.execute("select users.id,name,surname,email,telephone,weight,height,info from users join trainees on users.id=trainees.id where trainees.trainerId=%s"%session["user"][0]) #my user id
         trainees=cursor.fetchall()
