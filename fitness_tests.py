@@ -45,10 +45,30 @@ class FitnessTestCase(unittest.TestCase):
 
         #TODO: add equipment test
     def test_add_equipment(self):
+        self.test_trainer_login()
+        rv = self.app.post("/addequipment", data = dict(
+            name = "testequipment"
+            ) , follow_redirects = True)
+        assert "dashboard" in rv.data
+
+        rv = self.app.get("/addequipment")
+        assert rv.status_code == 200
 
         #TODO: add event test
     def test_add_event(self):
-        
+        self.test_trainer_login()
+        rv = self.app.post("/addevent" , data = dict(
+            year = "2020" ,
+            month = "1" ,
+            day = "1" ,
+            starttime = "12:00" ,
+            endtime = "13:00" ,
+            name = "testevent"
+            ) , follow_redirects = True)
+        assert "dashboard" in rv.data
+
+        rv = self.app.get("/addevent")
+        assert rv.status_code == 200
     def test_server(self):
         rv=self.app.get("/")
         assert rv.status_code==200
