@@ -251,7 +251,7 @@ def get_tasks(traineeId):
 @app.route("/ws/events", methods=["GET"])
 def get_events():
     cursor = mysql.get_db().cursor()
-    sql = "select * from events"
+    sql = "select * FROM events WHERE startdate > CURRENT_DATE"
     cursor.execute(sql)
     events = cursor.fetchall()
 
