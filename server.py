@@ -85,7 +85,7 @@ def addtrainee():
         trainerId=session["user"][0]
         cursor=mysql.get_db().cursor()
         #first insert into users
-        sql="Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',1,'%s')" %(name,surname,email,password,telephone)
+        sql="Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',2,'%s')" %(name,surname,email,password,telephone)
         cursor.execute(sql)
        
         user_id=cursor.lastrowid
