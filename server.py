@@ -1,7 +1,9 @@
 #!/usr/bin/env python   
 # -*- coding: utf-8 -*-
 
-from flask import Flask,render_template,request,session,json ,jsonify ,redirect,url_for,flash
+from flask import Flask,render_template,request,session,json ,jsonify ,redirect,url_for,flash,Markup
+# Markup added above to pass good looking messages to flash. -AY
+
 from flaskext.mysql import MySQL
 mysql=MySQL()
 app = Flask(__name__)
@@ -9,7 +11,33 @@ app.secret_key = "adadaxax"
 app.config.from_pyfile("dbconfig.cfg")
 mysql.init_app(app)
 
-#TODO: add flash thing 
+#TODO: add flash thing
+    # Half-way solution:
+    # We need to add one of the following "flashes" class to html file but I don't exactly know where to, to make it work properly -AY
+""" This one for simple messages.
+    <div class="flashes">
+        {% for message in get_flashed_messages()%}
+            {{ message | safe}} <!--# "...|safe" is needed to pass HTML code but opens a backdoor to XSS attacks. -AY-->
+        {% endfor %}
+    </div>
+"""
+
+""" This one uses Bootstrap message boxes.
+    <div class="flashes">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <!-- <strong>Title</strong> --> {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+"""  
+
 @app.route("/")
 def hello():
     return render_template("login.html")
@@ -110,6 +138,26 @@ def addequipment() :
         print name
         return redirect("/dashboard")
 
+@app.route("/addroom",methods=["GET","POST"]) 
+def addroom() :
+    if request.method == "GET" :
+        return render_template("addroom.html")
+    else :
+        name = request.form["name"]
+        number = request.form["number"]
+        size = request.form["size"]
+        sql = "Insert into rooms(name,number,size) values('%s','%s','%s')" %(name,number,size)
+        print sql
+        cursor=mysql.get_db().cursor()
+
+        cursor.execute(sql)
+        mysql.get_db().commit()
+        print size, name
+        message = "Room added succesfully."
+        #messageHTML = "<div class=\"alert alert-success\"> Success! Room added. </div>"
+        flash(message)
+        return redirect("/dashboard")
+
 def add_program() :
     pass
 
@@ -133,7 +181,7 @@ def add_event() :
         cursor.execute(sql)
         mysql.get_db().commit()
         print year , month , day , starttime , endtime , name 
-        return redirect("dashboard")
+        return redirect("dashboard") #change to "/dashboard" ??
 
 @app.route("/addtask",methods=["GET","POST"])
 def add_task():
@@ -148,7 +196,7 @@ def add_task():
         cursor.execute(sql)
         mysql.get_db().commit()
         flash("Task added succesfully")
-        return redirect("dashboard")
+        return redirect("dashboard") #change to "/dashboard" ??
 
 #webServices
 @app.route("/ws/login",methods=["POST"])
