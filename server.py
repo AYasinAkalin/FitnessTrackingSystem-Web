@@ -116,8 +116,9 @@ def addroom() :
         return render_template("addroom.html")
     else :
         name = request.form["name"]
+        number = request.form["number"]
         size = request.form["size"]
-        sql = "Insert into rooms(name,size) values('%s','%s')" %(name,size)
+        sql = "Insert into rooms(name,number,size) values('%s','%s','%s')" %(name,number,size)
         print sql
         cursor=mysql.get_db().cursor()
 
