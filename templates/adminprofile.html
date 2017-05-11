@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 
   <head>
@@ -69,17 +70,23 @@
                     <h4>Add Equipment</h4>
                 </div>
             </a>
+            
             <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="http://world-adventurer.com/wp-content/uploads/2014/10/Kronwell-Gym-Room.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Add Room</h4>    
+              <a href="/addroom">
+                <img src="http://world-adventurer.com/wp-content/uploads/2014/10/Kronwell-Gym-Room.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              </a>
+              <a href="/addroom">
+                <h4>Add Room</h4>
+              </a>
             </div>
+
            <!--   <div class="col-xs-6 col-sm-3 placeholder">
               <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
               <h4>...</h4>
             </div> -->
           </div>
 
-          <h2 class="sub-header">Trainers List</h2>
+      <h2 class="sub-header">Trainers List</h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -127,6 +134,30 @@
               </tbody>
             </table>
           </div>
+          
+
+		  <h2 class="sub-header">Room List</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Capacity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for room in rooms %}
+                <tr>
+                  <td>{{loop.index}}</td>
+                  <td>{{room[0]}}</td>
+                  <td>{{room[1]}}</td>
+                </tr>
+                {%endfor%}
+              </tbody>
+            </table>
+          </div>
+
         </div>
       </div>
     </div>

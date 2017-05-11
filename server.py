@@ -110,6 +110,25 @@ def addequipment() :
         print name
         return redirect("/dashboard")
 
+@app.route("/addroom",methods=["GET","POST"]) 
+def addroom() :
+    if request.method == "GET" :
+        return render_template("addroom.html")
+    else :
+        name = request.form["name"]
+        size = request.form["size"]
+        sql = "Insert into rooms(name,size) values('%s','%s')" %(name,size)
+        print sql
+        cursor=mysql.get_db().cursor()
+
+        cursor.execute(sql)
+        mysql.get_db().commit()
+        print size, name
+        message = "Room added succesfully."
+        #messageHTML = "<div class=\"alert alert-success\"> Success! Room added. </div>"
+        flash(message)
+        return redirect("/dashboard")
+
 def add_program() :
     pass
 
