@@ -248,6 +248,16 @@ def get_tasks(traineeId):
         tasks=tasks
     )
 
+@app.route("/ws/events", methods=["GET"])
+def get_events():
+    cursor = mysql.get_db().cursor()
+    sql = "select * from events"
+    cursor.execute(sql)
+    events = cursor.fetchall()
+
+    return jsonify(
+        events = events
+    )
 
 @app.route("/ws/task/<int:taskId>/complete", methods=["GET"])
 def complete_task(taskId):
