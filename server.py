@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask,render_template,request,session,json ,jsonify ,redirect,url_for,flash
+
 from flaskext.mysql import MySQL
 mysql=MySQL()
 app = Flask(__name__)
@@ -9,7 +10,6 @@ app.secret_key = "adadaxax"
 app.config.from_pyfile("dbconfig.cfg")
 mysql.init_app(app)
 
-#TODO: add flash thing 
 @app.route("/")
 def hello():
     return render_template("login.html")
@@ -39,8 +39,11 @@ def dashboard():
         session["trainers"]=trainers
         cursor.execute("select name from equipments")
         equipments = cursor.fetchall()
-        session["equipments"] = equipments 
-        return render_template("adminprofile.html",admin=session["user"],trainers=session["trainers"] , equipments=session["equipments"])
+        session["equipments"] = equipments
+        cursor.execute("select name,number,size from rooms")
+        rooms=cursor.fetchall()
+        session["rooms"]=rooms
+        return render_template("adminprofile.html",admin=session["user"],trainers=session["trainers"] , equipments=session["equipments"],rooms=session["rooms"])
     elif session["user"][4]==1: #user role is trainer
         cursor.execute("select users.id,name,surname,email,telephone,weight,height,info from users join trainees on users.id=trainees.id where trainees.trainerId=%s"%session["user"][0]) #my user id
         trainees=cursor.fetchall()
@@ -108,6 +111,26 @@ def addequipment() :
         cursor.execute(sql)
         mysql.get_db().commit()
         print name
+        return redirect("/dashboard")
+
+
+@app.route("/addroom",methods=["GET","POST"]) 
+def addroom() :
+    if request.method == "GET" :
+        return render_template("addroom.html")
+    else :
+        name = request.form["name"]
+        number = request.form["number"]
+        size = request.form["size"]
+        sql = "Insert into rooms(name,number,size) values('%s','%s','%s')" %(name,number,size)
+        print sql
+        cursor=mysql.get_db().cursor()
+
+        cursor.execute(sql)
+        mysql.get_db().commit()
+        print size, name
+        message = "Room added succesfully."
+        flash(message)
         return redirect("/dashboard")
 
 def add_program() :
