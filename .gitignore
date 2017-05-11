@@ -8,3 +8,4 @@ web.debug.config
 .vscode/
 *.pyc
 tmp/
+/tmp

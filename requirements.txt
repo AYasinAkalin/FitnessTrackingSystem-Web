@@ -1,5 +1,6 @@
 appdirs==1.4.3
 click==6.7
+coverage==4.3.4
 Flask==0.12.1
 Flask-MySQL==1.4.0
 itsdangerous==0.24

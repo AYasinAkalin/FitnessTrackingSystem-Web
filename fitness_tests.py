@@ -1,19 +1,39 @@
 import unittest
 import server
 from flask import json
+from coverage import coverage
+import os
+cov = coverage(branch=True, omit=['venv/*', 'fitness_tests.py'])
+cov.start()
 class FitnessTestCase(unittest.TestCase):
 
     def setUp(self):
         self.app=server.app.test_client()
         
         
-
+#TODO: update tests to use flash
     def test_admin_login(self):
         rv=self.app.post("/login",data=dict(
             email="admin@fitness.com",
             password="adminpass"
         ),follow_redirects=True)
         assert "dashboard" in rv.data
+
+    def test_not_authorized_login(self):
+        rv=self.app.post("/login",data=dict(
+            email="no_email",
+            password="wrongpass"
+        ),follow_redirects=True)
+
+        assert "Not authorized" in rv.data
+
+    def test_trainee_login(self):
+        rv=self.app.post("/login",data=dict(
+            email="berke@berke",
+            password="berke"   
+        ),follow_redirects=True)
+
+        assert "mobile" in rv.data
 
     def test_trainer_login(self):
         rv=self.app.post("/login",data=dict(
@@ -23,7 +43,32 @@ class FitnessTestCase(unittest.TestCase):
         assert "dashboard" in rv.data
 
 
+        #TODO: add equipment test
+    def test_add_equipment(self):
+        self.test_trainer_login()
+        rv = self.app.post("/addequipment", data = dict(
+            name = "testequipment"
+            ) , follow_redirects = True)
+        assert "dashboard" in rv.data
 
+        rv = self.app.get("/addequipment")
+        assert rv.status_code == 200
+
+        #TODO: add event test
+    def test_add_event(self):
+        self.test_trainer_login()
+        rv = self.app.post("/addevent" , data = dict(
+            year = "2020" ,
+            month = "1" ,
+            day = "1" ,
+            starttime = "12:00" ,
+            endtime = "13:00" ,
+            name = "testevent"
+            ) , follow_redirects = True)
+        assert "dashboard" in rv.data
+
+        rv = self.app.get("/addevent")
+        assert rv.status_code == 200
     def test_server(self):
         rv=self.app.get("/")
         assert rv.status_code==200
@@ -39,6 +84,9 @@ class FitnessTestCase(unittest.TestCase):
         ),follow_redirects=True)
         assert "dashboard" in rv.data
 
+        rv=self.app.get("/addtrainer")
+        assert rv.status_code==200
+
     def test_add_trainee(self):
         self.test_trainer_login()
         rv=self.app.post("/addtrainee",data=dict(
@@ -53,6 +101,9 @@ class FitnessTestCase(unittest.TestCase):
         ),follow_redirects=True)
         assert rv.status_code==200
 
+        rv=self.app.get("/addtrainee")
+        assert rv.status_code==200
+
 
     def test_add_task(self):
 
@@ -60,10 +111,13 @@ class FitnessTestCase(unittest.TestCase):
         rv=self.app.post("/addtask",data=dict(
             taskName="testTask",
             traineeId=10,
-            status=0,
+       
             info="testinfo"
         ))
         assert "dashboard" in rv.data
+
+        rv=self.app.get("/addtask")
+        assert rv.status_code==200
 
     def test_web_login(self):
         rv=self.app.post("/ws/login",
@@ -109,4 +163,14 @@ class FitnessTestCase(unittest.TestCase):
         
     
 if __name__=="__main__":
-    unittest.main()
+    try:
+        unittest.main()
+    except:
+        pass
+    cov.stop()
+    cov.save()
+    print("\n\nCoverage Report:\n")
+    cov.report()
+    print("HTML version: " + os.path.join(".", "tmp/coverage/index.html"))
+    cov.html_report(directory='tmp/coverage')
+    cov.erase()

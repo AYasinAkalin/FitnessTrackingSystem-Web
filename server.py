@@ -1,7 +1,7 @@
 #!/usr/bin/env python   
 # -*- coding: utf-8 -*-
 
-from flask import Flask,render_template,request,session,json ,jsonify ,redirect,url_for
+from flask import Flask,render_template,request,session,json ,jsonify ,redirect,url_for,flash
 from flaskext.mysql import MySQL
 mysql=MySQL()
 app = Flask(__name__)
@@ -9,7 +9,7 @@ app.secret_key = "adadaxax"
 app.config.from_pyfile("dbconfig.cfg")
 mysql.init_app(app)
 
-
+#TODO: add flash thing 
 @app.route("/")
 def hello():
     return render_template("login.html")
@@ -27,7 +27,8 @@ def login():
     if response: # there is a user with given info
         session["user"]=response
         return redirect("/dashboard")
-        
+    else:
+        return "Not authorized"
 
 @app.route("/dashboard",methods=["GET"])
 def dashboard():
@@ -38,7 +39,7 @@ def dashboard():
         session["trainers"]=trainers
         return render_template("adminprofile.html",admin=session["user"],trainers=session["trainers"])
     elif session["user"][4]==1: #user role is trainer
-        cursor.execute("select id,name,surname,weight,height from trainees where trainerId=%s"%session["user"][0]) #my user id
+        cursor.execute("select users.id,name,surname,email,telephone,weight,height,info from users join trainees on users.id=trainees.id where trainees.trainerId=%s"%session["user"][0]) #my user id
         trainees=cursor.fetchall()
         session["trainees"]=trainees
         return render_template("trainerprofile.html" , trainer = session["user"] , trainees = session["trainees"])
@@ -80,11 +81,30 @@ def addtrainee():
         additional_info = request.form["info"]
         trainerId=session["user"][0]
         cursor=mysql.get_db().cursor()
-        sql="Insert into trainees(name,surname,email,telephone,weight,height,info,trainerId) values('%s','%s','%s','%s','%s','%s','%s',%s)" %(name,surname,email,telephone,weight,height,additional_info,trainerId)
+        #first insert into users
+        sql="Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',1,'%s')" %(name,surname,email,password,telephone)
+        cursor.execute(sql)
+       
+        user_id=cursor.lastrowid
+        sql="Insert into trainees(id,weight,height,info,trainerId) values('%s','%s','%s','%s',%s)" %(user_id,weight,height,additional_info,trainerId)
         
         cursor.execute(sql)
         mysql.get_db().commit()
         
+        return redirect("/dashboard")
+
+@app.route("/addequipment",methods=["GET","POST"]) 
+def addequipment() :
+    if request.method == "GET" :
+        return render_template("addequipment.html")
+    else :
+        name = request.form["name"]
+        sql = "Insert into equipments(name) values('%s')" %(name)
+        print sql
+        cursor=mysql.get_db().cursor()
+        cursor.execute(sql)
+        mysql.get_db().commit()
+        print name
         return redirect("/dashboard")
 
 def add_program() :
@@ -112,16 +132,20 @@ def add_event() :
         print year , month , day , starttime , endtime , name 
         return redirect("dashboard")
 
-@app.route("/addtask",methods=["POST"])
+@app.route("/addtask",methods=["GET","POST"])
 def add_task():
-    taskName=request.form["taskName"]
-    traineeId=request.form["traineeId"]
-    info=request.form["info"]
-    sql="INSERT INTO `tasks`(`taskName`, `traineeId`,`info`, `status`) VALUES ('%s',%s,'%s',0)" %(taskName,traineeId,info)
-    cursor=mysql.get_db().cursor()
-    cursor.execute(sql)
-    mysql.get_db().commit()
-    return redirect("/dashboard")
+    if request.method=="GET":
+        return render_template("addtask.html",trainees=session["trainees"])
+    else:
+        taskName=request.form["taskName"]
+        traineeId=request.form["traineeId"]
+        info=request.form["info"]
+        sql="INSERT INTO `tasks`(`taskName`, `traineeId`,`info`, `status`) VALUES ('%s',%s,'%s',0)" %(taskName,traineeId,info)
+        cursor=mysql.get_db().cursor()
+        cursor.execute(sql)
+        mysql.get_db().commit()
+        flash("Task added succesfully")
+        return redirect("dashboard")
 
 #webServices
 @app.route("/ws/login",methods=["POST"])
