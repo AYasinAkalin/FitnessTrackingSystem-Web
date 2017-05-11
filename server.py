@@ -1,8 +1,7 @@
 #!/usr/bin/env python   
 # -*- coding: utf-8 -*-
 
-from flask import Flask,render_template,request,session,json ,jsonify ,redirect,url_for,flash,Markup
-# Markup added above to pass good looking messages to flash. -AY
+from flask import Flask,render_template,request,session,json ,jsonify ,redirect,url_for,flash
 
 from flaskext.mysql import MySQL
 mysql=MySQL()
@@ -10,33 +9,6 @@ app = Flask(__name__)
 app.secret_key = "adadaxax"
 app.config.from_pyfile("dbconfig.cfg")
 mysql.init_app(app)
-
-#TODO: add flash thing
-    # Half-way solution:
-    # We need to add one of the following "flashes" class to html file but I don't exactly know where to, to make it work properly -AY
-""" This one for simple messages.
-    <div class="flashes">
-        {% for message in get_flashed_messages()%}
-            {{ message | safe}} <!--# "...|safe" is needed to pass HTML code but opens a backdoor to XSS attacks. -AY-->
-        {% endfor %}
-    </div>
-"""
-
-""" This one uses Bootstrap message boxes.
-    <div class="flashes">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
-        {% if messages %}
-            {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <!-- <strong>Title</strong> --> {{ message }}
-            </div>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
-    </div>
-"""  
 
 @app.route("/")
 def hello():
@@ -67,8 +39,11 @@ def dashboard():
         session["trainers"]=trainers
         cursor.execute("select name from equipments")
         equipments = cursor.fetchall()
-        session["equipments"] = equipments 
-        return render_template("adminprofile.html",admin=session["user"],trainers=session["trainers"] , equipments=session["equipments"])
+        session["equipments"] = equipments
+        cursor.execute("select name,number,size from rooms")
+        rooms=cursor.fetchall()
+        session["rooms"]=rooms
+        return render_template("adminprofile.html",admin=session["user"],trainers=session["trainers"] , equipments=session["equipments"],rooms=session["rooms"])
     elif session["user"][4]==1: #user role is trainer
         cursor.execute("select users.id,name,surname,email,telephone,weight,height,info from users join trainees on users.id=trainees.id where trainees.trainerId=%s"%session["user"][0]) #my user id
         trainees=cursor.fetchall()
@@ -154,7 +129,6 @@ def addroom() :
         mysql.get_db().commit()
         print size, name
         message = "Room added succesfully."
-        #messageHTML = "<div class=\"alert alert-success\"> Success! Room added. </div>"
         flash(message)
         return redirect("/dashboard")
 
