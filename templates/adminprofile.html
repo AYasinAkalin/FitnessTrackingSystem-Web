@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 
   <head>
@@ -55,123 +54,79 @@
           
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-  <h1 class="page-header">{{admin[1]}} {{admin[2]}}</h1>
+          <h1 class="page-header">{{admin[1]}} {{admin[2]}}</h1>
 
 		<a href="/addtrainer">
-      <div class="row placeholders">
-        <div class="col-xs-6 col-sm-3 placeholder">
-          <img src="http://nationalpti.edu/wp-content/uploads/2014/02/Personal-Trainer.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-          <h4>Add Trainer</h4>
-      </div>
-    </a>
-    <a href="/addequipment">
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <img src="http://www.exerciseequipmentwarehouse.com/blog/wp-content/uploads/2013/03/oakland-ca-home-gym-equipment-store.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            <h4>Add Equipment</h4>
-        </div>
-    </a>
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="http://nationalpti.edu/wp-content/uploads/2014/02/Personal-Trainer.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Add Trainer</h4>
+            </div>
+            </a>
+            <a href="/addequipment">
+                <div class="col-xs-6 col-sm-3 placeholder">
+                    <img src="http://www.exerciseequipmentwarehouse.com/blog/wp-content/uploads/2013/03/oakland-ca-home-gym-equipment-store.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+                    <h4>Add Equipment</h4>
+                </div>
+            </a>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="http://world-adventurer.com/wp-content/uploads/2014/10/Kronwell-Gym-Room.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Add Room</h4>    
+            </div>
+           <!--   <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>...</h4>
+            </div> -->
+          </div>
 
-    <div class="col-xs-6 col-sm-3 placeholder">
-      <a href="/addroom">
-        <img src="http://world-adventurer.com/wp-content/uploads/2014/10/Kronwell-Gym-Room.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-      </a>
-      <a href="/addroom">
-        <h4>Add Room</h4>
-      </a>
-    </div>
-
-      <!--   <div class="col-xs-6 col-sm-3 placeholder">
-        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-        <h4>...</h4>
-      </div> -->
-    </div>
-
-<div class="sub-container">
-  <h2 class="sub-header">Lists</h2>
-  <ul class="nav nav-tabs">
-    <li><a data-toggle="tab" href="#trainerList">Trainer List</a></li>
-    <li><a data-toggle="tab" href="#equipmentList">Equipment List</a></li>
-    <li><a data-toggle="tab" href="#roomList">Room List</a></li>
-  </ul>
-
-  <div class="tab-content">
-    <div id="trainerList" class="tab-pane fade">
-      <!--<h2 class="sub-header">Trainers List</h2>-->
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Surname</th>
-              <th>telephone</th>
-              <th>email</th>
-            </tr>
-          </thead>
-          <tbody>
-        
-            {% for trainer in trainers %}
-            <tr>
-              <td>{{loop.index}}</td>
-              <td>{{trainer[0]}}</td>
-              <td>{{trainer[1]}}</td>
-              <td>{{trainer[2]}}</td>
-              <td>{{trainer[3]}}</td>
-            </tr>
-            {%endfor%}
+          <h2 class="sub-header">Trainers List</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Surname</th>
+                  <th>telephone</th>
+                  <th>email</th>
+                </tr>
+              </thead>
+              <tbody>
             
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div id="equipmentList" class="tab-pane fade">
-      <!--<h2 class="sub-header">Equipments List</h2>-->
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-        
-            {% for equipment in equipments %}
-            <tr>
-              <td>{{loop.index}}</td>
-              <td>{{equipment[0]}}</td>
-            </tr>
-            {%endfor%}
+                {% for trainer in trainers %}
+                <tr>
+                  <td>{{loop.index}}</td>
+                  <td>{{trainer[0]}}</td>
+                  <td>{{trainer[1]}}</td>
+                  <td>{{trainer[2]}}</td>
+                  <td>{{trainer[3]}}</td>
+                </tr>
+                {%endfor%}
+                
+              </tbody>
+            </table>
+          </div>
+		  <h2 class="sub-header">Equipments List</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                </tr>
+              </thead>
+              <tbody>
             
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div id="roomList" class="tab-pane fade">
-      <!--<h2 class="sub-header">Room List</h2>-->
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Capacity</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for room in rooms %}
-            <tr>
-              <td>{{loop.index}}</td>
-              <td>{{room[0]}}</td>
-              <td>{{room[1]}}</td>
-            </tr>
-            {%endfor%}
-          </tbody>
-        </table>
-      </div>
-    </div>
-</div>
-
+                {% for equipment in equipments %}
+                <tr>
+                  <td>{{loop.index}}</td>
+                  <td>{{equipment[0]}}</td>
+                </tr>
+                {%endfor%}
+                
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
