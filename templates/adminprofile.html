@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
-
-  <head>
+<head>
+  <style>
+    body {
+      padding-top: 50px;
+    }
+  </style>
 
 <!-- JQUERY -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -15,172 +19,178 @@
 <title>Fitness Yeah!</title>
 </head>
 
-
-  <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Fitness Training</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Help</a></li>
-          </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
-        </div>
-      </div>
-    </nav>
-
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Fitness Training</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Settings</a></li>
+          <li><a href="#">Profile</a></li>
+          <li><a href="#">Help</a></li>
+        </ul>
+        <form class="navbar-form navbar-right">
+          <input type="text" class="form-control" placeholder="Search...">
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 main">
+       
+       {% with messages = get_flashed_messages() %}
+       {% if messages %}
+            {% for message in messages %}
+             <div class="alert alert-success" role="alert">{{message}}</div>
+             {% endfor %}
+       {% endif %}
+    {% endwith %}
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div 
+           class="col-xs-12 col-xs-offset-0
+                  col-sm-10 col-sm-offset-1
+                  col-md-10 col-md-offset-1
+                  col-lg-8  col-lg-offset-2
+                  main"
+      >
+        <h1 class="page-header">{{admin[1]}} {{admin[2]}}</h1>
+
+        <div style= "display: flex; justify-content: space-between;" class="row placeholders">
+          <div class="col-xs-6 col-sm-4 placeholder">
+            <a href="/addtrainer">
+              <img src="http://nationalpti.edu/wp-content/uploads/2014/02/Personal-Trainer.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+            </a>
+            <a href="/addtrainer">
+              <h4>Add Trainer</h4>
+            </a>
+          </div>
+          <div class="col-xs-6 col-sm-4 placeholder">
+            <a href="/addequipment">
+              <img src="http://www.exerciseequipmentwarehouse.com/blog/wp-content/uploads/2013/03/oakland-ca-home-gym-equipment-store.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+            </a>
+            <a href="/addequipment">
+              <h4>Add Equipment</h4>
+            </a>
+          </div>
+          <div class="col-xs-6 col-sm-4 placeholder">
+            <a href="/addroom">
+              <img src="http://world-adventurer.com/wp-content/uploads/2014/10/Kronwell-Gym-Room.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+            </a>
+            <a href="/addroom">
+              <h4>Add Room</h4>
+            </a>
+          </div>
+            <!--   <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>...</h4>
+            </div> -->
+        </div>
+        <div class="sub-container">
+          <h2 class="sub-header">Lists</h2>
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#trainerList">Trainer List</a></li>
+            <li><a data-toggle="tab" href="#equipmentList">Equipment List</a></li>
+            <li><a data-toggle="tab" href="#roomList">Room List</a></li>
           </ul>
-          
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">{{admin[1]}} {{admin[2]}}</h1>
 
-		<a href="/addtrainer">
-      <div class="row placeholders">
-        <div class="col-xs-6 col-sm-3 placeholder">
-          <img src="http://nationalpti.edu/wp-content/uploads/2014/02/Personal-Trainer.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-          <h4>Add Trainer</h4>
-      </div>
-    </a>
-    <a href="/addequipment">
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <img src="http://www.exerciseequipmentwarehouse.com/blog/wp-content/uploads/2013/03/oakland-ca-home-gym-equipment-store.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            <h4>Add Equipment</h4>
-        </div>
-    </a>
+          <div class="tab-content">
+            <div id="trainerList" class="tab-pane fade in active">
+              <!--<h2 class="sub-header">Trainers List</h2>-->
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Surname</th>
+                      <th>telephone</th>
+                      <th>email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                
+                    {% for trainer in trainers %}
+                    <tr>
+                      <td>{{loop.index}}</td>
+                      <td>{{trainer[0]}}</td>
+                      <td>{{trainer[1]}}</td>
+                      <td>{{trainer[2]}}</td>
+                      <td>{{trainer[3]}}</td>
+                    </tr>
+                    {%endfor%}
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div id="equipmentList" class="tab-pane fade">
+              <!--<h2 class="sub-header">Equipments List</h2>-->
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                
+                    {% for equipment in equipments %}
+                    <tr>
+                      <td>{{loop.index}}</td>
+                      <td>{{equipment[0]}}</td>
+                    </tr>
+                    {%endfor%}
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div id="roomList" class="tab-pane fade">
+              <!--<h2 class="sub-header">Room List</h2>-->
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Room Number</th>
+                      <th>Capacity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
-    <div class="col-xs-6 col-sm-3 placeholder">
-      <a href="/addroom">
-        <img src="http://world-adventurer.com/wp-content/uploads/2014/10/Kronwell-Gym-Room.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-      </a>
-      <a href="/addroom">
-        <h4>Add Room</h4>
-      </a>
-    </div>
+                    {% for room in rooms %}
+                    <tr>
+                      <td>{{loop.index}}</td>
+                      <td>{{room[0]}}</td>
+                      <td>{{room[1]}}</td>
+                      <td>{{room[2]}}</td>
+                    </tr>
+                    {%endfor%}
 
-      <!--   <div class="col-xs-6 col-sm-3 placeholder">
-        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-        <h4>...</h4>
-      </div> -->
-    </div>
-
-<div class="sub-container">
-  <h2 class="sub-header">Lists</h2>
-  <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#trainerList">Trainer List</a></li>
-    <li><a data-toggle="tab" href="#equipmentList">Equipment List</a></li>
-    <li><a data-toggle="tab" href="#roomList">Room List</a></li>
-  </ul>
-
-  <div class="tab-content">
-    <div id="trainerList" class="tab-pane fade in active">
-      <!--<h2 class="sub-header">Trainers List</h2>-->
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Surname</th>
-              <th>telephone</th>
-              <th>email</th>
-            </tr>
-          </thead>
-          <tbody>
-        
-            {% for trainer in trainers %}
-            <tr>
-              <td>{{loop.index}}</td>
-              <td>{{trainer[0]}}</td>
-              <td>{{trainer[1]}}</td>
-              <td>{{trainer[2]}}</td>
-              <td>{{trainer[3]}}</td>
-            </tr>
-            {%endfor%}
-            
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div id="equipmentList" class="tab-pane fade">
-      <!--<h2 class="sub-header">Equipments List</h2>-->
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-        
-            {% for equipment in equipments %}
-            <tr>
-              <td>{{loop.index}}</td>
-              <td>{{equipment[0]}}</td>
-            </tr>
-            {%endfor%}
-            
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div id="roomList" class="tab-pane fade">
-      <!--<h2 class="sub-header">Room List</h2>-->
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Room Number</th>
-              <th>Capacity</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for room in rooms %}
-            <tr>
-              <td>{{loop.index}}</td>
-              <td>{{room[0]}}</td>
-              <td>{{room[1]}}</td>
-              <td>{{room[2]}}</td>
-            </tr>
-            {%endfor%}
-          </tbody>
-        </table>
-      </div>
-    </div>
-</div>
-
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-   
-   
-  </body>
-</html>
-
+  </div>
+</body>
 </html>
