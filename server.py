@@ -74,7 +74,7 @@ def addtrainer():
         cursor.execute(sql)
         mysql.get_db().commit()
 
-        message = "Trainer added succesfully."
+        message = "Trainer added successfully."
         flash(message)
         return redirect("/dashboard")
 
@@ -104,7 +104,7 @@ def addtrainee():
         cursor.execute(sql)
         mysql.get_db().commit()
 
-        message = "Trainee added succesfully."
+        message = "Trainee added successfully."
         flash(message)
         return redirect("/dashboard")
 
@@ -121,7 +121,7 @@ def addequipment():
         cursor.execute(sql)
         mysql.get_db().commit()
         print name
-        message = "Equipment added succesfully."
+        message = "Equipment added successfully."
         flash(message)
         return redirect("/dashboard")
 
@@ -140,7 +140,9 @@ def addroom():
         cursor.execute(sql)
         mysql.get_db().commit()
         print size, name
-        message = "Room added succesfully."
+        # Example markup message
+        '''message = Markup("<h1>Voila! Room is added.</h1>")'''
+        message = "Room added successfully."
         flash(message)
         return redirect("/dashboard")
 
@@ -169,7 +171,7 @@ def add_event():
         cursor.execute(sql)
         mysql.get_db().commit()
         print year, month, day, starttime, endtime, name
-        message = "Event added succesfully."
+        message = "Event added successfully."
         flash(message)
         return redirect("dashboard")
 
@@ -186,7 +188,8 @@ def add_task():
         cursor = mysql.get_db().cursor()
         cursor.execute(sql)
         mysql.get_db().commit()
-        flash("Task added succesfully")
+        message = "Task added successfully"
+        flash(message)
         return redirect("dashboard")
 
 # webServices
