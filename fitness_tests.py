@@ -62,7 +62,8 @@ class FitnessTestCase(unittest.TestCase):
             day = "1" ,
             starttime = "12:00" ,
             endtime = "13:00" ,
-            name = "testevent"
+            name = "testevent",
+            room = "10"
             ) , follow_redirects = True)
         assert "dashboard" in rv.data
 
