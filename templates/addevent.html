@@ -1,4 +1,5 @@
-﻿<html>
+﻿<!DOCTYPE html>
+<html>
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -7,162 +8,410 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-<html>
-<head>
 <meta charset="UTF-8">
 <title>Add Event</title>
 </head>
 <body>
+<div class="container">
+  <div id=signupbox1 
+       class="mailbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2"
+       style=" margin-top:50px">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+          <h2 class="sub-header">Add Event</h2>
+      </div>
+      <!--
+      <div class="panel-info">
+        <p><i>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id gravida eros. Donec sit amet dictum nunc, eget egestas elit. Etiam risus sapien, pretium.</i></p>
+      </div>
+      -->
+      <div class="panel-body">
+        <div class="sub-container">
+          <ul class="nav nav-tabs">
+              <li class="active">
+                <a data-toggle="tab" href="#byTime">By time availability</a>
+              </li>
+              <li>
+                <a data-toggle="tab" href="#byRoom">By room availability</a>
+              </li>
+          </ul>
+          <div class="tab-content">
+            <div id="byTime" class="tab-pane fade in active">
+              <div class="panel-body" >
+                <!--Input form by Time Availability-->
+                <form class="form-horizontal" method="post" action="/addevent">
+                  <!--Event name input-->
+                  <div id="event-name-input" class="form-group required">
+                    <label for="id_name" class="control-label col-md-4 requiredField">
+                      Event Name<span class="asteriskField">*</span>
+                    </label>
+                    <div class="controls col-md-8">
+                      <input type="text" name="name" id="id_name"
+                             placeholder="e.g. Push-up Training"
+                             class="input-md textinput textInput form-control"
+                             style="margin-bottom: 15px">
+                    </div>
+                  </div>
+                  <!--Legacy Event Name input
+                  <p>Event Name :
+                    <input type = "text" name = "name" />
+                  </p><br>
+                  -->
 
+                  <!--Room input-->
+                  <div id="room-input" class="form-group required"
+                       style="margin-bottom: 30px"> 
+                    <label for="id_name" class="control-label col-md-4 requiredField"> 
+                      Select Room<span class="asteriskField">*</span> 
+                    </label> 
+                    <div class="controls col-md-8 "> 
+                      <select  name="room" class="input-md form-control">
+                        {% for room in rooms | sort()%} 
+                        <option value="{{room[0]}}"> <!--Sends room id info-->
+                          {{room[2]}} - {{room[1]}} ({{room[3]}}) <!--RoomName - R.Num (R.Cap)-->
+                        </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <!--Legacy Room input
+                  <p>Select Room :
+                    <select name = "room">
+                      
+                      {% for room in rooms | sort() %} 
+                      <option value="{{room[1]}}"> 
+                        {{room[1]}} - {{room[0]}} ({{room[2]}})
+                      </option>
+                      {% endfor %}
+                    </select>
+                  </p><br>
+                  -->
 
-<div class="container">    
-            
-    <div id="signupbox" style=" margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <div class="panel-title">Add Event</div>
-                <br>
-            </div>  
-            <div class="panel-body" >
-                <form method="post" action="/addevent">
-                    		Year : <select name="year">
-                    		<option> 2017 </option>
-                    		<option> 2018 </option>
-                    		<option> 2019 </option>
-                    		<option> 2020 </option>
-                    		<option> 2021 </option>
-                    		<option> 2022 </option>
-                    		<option> 2023 </option>
-                    		<option> 2024 </option>
-                    		</select>
-                    		<br>
-                    		<br>
-                    		Month : <select name="month">
-                    		<option> 1 </option>
-                    		<option> 2 </option>
-                    		<option> 3 </option>
-                    		<option> 4 </option>
-                    		<option> 5 </option>
-                    		<option> 6 </option>
-                    		<option> 7 </option>
-                    		<option> 8 </option>
-                    		<option> 9 </option>
-                    		<option> 10 </option>
-                    		<option> 11 </option>
-                    		<option> 12 </option>                   		
-                    		</select>
-                    		<br>
-                    		<br>
-                    		Day : <select name= "day">
-                    		<option> 1 </option>
-                    		<option> 2 </option>
-                    		<option> 3 </option>
-                    		<option> 4 </option>
-                    		<option> 5 </option>
-                    		<option> 6 </option>
-                    		<option> 7 </option>
-                    		<option> 8 </option>
-                    		<option> 9 </option>
-                    		<option> 10 </option>
-                    		<option> 11 </option>
-                    		<option> 12 </option>
-                    		<option> 13 </option>
-                    		<option> 14 </option>
-                    		<option> 15 </option>
-                    		<option> 16 </option>
-                    		<option> 17 </option>
-                    		<option> 18 </option>
-                    		<option> 19 </option>
-                    		<option> 20 </option>
-                    		<option> 21 </option>
-                    		<option> 22 </option>
-                    		<option> 23 </option>
-                    		<option> 24 </option>
-                    		<option> 25 </option>
-                    		<option> 26 </option>
-                    		<option> 27 </option>
-                    		<option> 28 </option>
-                    		<option> 29 </option>
-                    		<option> 30 </option>
-                    		<option> 31 </option>                    		
-                    		</select>
-                    		<br>	
-                    		<br>
-                    		Select Start Time : <select name="starttime">
-                    			<option>00:00</option>
-                    			<option>01:00</option>
-                    			<option>02:00</option>
-                    			<option>03:00</option>
-                    			<option>04:00</option>
-                    			<option>05:00</option>
-                    			<option>06:00</option>
-                    			<option>07:00</option>
-                    			<option>08:00</option>
-                    			<option>09:00</option>
-                    			<option>10:00</option>
-                    			<option>11:00</option>
-                    			<option>12:00</option>
-                    			<option>13:00</option>
-                    			<option>14:00</option>
-                    			<option>15:00</option>
-                    			<option>16:00</option>
-                    			<option>17:00</option>
-                    			<option>18:00</option>
-                    			<option>19:00</option>
-                    			<option>20:00</option>
-                    			<option>21:00</option>
-                    			<option>22:00</option>
-                    			<option>23:00</option>                   			     			                        		
-                    		</select>
-                    		<br>
-                    		<br>
-                    		Select End Time : <select name="endtime">
-                    			<option>00:00</option>
-                    			<option>01:00</option>
-                    			<option>02:00</option>
-                    			<option>03:00</option>
-                    			<option>04:00</option>
-                    			<option>05:00</option>
-                    			<option>06:00</option>
-                    			<option>07:00</option>
-                    			<option>08:00</option>
-                    			<option>09:00</option>
-                    			<option>10:00</option>
-                    			<option>11:00</option>
-                    			<option>12:00</option>
-                    			<option>13:00</option>
-                    			<option>14:00</option>
-                    			<option>15:00</option>
-                    			<option>16:00</option>
-                    			<option>17:00</option>
-                    			<option>18:00</option>
-                    			<option>19:00</option>
-                    			<option>20:00</option>
-                    			<option>21:00</option>
-                    			<option>22:00</option>
-                    			<option>23:00</option>                   			     			                    		                    		
-                    		</select>
-                    		<br>
-                    		<br>                    		
-                    		Event Name : <input type = "text" name = "name" />
-                    		<br>
-                            <br>
-                    		<div class="form-group"> 
-                            <div class="aab controls col-md-4 "></div>
-                            <div class="controls col-md-8 ">
-                                <input type="submit" name="Event" value="Add Event" style="float:left" class="btn btn-primary btn btn-info" id="submit-id-event" />
-                               
-                            </div>
-                        </div> 	
-                       
+                  <!--Container for date inputs-->
+                  <div id="dateCont" style="margin-bottom: 30px">
+                    <!--Year input-->
+                    <div id="year-input" class="form-group required"> 
+                      <label for="id_name" class="control-label col-md-4 requiredField"> 
+                        Year<span class="asteriskField">*</span> 
+                      </label> 
+                      <div class="controls col-md-8 "> 
+                          <select name="year" class="input-md form-control">
+                            <option> 2017 </option>
+                            <option> 2018 </option>
+                            <option> 2019 </option>
+                            <option> 2020 </option>
+                            <option> 2021 </option>
+                            <option> 2022 </option>
+                            <option> 2023 </option>
+                            <option> 2024 </option>
+                          </select>
+                      </div>
+                    </div>
+                    <!--Legacy Year input
+                    <p>Year :
+                      <select name="year">
+                        <option> 2017 </option>
+                        <option> 2018 </option>
+                        <option> 2019 </option>
+                        <option> 2020 </option>
+                        <option> 2021 </option>
+                        <option> 2022 </option>
+                        <option> 2023 </option>
+                        <option> 2024 </option>
+                      </select>
+                    </p><br>
+                    -->
+
+                    <!--Month input-->
+                    <div id="month-input" class="form-group required"> 
+                      <label for="id_name" class="control-label col-md-4 requiredField"> 
+                        Month<span class="asteriskField">*</span> 
+                      </label> 
+                      <div class="controls col-md-8 "> 
+                        <select  name="month" class="input-md form-control">
+                          <option> 1 </option>
+                          <option> 2 </option>
+                          <option> 3 </option>
+                          <option> 4 </option>
+                          <option> 5 </option>
+                          <option> 6 </option>
+                          <option> 7 </option>
+                          <option> 8 </option>
+                          <option> 9 </option>
+                          <option> 10 </option>
+                          <option> 11 </option>
+                          <option> 12 </option>   
+                        </select>
+                      </div>
+                    </div>
+                    <!--Legacy Month input
+                    <p>Month : 
+                      <select name="month">
+                        <option> 1 </option>
+                        <option> 2 </option>
+                        <option> 3 </option>
+                        <option> 4 </option>
+                        <option> 5 </option>
+                        <option> 6 </option>
+                        <option> 7 </option>
+                        <option> 8 </option>
+                        <option> 9 </option>
+                        <option> 10 </option>
+                        <option> 11 </option>
+                        <option> 12 </option>                       
+                      </select>
+                    </p><br>
+                    -->
+
+                    <!--Day input-->
+                    <div id="day-input" class="form-group required"> 
+                      <label for="id_name" class="control-label col-md-4 requiredField"> 
+                        Day<span class="asteriskField">*</span> 
+                      </label> 
+                      <div class="controls col-md-8 "> 
+                        <select  name="day" class="input-md form-control">
+                          <option> 1 </option>
+                          <option> 2 </option>
+                          <option> 3 </option>
+                          <option> 4 </option>
+                          <option> 5 </option>
+                          <option> 6 </option>
+                          <option> 7 </option>
+                          <option> 8 </option>
+                          <option> 9 </option>
+                          <option> 10 </option>
+                          <option> 11 </option>
+                          <option> 12 </option>
+                          <option> 13 </option>
+                          <option> 14 </option>
+                          <option> 15 </option>
+                          <option> 16 </option>
+                          <option> 17 </option>
+                          <option> 18 </option>
+                          <option> 19 </option>
+                          <option> 20 </option>
+                          <option> 21 </option>
+                          <option> 22 </option>
+                          <option> 23 </option>
+                          <option> 24 </option>
+                          <option> 25 </option>
+                          <option> 26 </option>
+                          <option> 27 </option>
+                          <option> 28 </option>
+                          <option> 29 </option>
+                          <option> 30 </option>
+                          <option> 31 </option> 
+                        </select>
+                      </div>
+                    </div>
+                    <!--Legacy Day input
+                    <p>Day : 
+                      <select name= "day">
+                        <option> 1 </option>
+                        <option> 2 </option>
+                        <option> 3 </option>
+                        <option> 4 </option>
+                        <option> 5 </option>
+                        <option> 6 </option>
+                        <option> 7 </option>
+                        <option> 8 </option>
+                        <option> 9 </option>
+                        <option> 10 </option>
+                        <option> 11 </option>
+                        <option> 12 </option>
+                        <option> 13 </option>
+                        <option> 14 </option>
+                        <option> 15 </option>
+                        <option> 16 </option>
+                        <option> 17 </option>
+                        <option> 18 </option>
+                        <option> 19 </option>
+                        <option> 20 </option>
+                        <option> 21 </option>
+                        <option> 22 </option>
+                        <option> 23 </option>
+                        <option> 24 </option>
+                        <option> 25 </option>
+                        <option> 26 </option>
+                        <option> 27 </option>
+                        <option> 28 </option>
+                        <option> 29 </option>
+                        <option> 30 </option>
+                        <option> 31 </option>                       
+                      </select> 
+                    </p><br>
+                    -->
+                  </div>
+
+                  <!--Container for start & end time inputs-->
+                  <div id="timeCont" style="margin-bottom: 30px">
+                    <!--Start Time input-->
+                    <div id="start-time-input" class="form-group required"> 
+                      <label for="id_name" class="control-label col-md-4 requiredField"> 
+                        Select Start Time<span class="asteriskField">*</span> 
+                      </label> 
+                      <div class="controls col-md-8 "> 
+                        <select  name="starttime" class="input-md form-control">
+                          <option>00:00</option>
+                          <option>01:00</option>
+                          <option>02:00</option>
+                          <option>03:00</option>
+                          <option>04:00</option>
+                          <option>05:00</option>
+                          <option>06:00</option>
+                          <option>07:00</option>
+                          <option>08:00</option>
+                          <option>09:00</option>
+                          <option>10:00</option>
+                          <option>11:00</option>
+                          <option>12:00</option>
+                          <option>13:00</option>
+                          <option>14:00</option>
+                          <option>15:00</option>
+                          <option>16:00</option>
+                          <option>17:00</option>
+                          <option>18:00</option>
+                          <option>19:00</option>
+                          <option>20:00</option>
+                          <option>21:00</option>
+                          <option>22:00</option>
+                          <option>23:00</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!--Legacy Start Time input
+                    <p>Select Start Time : 
+                      <select name="starttime">
+                        <option>00:00</option>
+                        <option>01:00</option>
+                        <option>02:00</option>
+                        <option>03:00</option>
+                        <option>04:00</option>
+                        <option>05:00</option>
+                        <option>06:00</option>
+                        <option>07:00</option>
+                        <option>08:00</option>
+                        <option>09:00</option>
+                        <option>10:00</option>
+                        <option>11:00</option>
+                        <option>12:00</option>
+                        <option>13:00</option>
+                        <option>14:00</option>
+                        <option>15:00</option>
+                        <option>16:00</option>
+                        <option>17:00</option>
+                        <option>18:00</option>
+                        <option>19:00</option>
+                        <option>20:00</option>
+                        <option>21:00</option>
+                        <option>22:00</option>
+                        <option>23:00</option>
+                      </select>
+                    </p><br>
+                    -->
+
+                    <!--End Time input-->
+                    <div id="end-time-input" class="form-group required"> 
+                      <label for="id_name" class="control-label col-md-4 requiredField"> 
+                        Select End Time<span class="asteriskField">*</span> 
+                      </label> 
+                      <div class="controls col-md-8 "> 
+                        <select  name="endtime" class="input-md form-control">
+                          <option>00:00</option>
+                          <option>01:00</option>
+                          <option>02:00</option>
+                          <option>03:00</option>
+                          <option>04:00</option>
+                          <option>05:00</option>
+                          <option>06:00</option>
+                          <option>07:00</option>
+                          <option>08:00</option>
+                          <option>09:00</option>
+                          <option>10:00</option>
+                          <option>11:00</option>
+                          <option>12:00</option>
+                          <option>13:00</option>
+                          <option>14:00</option>
+                          <option>15:00</option>
+                          <option>16:00</option>
+                          <option>17:00</option>
+                          <option>18:00</option>
+                          <option>19:00</option>
+                          <option>20:00</option>
+                          <option>21:00</option>
+                          <option>22:00</option>
+                          <option>23:00</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!--Legacy End Time input
+                    <p>Select End Time : 
+                      <select name="endtime">
+                        <option>00:00</option>
+                        <option>01:00</option>
+                        <option>02:00</option>
+                        <option>03:00</option>
+                        <option>04:00</option>
+                        <option>05:00</option>
+                        <option>06:00</option>
+                        <option>07:00</option>
+                        <option>08:00</option>
+                        <option>09:00</option>
+                        <option>10:00</option>
+                        <option>11:00</option>
+                        <option>12:00</option>
+                        <option>13:00</option>
+                        <option>14:00</option>
+                        <option>15:00</option>
+                        <option>16:00</option>
+                        <option>17:00</option>
+                        <option>18:00</option>
+                        <option>19:00</option>
+                        <option>20:00</option>
+                        <option>21:00</option>
+                        <option>22:00</option>
+                        <option>23:00</option>
+                      </select>
+                    </p><br>
+                    -->
+                  </div>
+
                   
+                  <!--Submit button-->
+                  <div class="form-group"> 
+                    <div class="aab controls col-md-4 "></div>
+                    <div class="controls col-md-8 ">
+                        <input type="submit" id="submit-id-event"
+                               name="Event" value="Add Event" 
+                               style="float:left" 
+                               class="btn btn-primary btn btn-info" 
+                                />                     
+                    </div>
+                  </div>  
                 </form>         
+              </div> 
+            </div>
+            <div id="byRoom" class="tab-pane fade">
+              <!--Input form by Room Availability-->
+              <form class="form-horizontal" method="post" action="/addevent">
+                <!--<h2 class="sub-header">Equipments List</h2>-->
+                <!--Submit button-->
+                <div class="form-group"> 
+                  <div class="aab controls col-md-4 "></div>
+                  <div class="controls col-md-8 ">
+                      <input type="submit" id="submit-id-event"
+                             name="Event" value="Add Event" 
+                             style="float:left" 
+                             class="btn btn-primary btn btn-info" 
+                              />                     
+                  </div>
+                </div>
+              </form>  
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-            </div>
-            </div>
-            </div>
-                    
-     
-     
+  </div>     
 </body>
 </html>

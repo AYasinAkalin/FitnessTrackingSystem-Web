@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, request, session, json, jsonify, redirect, url_for, flash, Markup
-# Markup added above to pass good looking messages to flash. -AY
 
 from flaskext.mysql import MySQL
 mysql = MySQL()
@@ -10,33 +9,6 @@ app = Flask(__name__)
 app.secret_key = "adadaxax"
 app.config.from_pyfile("dbconfig.cfg")
 mysql.init_app(app)
-
-# TODO: add flash thing
-    # Half-way solution:
-    # We need to add one of the following "flashes" class to html file but I don't exactly know where to, to make it work properly -AY
-""" This one for simple messages.
-    <div class="flashes">
-        {% for message in get_flashed_messages()%}
-            {{ message | safe}} <!--# "...|safe" is needed to pass HTML code but opens a backdoor to XSS attacks. -AY-->
-        {% endfor %}
-    </div>
-"""
-
-""" This one uses Bootstrap message boxes.
-    <div class="flashes">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
-        {% if messages %}
-            {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <!-- <strong>Title</strong> --> {{ message }}
-            </div>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
-    </div>
-"""
 
 
 @app.route("/")
@@ -81,7 +53,12 @@ def dashboard():
         cursor.execute("select users.id,name,surname,email,telephone,weight,height,info from users join trainees on users.id=trainees.id where trainees.trainerId=%s" % session["user"][0])  # my user id
         trainees = cursor.fetchall()
         session["trainees"] = trainees
-        return render_template("trainerprofile.html", trainer=session["user"], trainees=session["trainees"])
+
+        cursor.execute("select * from rooms")
+        rooms = cursor.fetchall()
+        session["rooms"] = rooms
+
+        return render_template("trainerprofile.html", trainer=session["user"], trainees=session["trainees"], rooms=session["rooms"])
     else:  # user role is trainee
         return "You are a trainee. Please use mobile."
 
@@ -102,6 +79,8 @@ def addtrainer():
         cursor.execute(sql)
         mysql.get_db().commit()
 
+        message = "Trainer added successfully."
+        flash(message)
         return redirect("/dashboard")
 
 
@@ -130,6 +109,8 @@ def addtrainee():
         cursor.execute(sql)
         mysql.get_db().commit()
 
+        message = "Trainee added successfully."
+        flash(message)
         return redirect("/dashboard")
 
 
@@ -145,6 +126,8 @@ def addequipment():
         cursor.execute(sql)
         mysql.get_db().commit()
         print name
+        message = "Equipment added successfully."
+        flash(message)
         return redirect("/dashboard")
 
 
@@ -159,12 +142,12 @@ def addroom():
         sql = "Insert into rooms(name,number,size) values('%s','%s','%s')" % (name, number, size)
         print sql
         cursor = mysql.get_db().cursor()
-
         cursor.execute(sql)
         mysql.get_db().commit()
-        print size, name
-        message = "Room added succesfully."
-        # messageHTML = "<div class=\"alert alert-success\"> Success! Room added. </div>"
+        print name, number, size
+        # Example markup message
+        '''message = Markup("<h1>Voila! Room is added.</h1>")'''
+        message = "Room added successfully."
         flash(message)
         return redirect("/dashboard")
 
@@ -176,7 +159,7 @@ def add_program():
 @app.route("/addevent", methods=["GET", "POST"])
 def add_event():
     if request.method == "GET":
-        return render_template("addevent.html")
+        return render_template("addevent.html", rooms=session["rooms"])
     else:
         year = request.form["year"]
         month = request.form["month"]
@@ -187,13 +170,18 @@ def add_event():
         startdate = "%s-%s-%s %s" % (year, month, day, starttime)
         enddate = "%s-%s-%s %s" % (year, month, day, endtime)
         cursor = mysql.get_db().cursor()
+        room_id = request.form["room"]  # [0] <<- This one makes form to take only one character
         trainer_id = session["user"][0]
-        sql = "Insert into events(startdate,enddate,name,trainerid) values('%s','%s','%s',%s)" % (startdate, enddate, name, trainer_id)
+        # TODO: Add Room ID to SQL statement just below
+        sql = "INSERT INTO events(startdate, enddate, name, trainerid, roomid) VALUES ('%s', '%s', '%s', '%s', '%s')" % (startdate, enddate, name, trainer_id, room_id)
         print sql
         cursor.execute(sql)
         mysql.get_db().commit()
-        print year, month, day, starttime, endtime, name
-        return redirect("dashboard")  # change to "/dashboard" ??
+        print year, month, day, starttime, endtime, name, room_id
+        message = "Event added successfully."
+        flash(message)
+        return redirect("dashboard")
+
 
 @app.route("/addtask", methods=["GET", "POST"])
 def add_task():
@@ -207,8 +195,9 @@ def add_task():
         cursor = mysql.get_db().cursor()
         cursor.execute(sql)
         mysql.get_db().commit()
-        flash("Task added succesfully")
-        return redirect("dashboard")  # change to "/dashboard" ??
+        message = "Task added successfully"
+        flash(message)
+        return redirect("dashboard")
 
 # webServices
 @app.route("/ws/login", methods=["POST"])
@@ -248,6 +237,16 @@ def get_tasks(traineeId):
         tasks=tasks
     )
 
+@app.route("/ws/events", methods=["GET"])
+def get_events():
+    cursor = mysql.get_db().cursor()
+    sql = "select * FROM events WHERE startdate > CURRENT_DATE"
+    cursor.execute(sql)
+    events = cursor.fetchall()
+
+    return jsonify(
+        events = events
+    )
 
 @app.route("/ws/task/<int:taskId>/complete", methods=["GET"])
 def complete_task(taskId):
