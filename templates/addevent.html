@@ -55,18 +55,18 @@
                     <input type = "text" name = "name" />
                   </p><br>
                   -->
-                  
+
                   <!--Room input-->
-                  <div id="div_id_name" class="form-group required"
+                  <div id="room-input" class="form-group required"
                        style="margin-bottom: 30px"> 
                     <label for="id_name" class="control-label col-md-4 requiredField"> 
                       Select Room<span class="asteriskField">*</span> 
                     </label> 
                     <div class="controls col-md-8 "> 
                       <select  name="room" class="input-md form-control">
-                        {% for room in rooms %} 
-                        <option value="{{loop.index}}"> <!--Sends room number info-->
-                          {{room[1]}} - {{room[0]}} ({{room[2]}})
+                        {% for room in rooms | sort()%} 
+                        <option value="{{room[0]}}"> <!--Sends room id info-->
+                          {{room[2]}} - {{room[1]}} ({{room[3]}}) <!--RoomName - R.Num (R.Cap)-->
                         </option>
                         {% endfor %}
                       </select>

@@ -53,7 +53,12 @@ def dashboard():
         cursor.execute("select users.id,name,surname,email,telephone,weight,height,info from users join trainees on users.id=trainees.id where trainees.trainerId=%s" % session["user"][0])  # my user id
         trainees = cursor.fetchall()
         session["trainees"] = trainees
-        return render_template("trainerprofile.html", trainer=session["user"], trainees=session["trainees"])
+
+        cursor.execute("select * from rooms")
+        rooms = cursor.fetchall()
+        session["rooms"] = rooms
+
+        return render_template("trainerprofile.html", trainer=session["user"], trainees=session["trainees"], rooms=session["rooms"])
     else:  # user role is trainee
         return "You are a trainee. Please use mobile."
 
@@ -164,15 +169,15 @@ def add_event():
         name = request.form["name"]
         startdate = "%s-%s-%s %s" % (year, month, day, starttime)
         enddate = "%s-%s-%s %s" % (year, month, day, endtime)
-        room = request.form["room"]  # [0] <<- This one makes form to take only one character
         cursor = mysql.get_db().cursor()
+        room_id = request.form["room"]  # [0] <<- This one makes form to take only one character
         trainer_id = session["user"][0]
         # TODO: Add Room ID to SQL statement just below
-        sql = "INSERT INTO events(startdate, enddate, name, trainerid, roomid) VALUES ('%s', '%s', '%s', '%s', '%s')" % (startdate, enddate, name, trainer_id, room)
+        sql = "INSERT INTO events(startdate, enddate, name, trainerid, roomid) VALUES ('%s', '%s', '%s', '%s', '%s')" % (startdate, enddate, name, trainer_id, room_id)
         print sql
         cursor.execute(sql)
         mysql.get_db().commit()
-        print year, month, day, starttime, endtime, name, room
+        print year, month, day, starttime, endtime, name, room_id
         message = "Event added successfully."
         flash(message)
         return redirect("dashboard")
