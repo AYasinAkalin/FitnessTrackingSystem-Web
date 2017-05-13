@@ -53,7 +53,12 @@ def dashboard():
         cursor.execute("select users.id,name,surname,email,telephone,weight,height,info from users join trainees on users.id=trainees.id where trainees.trainerId=%s" % session["user"][0])  # my user id
         trainees = cursor.fetchall()
         session["trainees"] = trainees
-        return render_template("trainerprofile.html", trainer=session["user"], trainees=session["trainees"])
+
+        cursor.execute("select * from rooms")
+        rooms = cursor.fetchall()
+        session["rooms"] = rooms
+
+        return render_template("trainerprofile.html", trainer=session["user"], trainees=session["trainees"], rooms=session["rooms"])
     else:  # user role is trainee
         return "You are a trainee. Please use mobile."
 
@@ -74,7 +79,7 @@ def addtrainer():
         cursor.execute(sql)
         mysql.get_db().commit()
 
-        message = "Trainer added succesfully."
+        message = "Trainer added successfully."
         flash(message)
         return redirect("/dashboard")
 
@@ -104,7 +109,7 @@ def addtrainee():
         cursor.execute(sql)
         mysql.get_db().commit()
 
-        message = "Trainee added succesfully."
+        message = "Trainee added successfully."
         flash(message)
         return redirect("/dashboard")
 
@@ -121,7 +126,7 @@ def addequipment():
         cursor.execute(sql)
         mysql.get_db().commit()
         print name
-        message = "Equipment added succesfully."
+        message = "Equipment added successfully."
         flash(message)
         return redirect("/dashboard")
 
@@ -139,8 +144,10 @@ def addroom():
         cursor = mysql.get_db().cursor()
         cursor.execute(sql)
         mysql.get_db().commit()
-        print size, name
-        message = "Room added succesfully."
+        print name, number, size
+        # Example markup message
+        '''message = Markup("<h1>Voila! Room is added.</h1>")'''
+        message = "Room added successfully."
         flash(message)
         return redirect("/dashboard")
 
@@ -152,7 +159,7 @@ def add_program():
 @app.route("/addevent", methods=["GET", "POST"])
 def add_event():
     if request.method == "GET":
-        return render_template("addevent.html")
+        return render_template("addevent.html", rooms=session["rooms"])
     else:
         year = request.form["year"]
         month = request.form["month"]
@@ -163,13 +170,15 @@ def add_event():
         startdate = "%s-%s-%s %s" % (year, month, day, starttime)
         enddate = "%s-%s-%s %s" % (year, month, day, endtime)
         cursor = mysql.get_db().cursor()
+        room_id = request.form["room"]  # [0] <<- This one makes form to take only one character
         trainer_id = session["user"][0]
-        sql = "Insert into events(startdate,enddate,name,trainerid) values('%s','%s','%s',%s)" % (startdate, enddate, name, trainer_id)
+        # TODO: Add Room ID to SQL statement just below
+        sql = "INSERT INTO events(startdate, enddate, name, trainerid, roomid) VALUES ('%s', '%s', '%s', '%s', '%s')" % (startdate, enddate, name, trainer_id, room_id)
         print sql
         cursor.execute(sql)
         mysql.get_db().commit()
-        print year, month, day, starttime, endtime, name
-        message = "Event added succesfully."
+        print year, month, day, starttime, endtime, name, room_id
+        message = "Event added successfully."
         flash(message)
         return redirect("dashboard")
 
@@ -186,7 +195,8 @@ def add_task():
         cursor = mysql.get_db().cursor()
         cursor.execute(sql)
         mysql.get_db().commit()
-        flash("Task added succesfully")
+        message = "Task added successfully"
+        flash(message)
         return redirect("dashboard")
 
 # webServices
