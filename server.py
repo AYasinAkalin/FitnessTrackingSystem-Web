@@ -168,7 +168,7 @@ def add_event():
         cursor = mysql.get_db().cursor()
         trainer_id = session["user"][0]
         # TODO: Add Room ID to SQL statement just below
-        sql = "INSERT INTO `events`(`startdate`, `enddate`, `name`, `trainerid`, `roomid) VALUES ('%s', '%s', '%s', '%s', '%s')" % (startdate, enddate, name, trainer_id, room)
+        sql = "INSERT INTO events(startdate, enddate, name, trainerid, roomid) VALUES ('%s', '%s', '%s', '%s', '%s')" % (startdate, enddate, name, trainer_id, room)
         print sql
         cursor.execute(sql)
         mysql.get_db().commit()
