@@ -139,7 +139,7 @@ def addroom():
         cursor = mysql.get_db().cursor()
         cursor.execute(sql)
         mysql.get_db().commit()
-        print size, name
+        print name, number, size
         # Example markup message
         '''message = Markup("<h1>Voila! Room is added.</h1>")'''
         message = "Room added successfully."
@@ -154,7 +154,7 @@ def add_program():
 @app.route("/addevent", methods=["GET", "POST"])
 def add_event():
     if request.method == "GET":
-        return render_template("addevent.html")
+        return render_template("addevent.html", rooms=session["rooms"])
     else:
         year = request.form["year"]
         month = request.form["month"]
@@ -164,13 +164,15 @@ def add_event():
         name = request.form["name"]
         startdate = "%s-%s-%s %s" % (year, month, day, starttime)
         enddate = "%s-%s-%s %s" % (year, month, day, endtime)
+        room = request.form["room"]  # [0] <<- This one makes form to take only one character
         cursor = mysql.get_db().cursor()
         trainer_id = session["user"][0]
-        sql = "Insert into events(startdate,enddate,name,trainerid) values('%s','%s','%s',%s)" % (startdate, enddate, name, trainer_id)
+        # TODO: Add Room ID to SQL statement just below
+        sql = "INSERT INTO `events`(`startdate`, `enddate`, `name`, `trainerid`, `roomid) VALUES ('%s', '%s', '%s', '%s', '%s')" % (startdate, enddate, name, trainer_id, room)
         print sql
         cursor.execute(sql)
         mysql.get_db().commit()
-        print year, month, day, starttime, endtime, name
+        print year, month, day, starttime, endtime, name, room
         message = "Event added successfully."
         flash(message)
         return redirect("dashboard")
