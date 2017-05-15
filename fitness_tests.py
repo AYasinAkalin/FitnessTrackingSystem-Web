@@ -108,9 +108,12 @@ class FitnessTestCase(unittest.TestCase):
     def test_add_task(self):
 
         self.test_trainer_login()
+        import datetime
+        task_date=datetime.date.today()+datetime.timedelta(3)
         rv=self.app.post("/addtask",data=dict(
             taskName="testTask",
-            traineeId=10,
+            traineeId=531,
+            validuntil=str(task_date),
        
             info="testinfo"
         ))
@@ -119,6 +122,16 @@ class FitnessTestCase(unittest.TestCase):
         rv=self.app.get("/addtask")
         assert rv.status_code==200
 
+    def test_add_room(self):
+        self.test_admin_login()
+        rv=self.app.post("/addroom",data=dict(
+             name = "testroom",
+        number = '5',
+        size = 10
+        ),follow_redirects=True)
+        assert rv.status_code==200
+        rv=self.app.get("/addroom")
+        assert rv.status_code==200
     def test_web_login(self):
         rv=self.app.post("/ws/login",
         data=json.dumps(dict(
@@ -154,7 +167,7 @@ class FitnessTestCase(unittest.TestCase):
     def test_web_get_tasks(self):
         rv=self.app.get("/ws/tasks/531")
         tasks=json.loads(rv.data)
-        assert tasks["tasks"][0][1]=="mytask1"
+        assert tasks["tasks"][0][1]=="testTask"
 
     def test_web_complete_task(self):
         rv=self.app.get("/ws/task/1/complete")

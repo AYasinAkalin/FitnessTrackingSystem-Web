@@ -121,11 +121,11 @@ def addequipment():
     else:
         name = request.form["name"]
         sql = "Insert into equipments(name) values('%s')" % (name)
-        print sql
+        
         cursor = mysql.get_db().cursor()
         cursor.execute(sql)
         mysql.get_db().commit()
-        print name
+    
         message = "Equipment added successfully."
         flash(message)
         return redirect("/dashboard")
@@ -140,11 +140,10 @@ def addroom():
         number = request.form["number"]
         size = request.form["size"]
         sql = "Insert into rooms(name,number,size) values('%s','%s','%s')" % (name, number, size)
-        print sql
+      
         cursor = mysql.get_db().cursor()
         cursor.execute(sql)
         mysql.get_db().commit()
-        print name, number, size
         # Example markup message
         '''message = Markup("<h1>Voila! Room is added.</h1>")'''
         message = "Room added successfully."
@@ -174,10 +173,9 @@ def add_event():
         trainer_id = session["user"][0]
         # TODO: Add Room ID to SQL statement just below
         sql = "INSERT INTO events(startdate, enddate, name, trainerid, roomid) VALUES ('%s', '%s', '%s', '%s', '%s')" % (startdate, enddate, name, trainer_id, room_id)
-        print sql
+      
         cursor.execute(sql)
         mysql.get_db().commit()
-        print year, month, day, starttime, endtime, name, room_id
         message = "Event added successfully."
         flash(message)
         return redirect("dashboard")
@@ -191,7 +189,8 @@ def add_task():
         taskName = request.form["taskName"]
         traineeId = request.form["traineeId"]
         info = request.form["info"]
-        sql = "INSERT INTO `tasks`(`taskName`, `traineeId`,`info`, `status`) VALUES ('%s',%s,'%s',0)" % (taskName, traineeId, info)
+        validdate=request.form["validuntil"]
+        sql = "INSERT INTO `tasks`(`taskName`, `traineeId`,`info`, `status`,`validuntil`) VALUES ('%s',%s,'%s',0,'%s')" % (taskName, traineeId, info,validdate)
         cursor = mysql.get_db().cursor()
         cursor.execute(sql)
         mysql.get_db().commit()
@@ -229,7 +228,7 @@ def login_trainee():
 @app.route("/ws/tasks/<int:traineeId>", methods=["GET"])
 def get_tasks(traineeId):
     cursor = mysql.get_db().cursor()
-    sql = "select id,taskName,info,status from tasks where traineeId=%d" % traineeId
+    sql = "select id,taskName,info,status,validuntil from tasks where traineeId=%d and  CURRENT_DATE+7 >validuntil" % traineeId
     cursor.execute(sql)
     tasks = cursor.fetchall()
 
