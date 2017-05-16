@@ -13,6 +13,11 @@
 	  margin-right: -15px;
 	  margin-left: 0px;
 	}
+/* Row class declaration for Flash Messages */
+	.row-flash-dashboard {
+	  margin-right: -15px;
+	  margin-left: -15px;
+	}
 /* Site Wide Link Color */
 	/* It is recommended to add 'link-color' attribute to <body> with one of the colors below*/
 	/* Default. Not recommended to activate.
