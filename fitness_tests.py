@@ -172,12 +172,13 @@ class FitnessTestCase(unittest.TestCase):
         assert data["response"]=="NA" #not authenticated user
 
     def test_web_events(self):
-        rv=self.app.get("/ws/events")
+        userid=10
+        rv=self.app.get("/ws/events/10")
         assert rv.status_code==200
     def test_web_get_tasks(self):
         rv=self.app.get("/ws/tasks/531")
         tasks=json.loads(rv.data)
-        assert tasks["tasks"][0][1]=="testTask"
+        assert tasks["tasks"][-1][1]=="testTask"
 
     def test_web_complete_task(self):
         rv=self.app.get("/ws/task/1/complete")
