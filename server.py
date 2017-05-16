@@ -151,9 +151,6 @@ def addroom():
         return redirect("/dashboard")
 
 
-def add_program():
-    pass
-
 
 @app.route("/addevent", methods=["GET", "POST"])
 def add_event():
@@ -198,6 +195,7 @@ def add_task():
         flash(message)
         return redirect("dashboard")
 
+
 @app.route("/logout",methods=["GET"])
 def logout():
     session.clear()
@@ -241,10 +239,17 @@ def get_tasks(traineeId):
         tasks=tasks
     )
 
-@app.route("/ws/events", methods=["GET"])
-def get_events():
+@app.route("/ws/events/<int:userid>", methods=["GET"])
+def get_events(userid):
     cursor = mysql.get_db().cursor()
-    sql = "select * FROM events WHERE startdate > CURRENT_DATE"
+    sql = """select events.id as eventid,startdate,enddate,events.name,
+
+(case when size>COUNT(joining.traineeid) then 0
+when size=COUNT(joining.traineeid) then 1
+end) as isFull,
+
+(SELECT COUNT(*) from joining,events where events.id=eventid and joining.traineeid=%s) as joining
+FROM events,joining,rooms WHERE startdate > CURRENT_DATE and joining.eventid=events.id and events.roomid=rooms.id""" % userid
     cursor.execute(sql)
     events = cursor.fetchall()
 
@@ -256,6 +261,23 @@ def get_events():
 def complete_task(taskId):
     cursor = mysql.get_db().cursor()
     sql = "update tasks set status=1 where id=%d" % taskId
+    cursor.execute(sql)
+    mysql.get_db().commit()
+    return "OK"
+
+@app.route("/ws/events/join/<int:eventId>/<int:traineeId>",methods=["GET"])
+def join_event(eventId,traineeId):
+    cursor=mysql.get_db().cursor()
+    sql="Insert into joining(eventid,traineeid) values(%s,%s)"%(eventId,traineeId)
+    cursor.execute(sql)
+    mysql.get_db().commit()
+    return "OK"
+
+@app.route("/ws/events/leave/<int:eventId>/<int:traineeId>",methods=["GET"])
+def leave_event(eventId,traineeId):
+    cursor=mysql.get_db().cursor()
+    sql="DELETE FROM joining where eventid=%s and traineeid=%s"%(eventId,traineeId)
+    print sql
     cursor.execute(sql)
     mysql.get_db().commit()
     return "OK"
