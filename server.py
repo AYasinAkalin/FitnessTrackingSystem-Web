@@ -198,6 +198,11 @@ def add_task():
         flash(message)
         return redirect("dashboard")
 
+@app.route("/logout",methods=["GET"])
+def logout():
+    session.clear()
+    return redirect("/")
+
 # webServices
 @app.route("/ws/login", methods=["POST"])
 def login_trainee():

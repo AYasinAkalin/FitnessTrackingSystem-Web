@@ -132,6 +132,14 @@ class FitnessTestCase(unittest.TestCase):
         assert rv.status_code==200
         rv=self.app.get("/addroom")
         assert rv.status_code==200
+
+
+    def test_logout(self):
+        self.test_trainer_login()
+        rv=self.app.get("/logout",follow_redirects=True)
+        assert rv.status_code==200
+
+    #Web Service Tests
     def test_web_login(self):
         rv=self.app.post("/ws/login",
         data=json.dumps(dict(
