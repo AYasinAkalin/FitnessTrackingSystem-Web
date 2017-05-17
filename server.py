@@ -55,8 +55,8 @@ def dashboard():
         rooms = cursor.fetchall()
         session["rooms"] = rooms
 
-        return render_template("adminprofile.html", 
-                                admin=session["user"], 
+        return render_template("adminprofile.html",
+                                admin=session["user"],
                                 trainers=session["trainers"], trainees=session["trainees"],
                                 equipments=session["equipments"], rooms=session["rooms"])
     elif session["user"][4] == 1:  # user role is trainer
@@ -142,8 +142,6 @@ def addtrainee():
                 cursor.execute(sql)
 
                 mysql.get_db().commit()
-                # Example markup message
-                '''message = Markup("<h1>Voila! Room is added.</h1>")'''
                 message = "Trainee added successfully."
                 category = "success"
             except Exception as e:
@@ -156,9 +154,6 @@ def addtrainee():
 
     else:
         message = Markup("You can not add any trainee from administrator panel.")
-        ''' Other categories are:
-            "success", "error", "info", "warning"
-        '''
         category = "warning"
         flash(message, category)
         return redirect("/dashboard")
@@ -171,7 +166,7 @@ def addequipment():
     else:
         name = request.form["name"]
         sql = "Insert into equipments(name) values('%s')" % (name)
-        
+
         cursor = mysql.get_db().cursor()
 
         try:
@@ -203,8 +198,6 @@ def addroom():
         try:
             cursor.execute(sql)
             mysql.get_db().commit()
-            # Example markup message
-            '''message = Markup("<h1>Voila! Room is added.</h1>")'''
             message = "Room added successfully."
             category = "success"
         except Exception as e:
@@ -238,8 +231,6 @@ def add_event():
         try:
             cursor.execute(sql)
             mysql.get_db().commit()
-            # Example markup message
-            '''message = Markup("<h1>Voila! Room is added.</h1>")'''
             message = "Event added successfully."
             category = "success"
         except Exception as e:
@@ -266,8 +257,6 @@ def add_task():
         try:
             cursor.execute(sql)
             mysql.get_db().commit()
-            # Example markup message
-            '''message = Markup("<h1>Voila! Room is added.</h1>")'''
             message = "Task added successfully."
             category = "success"
         except Exception as e:
@@ -336,7 +325,7 @@ FROM events,joining,rooms WHERE startdate > CURRENT_DATE and joining.eventid=eve
     events = cursor.fetchall()
 
     return jsonify(
-        events = events
+        events=events
     )
 
 @app.route("/ws/task/<int:taskId>/complete", methods=["GET"])
