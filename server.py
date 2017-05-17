@@ -114,7 +114,7 @@ def addtrainee():
         if request.method == 'GET':
             return render_template("addtrainee.html", user=session["user"])
         else:
-            isTrainee = request.form["trainee-checkbox"]
+            # isTrainee = request.form["trainee-checkbox"]
 
             name = request.form["firstname"]
             surname = request.form["lastname"]
@@ -132,7 +132,7 @@ def addtrainee():
 
             cursor = mysql.get_db().cursor()
             # first insert into users
-            sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s','%s','%s')" % (name, surname, email, password, isTrainee, telephone)
+            sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',2,'%s')" % (name, surname, email, password, telephone)
             cursor.execute(sql)
 
             user_id = cursor.lastrowid
