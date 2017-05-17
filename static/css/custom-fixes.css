@@ -18,6 +18,12 @@
 	  margin-right: -15px;
 	  margin-left: -15px;
 	}
+
+/* Notification bubble color*/
+	.navbar .notification {
+  background: #f44336;
+}
+
 /* Site Wide Link Color */
 	/* It is recommended to add 'link-color' attribute to <body> with one of the colors below*/
 	/* Default. Not recommended to activate.
@@ -171,3 +177,26 @@
 		border-color: var(--red-color);
 		color: var(--red-color);
 	}
+
+/* Dashboard dropdown menu link color correction */
+  .navbar .navbar-nav .open .dropdown-menu > li > a {
+    color: inherit;
+  }
+  .navbar .navbar-nav .open .dropdown-menu > li > a:hover, 
+  .navbar .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: white;
+    background-color: var(--blue-color);
+  }
+  .navbar .navbar-nav .open .dropdown-menu > .active > a, 
+  .navbar .navbar-nav .open .dropdown-menu > .active > a:hover, 
+  .navbar .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: inherit;
+    background-color: var(--blue-color);
+  }
+  .navbar .navbar-nav .open .dropdown-menu > .disabled > a, 
+  .navbar .navbar-nav .open .dropdown-menu > .disabled > a:hover, 
+  .navbar .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+    color: inherit;
+    background-color: var(--blue-color);
+  }
+  
