@@ -151,19 +151,27 @@ def addtrainee():
 @app.route("/addequipment", methods=["GET", "POST"])
 def addequipment():
     if request.method == "GET":
-        return render_template("addequipment.html")
+        return render_template("addequipment.html", user=session["user"])
     else:
         name = request.form["name"]
         sql = "Insert into equipments(name) values('%s')" % (name)
         print sql
         cursor = mysql.get_db().cursor()
-        cursor.execute(sql)
-        mysql.get_db().commit()
-        print name
-        message = "Equipment added successfully."
-        category = "success"
-        flash(message, category)
-        return redirect("/dashboard")
+
+        try:
+            cursor.execute(sql)
+            mysql.get_db().commit()
+            # Example markup message
+            '''message = Markup("<h1>Voila! Room is added.</h1>")'''
+            message = "Equipment added successfully."
+            category = "success"
+        except Exception as e:
+            raise e
+            message = "Error occurred."
+            category = "error"
+        finally:
+            flash(message, category)
+            return redirect("/dashboard")
 
 
 @app.route("/addroom", methods=["GET", "POST"])
