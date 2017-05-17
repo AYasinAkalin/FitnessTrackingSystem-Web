@@ -114,7 +114,7 @@ def addtrainee():
         if request.method == 'GET':
             return render_template("addtrainee.html", user=session["user"])
         else:
-            # isTrainee = request.form["trainee-checkbox"]
+            isTrainee = request.form["trainee-checkbox"]
 
             name = request.form["firstname"]
             surname = request.form["lastname"]
@@ -131,16 +131,15 @@ def addtrainee():
             trainerId = session["user"][0]
 
             cursor = mysql.get_db().cursor()
+            # first insert into users
+            sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s','%s','%s')" % (name, surname, email, password, isTrainee, telephone)
+            cursor.execute(sql)
+
+            user_id = cursor.lastrowid
+            sql = "Insert into trainees(id,weight,height,info,trainerId) values('%s','%s','%s','%s',%s)" % (user_id, weight, height, additional_info, trainerId)
+            cursor.execute(sql)
 
             try:
-                # first insert into users
-                sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',1,'%s')" % (name, surname, email, password, telephone)
-                cursor.execute(sql)
-
-                user_id = cursor.lastrowid
-                sql = "Insert into trainees(id,weight,height,info,trainerId) values('%s','%s','%s','%s',%s)" % (user_id, weight, height, additional_info, trainerId)
-                cursor.execute(sql)
-
                 mysql.get_db().commit()
                 message = "Trainee added successfully."
                 category = "success"
