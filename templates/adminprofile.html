@@ -444,14 +444,17 @@
                               <td>{{trainer[1]}}</td>
                               <td>{{trainer[2]}}</td>
                               <td>{{trainer[3]}}</td>
-                              <td>
-                                <a rel="tooltip" title="Edit" class="table-action edit" href="javascript:trainerwindow({{trainer[4]}})" title="Edit">
-                  <i class="fa fa-edit"></i>
+                              <td>  <a rel="tooltip" title="Like" class="table-action like" href="javascript:trainerwindow({{trainer[4]}})" title="Like">
+                  <i class="material-icons">remove_red_eye</i>
+              </a>
+              <a rel="tooltip" title="Edit" class="table-action edit" href="javascript:void(0)" title="Edit">
+                  <i class="material-icons">mode_edit</i>
               </a>
               <a rel="tooltip" title="Remove" class="table-action remove" href="javascript:void(0)" title="Remove">
-                  <i class="fa fa-remove"></i>
+                  <i class="material-icons">remove_circle</i>
               </a>
                               </td>
+                             
                             </tr>
                             {%endfor%}
                           </tbody>
