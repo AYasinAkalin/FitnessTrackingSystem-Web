@@ -148,9 +148,6 @@ def addtrainee():
         return redirect("/dashboard")
 
 
-    
-
-
 @app.route("/addequipment", methods=["GET", "POST"])
 def addequipment():
     if request.method == "GET":
@@ -172,23 +169,28 @@ def addequipment():
 @app.route("/addroom", methods=["GET", "POST"])
 def addroom():
     if request.method == "GET":
-        return render_template("addroom.html")
+        return render_template("addroom.html", user=session["user"])
     else:
         name = request.form["name"]
         number = request.form["number"]
         size = request.form["size"]
         sql = "Insert into rooms(name,number,size) values('%s','%s','%s')" % (name, number, size)
-        print sql
         cursor = mysql.get_db().cursor()
-        cursor.execute(sql)
-        mysql.get_db().commit()
-        print name, number, size
-        # Example markup message
-        '''message = Markup("<h1>Voila! Room is added.</h1>")'''
-        message = "Room added successfully."
-        category = "success"
-        flash(message, category)
-        return redirect("/dashboard")
+
+        try:
+            cursor.execute(sql)
+            mysql.get_db().commit()
+            # Example markup message
+            '''message = Markup("<h1>Voila! Room is added.</h1>")'''
+            message = "Room added successfully."
+            category = "success"
+        except Exception as e:
+            raise e
+            message = "Error occurred."
+            category = "error"
+        finally:
+            flash(message, category)
+            return redirect("/dashboard")
 
 
 def add_program():
