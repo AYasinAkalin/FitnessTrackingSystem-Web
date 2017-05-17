@@ -124,9 +124,9 @@
                           <div class="col-sm-4">
                             <div class="choice" data-toggle="wizard-checkbox"  rel="tooltip" 
                                title="Administrators can add-remove users, equipments, rooms, and look on event time table.">
-                              <!-- TODO: Change 'value="2"' to 1 after changes to DB table are made -->
+                              <!-- TODO: Change 'value="0"' to 1 after changes to DB table are made -->
                               <!-- 'Disabled' attribute here disables this checkboxes behaviour in background -->
-                              <input type="checkbox" name="admin-checkbox" value="2" disabled> 
+                              <input type="checkbox" name="admin-checkbox" value="0" disabled> 
                               
                               <!-- 'Disabled' here make color changes happens -->
                               <div class="icon" data-color={{theme_color}} disabled> 
@@ -155,8 +155,8 @@
                             <div class="choice" data-toggle="wizard-checkbox" rel="tooltip"
                                title="Trainees can't do shit. They are losers. They don't even have access to website.">
                               <!-- TODO: Change 'value="2"' to 1 after changes to DB table are made -->
-                              <input type="checkbox" name="trainee-checkbox" value="2">
-                              <div class="icon" data-color={{theme_color}}>
+                              <input type="checkbox" name="trainee-checkbox" value="2" checked>
+                              <div class="icon" data-color={{theme_color}} checked>
                                 <i class="material-icons">person</i>
                               </div>
                               <h6>Trainee</h6>
