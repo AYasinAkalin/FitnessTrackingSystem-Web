@@ -115,26 +115,32 @@ def addtrainee():
             return render_template("addtrainee.html", user=session["user"])
         else:
             # isTrainee = request.form["trainee-checkbox"]
+
             name = request.form["firstname"]
             surname = request.form["lastname"]
             email = request.form["email"]
-            password = request.form["password"]
-            # willPasswordChange = request.form["force-change-pass"]
             telephone = request.form["telephone"]
+
             weight = request.form["weight"]
             height = request.form["height"]
             additional_info = request.form["info"]
-            trainerId = session["user"][0]
-            cursor = mysql.get_db().cursor()
-            # first insert into users
-            sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',1,'%s')" % (name, surname, email, password, telephone)
-            cursor.execute(sql)
 
-            user_id = cursor.lastrowid
-            sql = "Insert into trainees(id,weight,height,info,trainerId) values('%s','%s','%s','%s',%s)" % (user_id, weight, height, additional_info, trainerId)
-            cursor.execute(sql)
+            password = request.form["password"]
+            # willPasswordChange = request.form["force-change-pass"]
+
+            trainerId = session["user"][0]
+
+            cursor = mysql.get_db().cursor()
 
             try:
+                # first insert into users
+                sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',1,'%s')" % (name, surname, email, password, telephone)
+                cursor.execute(sql)
+
+                user_id = cursor.lastrowid
+                sql = "Insert into trainees(id,weight,height,info,trainerId) values('%s','%s','%s','%s',%s)" % (user_id, weight, height, additional_info, trainerId)
+                cursor.execute(sql)
+
                 mysql.get_db().commit()
                 # Example markup message
                 '''message = Markup("<h1>Voila! Room is added.</h1>")'''
@@ -218,7 +224,7 @@ def add_program():
 @app.route("/addevent", methods=["GET", "POST"])
 def add_event():
     if request.method == "GET":
-        return render_template("addevent.html", rooms=session["rooms"])
+        return render_template("addevent.html", rooms=session["rooms"], user=session["user"])
     else:
         year = request.form["year"]
         month = request.form["month"]
@@ -231,16 +237,22 @@ def add_event():
         cursor = mysql.get_db().cursor()
         room_id = request.form["room"]  # [0] <<- This one makes form to take only one character
         trainer_id = session["user"][0]
-        # TODO: Add Room ID to SQL statement just below
         sql = "INSERT INTO events(startdate, enddate, name, trainerid, roomid) VALUES ('%s', '%s', '%s', '%s', '%s')" % (startdate, enddate, name, trainer_id, room_id)
-        print sql
-        cursor.execute(sql)
-        mysql.get_db().commit()
-        print year, month, day, starttime, endtime, name, room_id
-        message = "Event added successfully."
-        category = "success"
-        flash(message, category)
-        return redirect("dashboard")
+
+        try:
+            cursor.execute(sql)
+            mysql.get_db().commit()
+            # Example markup message
+            '''message = Markup("<h1>Voila! Room is added.</h1>")'''
+            message = "Event added successfully."
+            category = "success"
+        except Exception as e:
+            raise e
+            message = "Error occurred."
+            category = "error"
+        finally:
+            flash(message, category)
+            return redirect("/dashboard")
 
 
 @app.route("/addtask", methods=["GET", "POST"])
