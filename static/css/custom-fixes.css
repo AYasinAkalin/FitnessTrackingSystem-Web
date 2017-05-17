@@ -110,3 +110,64 @@
   box-shadow: none;
   transition-duration: 0.3s;
 }
+/* Tooltip size change */
+	.tooltip-inner {
+	  padding: 10px 5px;
+	  min-width: 300px;
+	}
+/* Wizard windows shortening */
+	.wizard-card .tab-content {
+	  min-height: 250px;
+	  padding: 20px 15px;
+	}
+
+/* Choice button(checkbox or radio) colors */
+	.wizard-card .choice:hover .icon[data-color="blue"]{
+	  border-color: var(--blue-color);
+	  color: var(--blue-color);
+	}
+	.wizard-card .choice:hover .icon[data-color="green"]{
+	  border-color: var(--green-color);
+	  color: var(--green-color);
+	}
+	.wizard-card .choice:hover .icon[data-color="orange"]{
+	  border-color: var(--orange-color);
+	  color: var(--orange-color);
+	}
+	.wizard-card .choice:hover .icon[data-color="red"]{
+	  border-color: var(--red-color);
+	  color: var(--red-color);
+	}
+	.wizard-card .choice:hover .icon[data-color="purple"]{
+	  border-color: var(--purple-color);
+	  color: var(--purple-color);
+	}
+
+	.wizard-card .choice.active .icon,
+	.wizard-card .choice.active .icon[data-color="blue"], 
+	.wizard-card .choice.active .icon[data-color="green"], 
+	.wizard-card .choice.active .icon[data-color="orange"], 
+	.wizard-card .choice.active .icon[data-color="red"], 
+	.wizard-card .choice.active .icon[data-color="purple"]{
+		border-color: var(--green-color);
+		color: var(--green-color);
+	}
+
+	.wizard-card .choice.active .icon[disabled],
+	.wizard-card .choice.active .icon[data-color="blue"][disabled], 
+	.wizard-card .choice.active .icon[data-color="green"][disabled], 
+	.wizard-card .choice.active .icon[data-color="orange"][disabled], 
+	.wizard-card .choice.active .icon[data-color="red"][disabled], 
+	.wizard-card .choice.active .icon[data-color="purple"][disabled]{
+		border-color: #999999;
+		color: #999999;
+	}
+	.wizard-card .choice:hover .icon[disabled],
+	.wizard-card .choice:hover .icon[data-color="blue"][disabled], 
+	.wizard-card .choice:hover .icon[data-color="green"][disabled], 
+	.wizard-card .choice:hover .icon[data-color="orange"][disabled], 
+	.wizard-card .choice:hover .icon[data-color="red"][disabled], 
+	.wizard-card .choice:hover .icon[data-color="purple"][disabled]{
+		border-color: var(--red-color);
+		color: var(--red-color);
+	}

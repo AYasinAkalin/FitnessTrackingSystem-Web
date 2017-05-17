@@ -1,0 +1,64 @@
+/* Logged in as button */
+	.logged-in-as {
+	  width: 50px;
+	  height: 50px;
+	  display: block;
+	  position: fixed;
+	  z-index: 555;
+	  top: 25px;
+	  right: 25px;
+	  border-radius: 30px;
+	  background-color: rgba(16, 16, 16, 0.35);
+	  border: 1px solid rgba(255, 255, 255, 0.15);
+	  color: #FFFFFF;
+	  cursor: pointer;
+	  padding: 10px 12px;
+	  white-space: nowrap;
+	  overflow: hidden;
+	  -webkit-transition: 0.55s cubic-bezier(0.6, 0, 0.4, 1);
+	  -moz-transition: 0.55s cubic-bezier(0.6, 0, 0.4, 1);
+	  -o-transition: 0.55s cubic-bezier(0.6, 0, 0.4, 1);
+	  transition: 0.55s cubic-bezier(0.6, 0, 0.4, 1);
+	}
+	.logged-in-as:hover, .logged-in-as:active, .logged-in-as:focus {
+	  width: 260px;
+	  color: #FFFFFF;
+	  transition-duration: .55s;
+	  padding: 10px 19px;
+	}
+	.logged-in-as:hover .logged-in, .logged-in-as:active .logged-in, .logged-in-as:focus .logged-in {
+	  opacity: 1;
+	}
+	.logged-in-as:hover .user-initials, .logged-in-as:active .user-initials, .logged-in-as:focus .user-initials {
+	  left: 0;
+	}
+	.logged-in-as .user-initials,
+	.logged-in-as .logged-in {
+	  float: left;
+	}
+	.logged-in-as .user-initials {
+	  position: relative;
+	  top: 4px;
+	  left: 4px;
+	  letter-spacing: 1px;
+	  text-align: center;
+	  vertical-align: middle;
+	  font-size: 16px;
+	  font-weight: 600;
+	}
+	.logged-in-as .logged-in {
+	  color: rgba(0, 0, 0, 0.6);
+	  position: absolute;
+	  left: 58px;
+	  top: 14px;
+	  opacity: 0;
+	  margin: 0;
+	  -webkit-transition: 0.55s cubic-bezier(0.6, 0, 0.4, 1);
+	  -moz-transition: 0.55s cubic-bezier(0.6, 0, 0.4, 1);
+	  -o-transition: 0.55s cubic-bezier(0.6, 0, 0.4, 1);
+	  transition: 0.55s cubic-bezier(0.6, 0, 0.4, 1);
+	}
+	.logged-in-as .logged-in strong {
+	  font-weight: 400;
+	  color: rgba(255, 255, 255, 0.9);
+	}

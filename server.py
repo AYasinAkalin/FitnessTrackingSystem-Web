@@ -76,13 +76,20 @@ def dashboard():
 @app.route("/addtrainer", methods=["GET", "POST"])
 def addtrainer():
     if request.method == 'GET':
-        return render_template("addtrainer.html")
+        return render_template("addtrainer.html", user=session["user"])
     else:
-        name = request.form["name"]
-        surname = request.form["surname"]
+        # isAdmin = request.form["admin-checkbox"]
+        # isTrainer = request.form["trainer-checkbox"]
+        # isTrainee = request.form["trainee-checkbox"]
+
+        name = request.form["firstname"]
+        surname = request.form["lastname"]
         email = request.form["email"]
-        password = request.form["password"]
         telephone = request.form["telephone"]
+
+        password = request.form["password"]
+        # willPasswordChange = request.form["force-change-pass"]
+
         cursor = mysql.get_db().cursor()
         sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',1,'%s')" % (name, surname, email, password, telephone)
 
@@ -98,7 +105,6 @@ def addtrainer():
         finally:
             flash(message, category)
             return redirect("/dashboard")
-
 
 
 @app.route("/addtrainee", methods=["GET", "POST"])

@@ -34,8 +34,8 @@ class FitnessTestCase(unittest.TestCase):
     def test_add_trainer(self):
         self.test_admin_login()
         rv = self.app.post("/addtrainer", data=dict(
-            name="testtrainer",
-            surname="testsurname",
+            firstname="testtrainer",
+            lastname="testsurname",
             email="testmail@mail",
             password="testpass",
             telephone="123123"
