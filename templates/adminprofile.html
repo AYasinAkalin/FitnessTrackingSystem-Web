@@ -443,6 +443,7 @@
                               <td>{{trainer[1]}}</td>
                               <td>{{trainer[2]}}</td>
                               <td>{{trainer[3]}}</td>
+                              <td></td>
                             </tr>
                             {%endfor%}
                           </tbody>
@@ -470,6 +471,7 @@
                             <tr>
                               <td>{{loop.index}}</td>
                               <td>{{equipment[0]}}</td>
+                              <td></td>
                             </tr>
                             {%endfor%}
                             
@@ -502,6 +504,7 @@
                               <td>{{room[0]}}</td>
                               <td>{{room[1]}}</td>
                               <td>{{room[2]}}</td>
+                              <td></td>
                             </tr>
                             {%endfor%}
 
@@ -575,7 +578,11 @@ This script brokes dropdown menus
   
           
           window.operateEvents = {
-              'click .edit': function (e, value, row, index) {
+            'click .like': function (e, value, row, index) {
+                    alert('You click to view more info about trainer (...), row: ' + JSON.stringify(row));
+                    console.log(value, row, index);
+              },
+            'click .edit': function (e, value, row, index) {
                   alert('You click edit icon, row: ' + JSON.stringify(row));
                   console.log(value, row, index);    
               },
@@ -597,11 +604,14 @@ This script brokes dropdown menus
   
       function operateFormatter(value, row, index) {
           return [
+              '<a rel="tooltip" title="Like" class="table-action like" href="javascript:void(0)" title="Like">',
+                  '<i class="material-icons">remove_red_eye</i>',
+              '</a>',
               '<a rel="tooltip" title="Edit" class="table-action edit" href="javascript:void(0)" title="Edit">',
-                  '<i class="fa fa-edit"></i>',
+                  '<i class="material-icons">mode_edit</i>',
               '</a>',
               '<a rel="tooltip" title="Remove" class="table-action remove" href="javascript:void(0)" title="Remove">',
-                  '<i class="fa fa-remove"></i>',
+                  '<i class="material-icons">remove_circle</i>',
               '</a>'
           ].join('');
       }
