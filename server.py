@@ -236,19 +236,28 @@ def add_event():
 @app.route("/addtask", methods=["GET", "POST"])
 def add_task():
     if request.method == "GET":
-        return render_template("addtask.html", trainees=session["trainees"])
+        return render_template("addtask.html", trainees=session["trainees"], user=session["user"])
     else:
         taskName = request.form["taskName"]
         traineeId = request.form["traineeId"]
         info = request.form["info"]
         sql = "INSERT INTO `tasks`(`taskName`, `traineeId`,`info`, `status`) VALUES ('%s',%s,'%s',0)" % (taskName, traineeId, info)
         cursor = mysql.get_db().cursor()
-        cursor.execute(sql)
-        mysql.get_db().commit()
-        message = "Task added successfully"
-        category = "success"
-        flash(message, category)
-        return redirect("dashboard")
+
+        try:
+            cursor.execute(sql)
+            mysql.get_db().commit()
+            # Example markup message
+            '''message = Markup("<h1>Voila! Room is added.</h1>")'''
+            message = "Task added successfully."
+            category = "success"
+        except Exception as e:
+            raise e
+            message = "Error occurred."
+            category = "error"
+        finally:
+            flash(message, category)
+            return redirect("/dashboard")
 
 # webServices
 @app.route("/ws/login", methods=["POST"])
