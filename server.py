@@ -171,14 +171,13 @@ def addequipment():
     else:
         name = request.form["name"]
         sql = "Insert into equipments(name) values('%s')" % (name)
-        print sql
+        
         cursor = mysql.get_db().cursor()
 
         try:
-            cursor.execute(sql)
-            mysql.get_db().commit()
-            # Example markup message
-            '''message = Markup("<h1>Voila! Room is added.</h1>")'''
+        cursor.execute(sql)
+        mysql.get_db().commit()
+    
             message = "Equipment added successfully."
             category = "success"
         except Exception as e:
@@ -216,9 +215,6 @@ def addroom():
             flash(message, category)
             return redirect("/dashboard")
 
-
-def add_program():
-    pass
 
 
 @app.route("/addevent", methods=["GET", "POST"])
@@ -263,7 +259,8 @@ def add_task():
         taskName = request.form["taskName"]
         traineeId = request.form["traineeId"]
         info = request.form["info"]
-        sql = "INSERT INTO `tasks`(`taskName`, `traineeId`,`info`, `status`) VALUES ('%s',%s,'%s',0)" % (taskName, traineeId, info)
+        validdate=request.form["validuntil"]
+        sql = "INSERT INTO `tasks`(`taskName`, `traineeId`,`info`, `status`,`validuntil`) VALUES ('%s',%s,'%s',0,'%s')" % (taskName, traineeId, info,validdate)
         cursor = mysql.get_db().cursor()
 
         try:
@@ -280,6 +277,11 @@ def add_task():
         finally:
             flash(message, category)
             return redirect("/dashboard")
+
+@app.route("/logout",methods=["GET"])
+def logout():
+    session.clear()
+    return redirect("/")
 
 # webServices
 @app.route("/ws/login", methods=["POST"])
@@ -311,7 +313,7 @@ def login_trainee():
 @app.route("/ws/tasks/<int:traineeId>", methods=["GET"])
 def get_tasks(traineeId):
     cursor = mysql.get_db().cursor()
-    sql = "select id,taskName,info,status from tasks where traineeId=%d" % traineeId
+    sql = "select id,taskName,info,status,validuntil from tasks where traineeId=%d and  CURRENT_DATE+7 >validuntil" % traineeId
     cursor.execute(sql)
     tasks = cursor.fetchall()
 
@@ -319,10 +321,17 @@ def get_tasks(traineeId):
         tasks=tasks
     )
 
-@app.route("/ws/events", methods=["GET"])
-def get_events():
+@app.route("/ws/events/<int:userid>", methods=["GET"])
+def get_events(userid):
     cursor = mysql.get_db().cursor()
-    sql = "select * FROM events WHERE startdate > CURRENT_DATE"
+    sql = """select events.id as eventid,startdate,enddate,events.name,
+
+(case when size>COUNT(joining.traineeid) then 0
+when size=COUNT(joining.traineeid) then 1
+end) as isFull,
+
+(SELECT COUNT(*) from joining,events where events.id=eventid and joining.traineeid=%s) as joining
+FROM events,joining,rooms WHERE startdate > CURRENT_DATE and joining.eventid=events.id and events.roomid=rooms.id""" % userid
     cursor.execute(sql)
     events = cursor.fetchall()
 
@@ -334,6 +343,23 @@ def get_events():
 def complete_task(taskId):
     cursor = mysql.get_db().cursor()
     sql = "update tasks set status=1 where id=%d" % taskId
+    cursor.execute(sql)
+    mysql.get_db().commit()
+    return "OK"
+
+@app.route("/ws/events/join/<int:eventId>/<int:traineeId>",methods=["GET"])
+def join_event(eventId,traineeId):
+    cursor=mysql.get_db().cursor()
+    sql="Insert into joining(eventid,traineeid) values(%s,%s)"%(eventId,traineeId)
+    cursor.execute(sql)
+    mysql.get_db().commit()
+    return "OK"
+
+@app.route("/ws/events/leave/<int:eventId>/<int:traineeId>",methods=["GET"])
+def leave_event(eventId,traineeId):
+    cursor=mysql.get_db().cursor()
+    sql="DELETE FROM joining where eventid=%s and traineeid=%s"%(eventId,traineeId)
+    print sql
     cursor.execute(sql)
     mysql.get_db().commit()
     return "OK"
