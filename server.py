@@ -112,12 +112,14 @@ def addtrainee():
     cursor = mysql.get_db().cursor()
     if session["user"][4] == 1:  # user role is trainer
         if request.method == 'GET':
-            return render_template("addtrainee.html")
+            return render_template("addtrainee.html", user=session["user"])
         else:
-            name = request.form["name"]
-            surname = request.form["surname"]
+            # isTrainee = request.form["trainee-checkbox"]
+            name = request.form["firstname"]
+            surname = request.form["lastname"]
             email = request.form["email"]
             password = request.form["password"]
+            # willPasswordChange = request.form["force-change-pass"]
             telephone = request.form["telephone"]
             weight = request.form["weight"]
             height = request.form["height"]
@@ -130,14 +132,22 @@ def addtrainee():
 
             user_id = cursor.lastrowid
             sql = "Insert into trainees(id,weight,height,info,trainerId) values('%s','%s','%s','%s',%s)" % (user_id, weight, height, additional_info, trainerId)
-
             cursor.execute(sql)
-            mysql.get_db().commit()
 
-            message = "Trainee added successfully."
-            category = "success"
-            flash(message, category)
-            return redirect("/dashboard")
+            try:
+                mysql.get_db().commit()
+                # Example markup message
+                '''message = Markup("<h1>Voila! Room is added.</h1>")'''
+                message = "Trainee added successfully."
+                category = "success"
+            except Exception as e:
+                raise e
+                message = "Error occurred."
+                category = "error"
+            finally:
+                flash(message, category)
+                return redirect("/dashboard")
+
     else:
         message = Markup("You can not add any trainee from administrator panel.")
         ''' Other categories are:
