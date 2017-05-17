@@ -1,417 +1,382 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <title>Fitness Yeah!</title>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+  <meta name="viewport" content="width=device-width" />
+
+  <!-- Favicons 
+  <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='img/apple-icon.png') }}" />
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}" />
+  -->
+  
+  <!-- Style Files -->
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"  />
+
+  <!--  Material Wizard CSS -->
+  <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/material-bootstrap-wizard.css') }}" />
+  
+  <!--  Material Wizard Custom Additions CSS -->
+  <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/material-bootstrap-wizard-custom-additions.css') }}" />
+
+  <!--  Custom fixes -->
+  <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/custom-fixes.css') }}" />
+
+  <!-- Fonts and icons -->
+  <link rel="stylesheet" type='text/css' href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" >
+  <link rel="stylesheet" type='text/css' href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons'>
+  <link rel="stylesheet" type='text/css' href='http://fonts.googleapis.com/css?family=Roboto:400,700,300'>
+  <link rel="stylesheet" type='text/css' href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<!-- Legacy imports -->
+<!--Legacy
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-   
+-->
+
 <!-- Latest compiled and minified JavaScript -->
+<!--Legacy
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  -->
 
-<meta charset="UTF-8">
-<title>Add Event</title>
+  <!-- Color declerations -->
+  {% set theme_color = "blue" %}
+  {% set human_color = "orange" %}
+  {% set equipment_color = "purple" %}
+  {% set room_color = "green" %}
+  
 </head>
-<body>
-<div class="container">
-  <div id=signupbox1 
-       class="mailbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2"
-       style=" margin-top:50px">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-          <h2 class="sub-header">Add Event</h2>
-      </div>
-      <!--
-      <div class="panel-info">
-        <p><i>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id gravida eros. Donec sit amet dictum nunc, eget egestas elit. Etiam risus sapien, pretium.</i></p>
-      </div>
-      -->
-      <div class="panel-body">
-        <div class="sub-container">
-          <ul class="nav nav-tabs">
-              <li class="active">
-                <a data-toggle="tab" href="#byTime">By time availability</a>
-              </li>
-              <li>
-                <a data-toggle="tab" href="#byRoom">By room availability</a>
-              </li>
-          </ul>
-          <div class="tab-content">
-            <div id="byTime" class="tab-pane fade in active">
-              <div class="panel-body" >
-                <!--Input form by Time Availability-->
-                <form class="form-horizontal" method="post" action="/addevent">
-                  <!--Event name input-->
-                  <div id="event-name-input" class="form-group required">
-                    <label for="id_name" class="control-label col-md-4 requiredField">
-                      Event Name<span class="asteriskField">*</span>
-                    </label>
-                    <div class="controls col-md-8">
-                      <input type="text" name="name" id="id_name"
-                             placeholder="e.g. Push-up Training"
-                             class="input-md textinput textInput form-control"
-                             style="margin-bottom: 15px">
-                    </div>
-                  </div>
-                  <!--Legacy Event Name input
-                  <p>Event Name :
-                    <input type = "text" name = "name" />
-                  </p><br>
-                  -->
+<body link-color={{theme_color}}>
 
-                  <!--Room input-->
-                  <div id="room-input" class="form-group required"
-                       style="margin-bottom: 30px"> 
-                    <label for="id_name" class="control-label col-md-4 requiredField"> 
-                      Select Room<span class="asteriskField">*</span> 
-                    </label> 
-                    <div class="controls col-md-8 "> 
-                      <select  name="room" class="input-md form-control">
-                        {% for room in rooms | sort()%} 
-                        <option value="{{room[0]}}"> <!--Sends room id info-->
-                          {{room[2]}} - {{room[1]}} ({{room[3]}}) <!--RoomName - R.Num (R.Cap)-->
-                        </option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                  </div>
-                  <!--Legacy Room input
-                  <p>Select Room :
-                    <select name = "room">
-                      
-                      {% for room in rooms | sort() %} 
-                      <option value="{{room[1]}}"> 
-                        {{room[1]}} - {{room[0]}} ({{room[2]}})
-                      </option>
-                      {% endfor %}
-                    </select>
-                  </p><br>
-                  -->
-
-                  <!--Container for date inputs-->
-                  <div id="dateCont" style="margin-bottom: 30px">
-                    <!--Year input-->
-                    <div id="year-input" class="form-group required"> 
-                      <label for="id_name" class="control-label col-md-4 requiredField"> 
-                        Year<span class="asteriskField">*</span> 
-                      </label> 
-                      <div class="controls col-md-8 "> 
-                          <select name="year" class="input-md form-control">
-                            <option> 2017 </option>
-                            <option> 2018 </option>
-                            <option> 2019 </option>
-                            <option> 2020 </option>
-                            <option> 2021 </option>
-                            <option> 2022 </option>
-                            <option> 2023 </option>
-                            <option> 2024 </option>
-                          </select>
-                      </div>
-                    </div>
-                    <!--Legacy Year input
-                    <p>Year :
-                      <select name="year">
-                        <option> 2017 </option>
-                        <option> 2018 </option>
-                        <option> 2019 </option>
-                        <option> 2020 </option>
-                        <option> 2021 </option>
-                        <option> 2022 </option>
-                        <option> 2023 </option>
-                        <option> 2024 </option>
-                      </select>
-                    </p><br>
-                    -->
-
-                    <!--Month input-->
-                    <div id="month-input" class="form-group required"> 
-                      <label for="id_name" class="control-label col-md-4 requiredField"> 
-                        Month<span class="asteriskField">*</span> 
-                      </label> 
-                      <div class="controls col-md-8 "> 
-                        <select  name="month" class="input-md form-control">
-                          <option> 1 </option>
-                          <option> 2 </option>
-                          <option> 3 </option>
-                          <option> 4 </option>
-                          <option> 5 </option>
-                          <option> 6 </option>
-                          <option> 7 </option>
-                          <option> 8 </option>
-                          <option> 9 </option>
-                          <option> 10 </option>
-                          <option> 11 </option>
-                          <option> 12 </option>   
-                        </select>
-                      </div>
-                    </div>
-                    <!--Legacy Month input
-                    <p>Month : 
-                      <select name="month">
-                        <option> 1 </option>
-                        <option> 2 </option>
-                        <option> 3 </option>
-                        <option> 4 </option>
-                        <option> 5 </option>
-                        <option> 6 </option>
-                        <option> 7 </option>
-                        <option> 8 </option>
-                        <option> 9 </option>
-                        <option> 10 </option>
-                        <option> 11 </option>
-                        <option> 12 </option>                       
-                      </select>
-                    </p><br>
-                    -->
-
-                    <!--Day input-->
-                    <div id="day-input" class="form-group required"> 
-                      <label for="id_name" class="control-label col-md-4 requiredField"> 
-                        Day<span class="asteriskField">*</span> 
-                      </label> 
-                      <div class="controls col-md-8 "> 
-                        <select  name="day" class="input-md form-control">
-                          <option> 1 </option>
-                          <option> 2 </option>
-                          <option> 3 </option>
-                          <option> 4 </option>
-                          <option> 5 </option>
-                          <option> 6 </option>
-                          <option> 7 </option>
-                          <option> 8 </option>
-                          <option> 9 </option>
-                          <option> 10 </option>
-                          <option> 11 </option>
-                          <option> 12 </option>
-                          <option> 13 </option>
-                          <option> 14 </option>
-                          <option> 15 </option>
-                          <option> 16 </option>
-                          <option> 17 </option>
-                          <option> 18 </option>
-                          <option> 19 </option>
-                          <option> 20 </option>
-                          <option> 21 </option>
-                          <option> 22 </option>
-                          <option> 23 </option>
-                          <option> 24 </option>
-                          <option> 25 </option>
-                          <option> 26 </option>
-                          <option> 27 </option>
-                          <option> 28 </option>
-                          <option> 29 </option>
-                          <option> 30 </option>
-                          <option> 31 </option> 
-                        </select>
-                      </div>
-                    </div>
-                    <!--Legacy Day input
-                    <p>Day : 
-                      <select name= "day">
-                        <option> 1 </option>
-                        <option> 2 </option>
-                        <option> 3 </option>
-                        <option> 4 </option>
-                        <option> 5 </option>
-                        <option> 6 </option>
-                        <option> 7 </option>
-                        <option> 8 </option>
-                        <option> 9 </option>
-                        <option> 10 </option>
-                        <option> 11 </option>
-                        <option> 12 </option>
-                        <option> 13 </option>
-                        <option> 14 </option>
-                        <option> 15 </option>
-                        <option> 16 </option>
-                        <option> 17 </option>
-                        <option> 18 </option>
-                        <option> 19 </option>
-                        <option> 20 </option>
-                        <option> 21 </option>
-                        <option> 22 </option>
-                        <option> 23 </option>
-                        <option> 24 </option>
-                        <option> 25 </option>
-                        <option> 26 </option>
-                        <option> 27 </option>
-                        <option> 28 </option>
-                        <option> 29 </option>
-                        <option> 30 </option>
-                        <option> 31 </option>                       
-                      </select> 
-                    </p><br>
-                    -->
-                  </div>
-
-                  <!--Container for start & end time inputs-->
-                  <div id="timeCont" style="margin-bottom: 30px">
-                    <!--Start Time input-->
-                    <div id="start-time-input" class="form-group required"> 
-                      <label for="id_name" class="control-label col-md-4 requiredField"> 
-                        Select Start Time<span class="asteriskField">*</span> 
-                      </label> 
-                      <div class="controls col-md-8 "> 
-                        <select  name="starttime" class="input-md form-control">
-                          <option>00:00</option>
-                          <option>01:00</option>
-                          <option>02:00</option>
-                          <option>03:00</option>
-                          <option>04:00</option>
-                          <option>05:00</option>
-                          <option>06:00</option>
-                          <option>07:00</option>
-                          <option>08:00</option>
-                          <option>09:00</option>
-                          <option>10:00</option>
-                          <option>11:00</option>
-                          <option>12:00</option>
-                          <option>13:00</option>
-                          <option>14:00</option>
-                          <option>15:00</option>
-                          <option>16:00</option>
-                          <option>17:00</option>
-                          <option>18:00</option>
-                          <option>19:00</option>
-                          <option>20:00</option>
-                          <option>21:00</option>
-                          <option>22:00</option>
-                          <option>23:00</option>
-                        </select>
-                      </div>
-                    </div>
-                    <!--Legacy Start Time input
-                    <p>Select Start Time : 
-                      <select name="starttime">
-                        <option>00:00</option>
-                        <option>01:00</option>
-                        <option>02:00</option>
-                        <option>03:00</option>
-                        <option>04:00</option>
-                        <option>05:00</option>
-                        <option>06:00</option>
-                        <option>07:00</option>
-                        <option>08:00</option>
-                        <option>09:00</option>
-                        <option>10:00</option>
-                        <option>11:00</option>
-                        <option>12:00</option>
-                        <option>13:00</option>
-                        <option>14:00</option>
-                        <option>15:00</option>
-                        <option>16:00</option>
-                        <option>17:00</option>
-                        <option>18:00</option>
-                        <option>19:00</option>
-                        <option>20:00</option>
-                        <option>21:00</option>
-                        <option>22:00</option>
-                        <option>23:00</option>
-                      </select>
-                    </p><br>
-                    -->
-
-                    <!--End Time input-->
-                    <div id="end-time-input" class="form-group required"> 
-                      <label for="id_name" class="control-label col-md-4 requiredField"> 
-                        Select End Time<span class="asteriskField">*</span> 
-                      </label> 
-                      <div class="controls col-md-8 "> 
-                        <select  name="endtime" class="input-md form-control">
-                          <option>00:00</option>
-                          <option>01:00</option>
-                          <option>02:00</option>
-                          <option>03:00</option>
-                          <option>04:00</option>
-                          <option>05:00</option>
-                          <option>06:00</option>
-                          <option>07:00</option>
-                          <option>08:00</option>
-                          <option>09:00</option>
-                          <option>10:00</option>
-                          <option>11:00</option>
-                          <option>12:00</option>
-                          <option>13:00</option>
-                          <option>14:00</option>
-                          <option>15:00</option>
-                          <option>16:00</option>
-                          <option>17:00</option>
-                          <option>18:00</option>
-                          <option>19:00</option>
-                          <option>20:00</option>
-                          <option>21:00</option>
-                          <option>22:00</option>
-                          <option>23:00</option>
-                        </select>
-                      </div>
-                    </div>
-                    <!--Legacy End Time input
-                    <p>Select End Time : 
-                      <select name="endtime">
-                        <option>00:00</option>
-                        <option>01:00</option>
-                        <option>02:00</option>
-                        <option>03:00</option>
-                        <option>04:00</option>
-                        <option>05:00</option>
-                        <option>06:00</option>
-                        <option>07:00</option>
-                        <option>08:00</option>
-                        <option>09:00</option>
-                        <option>10:00</option>
-                        <option>11:00</option>
-                        <option>12:00</option>
-                        <option>13:00</option>
-                        <option>14:00</option>
-                        <option>15:00</option>
-                        <option>16:00</option>
-                        <option>17:00</option>
-                        <option>18:00</option>
-                        <option>19:00</option>
-                        <option>20:00</option>
-                        <option>21:00</option>
-                        <option>22:00</option>
-                        <option>23:00</option>
-                      </select>
-                    </p><br>
-                    -->
-                  </div>
-
-                  
-                  <!--Submit button-->
-                  <div class="form-group"> 
-                    <div class="aab controls col-md-4 "></div>
-                    <div class="controls col-md-8 ">
-                        <input type="submit" id="submit-id-event"
-                               name="Event" value="Add Event" 
-                               style="float:left" 
-                               class="btn btn-primary btn btn-info" 
-                                />                     
-                    </div>
-                  </div>  
-                </form>         
-              </div> 
-            </div>
-            <div id="byRoom" class="tab-pane fade">
-              <!--Input form by Room Availability-->
-              <form class="form-horizontal" method="post" action="/addevent">
-                <!--<h2 class="sub-header">Equipments List</h2>-->
-                <!--Submit button-->
-                <div class="form-group"> 
-                  <div class="aab controls col-md-4 "></div>
-                  <div class="controls col-md-8 ">
-                      <input type="submit" id="submit-id-event"
-                             name="Event" value="Add Event" 
-                             style="float:left" 
-                             class="btn btn-primary btn btn-info" 
-                              />                     
-                  </div>
-                </div>
-              </form>  
-            </div>
+<div class="wrapper">
+    <!-- 
+    Activate to add background image. Also remember to activate </div> tag at the bottom of the code
+    <div class="image-container set-full-height" style="background-image: url('{{ url_for('static', filename='IMAGE_FOLDER/FILENAME') }}'); background-size: cover; background-position: top center;"> 
+    -->
+      <!-- Branding -->
+      <!-- 
+      <a href="#">
+           <div class="logo-container">
+              <div class="logo">
+                  <img src="{{ url_for('static', filename='img/logo.png') }}">
+              </div>
+              <div class="brand">
+                  <!-- TODO: Center following text vertically to logo at left hand side -->
+                  <!-- 
+                  G.SEVEN
+              </div>
           </div>
-        </div>
+      </a>
+      -->
+      <!--  'Logged in as...' sliding button  -->
+      <div class="logged-in-as">
+        <!-- Uses flask to take user name and surname as string, then take boths initials -->
+        <div class="user-initials">{{user[1][0:1]}}{{user[2][0:1]}}</div>
+        <div class="logged-in">Logged in as <strong>{{user[1]}} {{user[2]}}</strong></div>
       </div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-10 col-xs-offset-1
+                      col-sm-8 col-sm-offset-2
+                      col-md-8 col-md-offset-2
+                      col-lg-8 col-lg-offset-2">
+            <!-- Wizard container -->
+            <div class="wizard-container">
+              <div class="card wizard-card" data-color={{theme_color}} id="wizardProfile">
+                <form action="/addevent" method="post">
+                  <!-- Header -->
+                  <div class="wizard-header">
+                    <h3 class="wizard-title">
+                      Add Event
+                    </h3>
+                    <h5><small></small></h5>
+                  </div>
+
+                  <!-- Navigation -->
+                  <div class="wizard-navigation">
+                    <ul>
+                      <li><a href="#info" data-toggle="tab">Basic Info</a></li>
+                      <li><a href="#reservation" data-toggle="tab">Date and Room Selection</a></li>
+                      <li><a href="#confirmation" data-toggle="tab">Confirm, Invite</a></li>
+                    </ul>
+                  </div>
+
+                  <!-- Form contents by tab -->
+                  <div class="tab-content">                   
+
+                    <!-- Basic info tab -->
+                    <div class="tab-pane" id="info">
+                      <div class="row">
+                        <!-- Info text 
+                        <h4 class="info-text"> Let's start with the basic information (with validation)</h4>
+                        -->
+
+                        <div class="col-sm-10 col-sm-offset-1">
+                          
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <i class="material-icons">event</i>
+                            </span>
+                            <div class="form-group label-floating">
+                              <label class="control-label">Event Name <small>(required)</small></label>
+                              <!-- form control only works when 'name="firstname"'. Fix this -->
+                              <input name="name" type="text" class="form-control" autofocus required>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div> <!-- End of info row -->
+                    </div> <!-- End of basic info tab -->
+
+                    <!-- Reservation info tab -->
+                    <div class="tab-pane" id="reservation">
+                      <div class="row">
+                        <!-- Info text 
+                        <h4 class="info-text"> Let's start with the basic information (with validation)</h4>
+                        -->
+                        <div class="col-sm-10 col-sm-offset-1">
+                          
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <i class="material-icons">room</i>
+                            </span>
+                            <div class="form-group">
+                              <label class="control-label">Select room <small>(required)</small></label>
+                              <select  name="room" class="input-md form-control" required>
+                                {% for room in rooms | sort()%} 
+                                <option value="{{room[0]}}"> <!--Sends room id info-->
+                                  {{room[2]}} - {{room[1]}} ({{room[3]}}) <!--RoomName - R.Num (R.Cap)-->
+                                </option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <i class="material-icons">date_range</i>
+                            </span>
+                            <div class="form-group">
+                              <label class="control-label">Year <small>(required)</small></label>
+                              <select name="year" class="form-control input-md" required>
+                                <option> 2017 </option>
+                                <option> 2018 </option>
+                                <option> 2019 </option>
+                                <option> 2020 </option>
+                                <option> 2021 </option>
+                                <option> 2022 </option>
+                                <option> 2023 </option>
+                                <option> 2024 </option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <i class="material-icons">date_range</i>
+                            </span>
+                            <div class="form-group">
+                              <label class="control-label">Month <small>(required)</small></label>
+                              <select name="month" class="form-control input-md" required>
+                                <option> 1 </option>
+                                <option> 2 </option>
+                                <option> 3 </option>
+                                <option> 4 </option>
+                                <option> 5 </option>
+                                <option> 6 </option>
+                                <option> 7 </option>
+                                <option> 8 </option>
+                                <option> 9 </option>
+                                <option> 10 </option>
+                                <option> 11 </option>
+                                <option> 12 </option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <i class="material-icons">date_range</i>
+                            </span>
+                            <div class="form-group">
+                              <label class="control-label">Day <small>(required)</small></label>
+                              <select name="day" class="form-control input-md" required>
+                                <option> 1 </option>
+                                <option> 2 </option>
+                                <option> 3 </option>
+                                <option> 4 </option>
+                                <option> 5 </option>
+                                <option> 6 </option>
+                                <option> 7 </option>
+                                <option> 8 </option>
+                                <option> 9 </option>
+                                <option> 10 </option>
+                                <option> 11 </option>
+                                <option> 12 </option>
+                                <option> 13 </option>
+                                <option> 14 </option>
+                                <option> 15 </option>
+                                <option> 16 </option>
+                                <option> 17 </option>
+                                <option> 18 </option>
+                                <option> 19 </option>
+                                <option> 20 </option>
+                                <option> 21 </option>
+                                <option> 22 </option>
+                                <option> 23 </option>
+                                <option> 24 </option>
+                                <option> 25 </option>
+                                <option> 26 </option>
+                                <option> 27 </option>
+                                <option> 28 </option>
+                                <option> 29 </option>
+                                <option> 30 </option>
+                                <option> 31 </option> 
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <i class="material-icons">access_time</i>
+                            </span>
+                            <div class="form-group">
+                              <label class="control-label">Select Start Time <small>(required)</small></label>
+                              <select name="starttime" class="form-control input-md" required>
+                                <option>00:00</option>
+                                <option>01:00</option>
+                                <option>02:00</option>
+                                <option>03:00</option>
+                                <option>04:00</option>
+                                <option>05:00</option>
+                                <option>06:00</option>
+                                <option>07:00</option>
+                                <option>08:00</option>
+                                <option>09:00</option>
+                                <option>10:00</option>
+                                <option>11:00</option>
+                                <option>12:00</option>
+                                <option>13:00</option>
+                                <option>14:00</option>
+                                <option>15:00</option>
+                                <option>16:00</option>
+                                <option>17:00</option>
+                                <option>18:00</option>
+                                <option>19:00</option>
+                                <option>20:00</option>
+                                <option>21:00</option>
+                                <option>22:00</option>
+                                <option>23:00</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <i class="material-icons">access_time</i>
+                            </span>
+                            <div class="form-group">
+                              <label class="control-label">Select End Time <small>(required)</small></label>
+                              <select name="endtime" class="form-control input-md" required>
+                                <option>00:00</option>
+                                <option>01:00</option>
+                                <option>02:00</option>
+                                <option>03:00</option>
+                                <option>04:00</option>
+                                <option>05:00</option>
+                                <option>06:00</option>
+                                <option>07:00</option>
+                                <option>08:00</option>
+                                <option>09:00</option>
+                                <option>10:00</option>
+                                <option>11:00</option>
+                                <option>12:00</option>
+                                <option>13:00</option>
+                                <option>14:00</option>
+                                <option>15:00</option>
+                                <option>16:00</option>
+                                <option>17:00</option>
+                                <option>18:00</option>
+                                <option>19:00</option>
+                                <option>20:00</option>
+                                <option>21:00</option>
+                                <option>22:00</option>
+                                <option>23:00</option>
+                              </select>
+                            </div>
+                          </div>
+
+                        </div> <!-- End of reservation offset -->
+                      </div> <!-- End of reservation row -->
+                    </div> <!-- End of reservation tab -->
+
+                    <!-- Confirmation tab -->
+                    <div class="tab-pane" id="confirmation">
+                      <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1">
+
+                          <!-- Additional info -->
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <i class="material-icons">note</i>
+                            </span>
+                            <div class="form-group">
+                              <label class="control-label">Invitation Message <small></small> </label>
+                              <textarea name="message" type="textarea" class="form-control" placeholder="This message box doesn't do anything at the moment." rows="5"></textarea>
+                            </div>
+                          </div> <!-- End of Additional info input -->
+
+                        </div> <!-- End of confirmation offset -->
+                      </div> <!-- End of confirmation row -->
+                    </div> <!-- End of confirmation tab -->
+
+                  </div>
+                  
+                  <!-- Wizard  footer: contains navigation buttons -->
+                  <div class="wizard-footer">
+                    <!-- Buttons on right -->
+                    <div class="pull-right">
+                        <input type='button' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Next' />
+                        <input type='submit' class='btn btn-finish btn-fill btn-success btn-wd' name='Finish' value='Finish' />
+                    </div>
+
+                    <!-- Buttons on left -->
+                    <div class="pull-left">
+                        <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
+                    </div>
+
+                    <div class="clearfix"></div>
+                  </div> <!-- End of wizard footer -->
+
+                </form>
+              </div>
+            </div> <!-- end wizard container -->
+          </div> <!-- end column size & offset div tag -->
+        </div><!-- end row -->
+
+      </div> <!-- End of one and only container -->
+    <!-- Disable due to no background
     </div>
-  </div>     
+    -->
+  </div>
+
 </body>
+
+<!--   Core JS Files   -->
+  <script type="text/javascript" src="../static/js/jquery-2.2.4.min.js"></script>
+  <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../static/js/jquery.bootstrap.js" ></script>
+
+  <!--  Plugin for the Wizard -->
+  <script src="../static/js/material-bootstrap-wizard.js"></script>
+  
+  <!--  More information about jquery.validate here: http://jqueryvalidation.org/  -->
+  <script src="../static/js/jquery.validate.min.js"></script>
+
 </html>

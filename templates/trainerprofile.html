@@ -1,25 +1,453 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style type="text/css">
-    body {
-      padding-top: 50px;
-    }
-  </style>
+  <title>Fitness Yeah!</title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+  <meta name="viewport" content="width=device-width" />
 
-<!-- JQUERY -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- Legacy imports -->
+    
+    <!-- JQUERY -->
+    <!--Legacy
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    -->
+    
+    <!--Legacy
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    --> 
+    
+    <!-- Legacy
+    <link rel="stylesheet" href="static/admindashboard.css">
+    -->
+    
+    <!-- Latest compiled and minified JavaScript -->
+    <!--Legacy
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    -->
 
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-   
-<link rel="stylesheet" href="static/admindashboard.css">
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <!-- Style Files -->
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"  />
+    
+    <!--  Fresh Bootstrap table CSS  -->
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/fresh-bootstrap-table.css') }}" />
 
-<title>Fitness Yeah!</title>
+    <!--  Material Dashboard CSS    -->
+    <!-- Break downs fresh bootstrap table -->
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/material-dashboard.css') }}" />
+
+    <!--  Custom fixes -->
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/custom-fixes.css') }}" />
+
+  <!--     Fonts and icons     -->
+    <link rel="stylesheet" type='text/css' href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" >
+    <link rel="stylesheet" type='text/css' href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons'>
+    <link rel="stylesheet" type='text/css' href='http://fonts.googleapis.com/css?family=Roboto:400,700,300'>
+    <link rel="stylesheet" type='text/css' href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <!-- Scripts -->
+    <!--   Core JS Files   -->
+    <script type="text/javascript" src="../static/js/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/js/material.min.js"></script>
+
+    <!--  Charts Plugin -->
+    <script src="../static/js/chartist.min.js"></script>
+
+    <!--  Notifications Plugin    -->
+    <script src="../static/js/bootstrap-notify.js"></script>
+
+    <!--  Google Maps Plugin    -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+
+    <!-- Material Dashboard javascript methods -->
+    <script src="../static/js/material-dashboard.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+
+      // Javascript method's body can be found in assets/js/demos.js
+          demo.initDashboardPageCharts();
+
+      });
+    </script>
+
+  <!-- Color declerations -->
+    {% set theme_color = "blue" %}
+    {% set human_color = "orange" %}
+    {% set equipment_color = "purple" %}
+    {% set room_color = "green" %}
+    {% set human_color = "orange" %}
+
 </head>
 
-<body>
+<body link-color={{theme_color}}>
+  <div class="wrapper">
+    
+
+    <div class="sidebar" data-color={{theme_color}} data-image="../static/img/sidebar-gradient-1">
+
+      <div class="logo">
+        <a href="/dashboard" class="simple-text">
+          Fitness Tracking
+        </a>
+      </div>
+
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <li class="active">
+              <a href="/dashboard">
+                  <i class="material-icons">dashboard</i>
+                  <p>Dashboard</p>
+              </a>
+          </li>
+          <li>
+              <a href="#">
+                  <i class="material-icons">person</i>
+                  <p>User Profile</p>
+              </a>
+          </li>
+          <li>
+              <a href="#lists">
+                  <i class="material-icons">view_list</i>
+                  <p>Table List</p>
+              </a>
+          </li>
+          <hr>
+          <li>
+              <a href="/addtrainee">
+                  <i class="material-icons">person_add</i>
+                  <p>Add Trainee</p>
+              </a>
+          </li>
+          <li>
+              <a href="/addevent">
+                  <i class="material-icons">event</i>
+                  <p>Add Event</p>
+              </a>
+          </li>
+          <li>
+              <a href="/addtask">
+                  <i class="material-icons">assignment</i>
+                  <p>Add Task</p>
+              </a>
+          </li>
+          <hr>
+          <li>
+              <a href="/logout">
+                  <i class="material-icons">power_settings_new</i>
+                  <p>Log Out</p>
+              </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-panel">
+
+      <nav class="navbar navbar-transparent navbar-absolute">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">{{trainer[1]}} {{trainer[2]}}</a>
+          </div>
+          <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="material-icons">notifications</i>
+                  <span class="notification">4</span>
+                  <p class="hidden-lg hidden-md">Notifications</p>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Roses are red</a></li>
+                  <li><a href="#">Violets are blue</a></li>
+                  <li><a href="#">Unchecked notifications are</a></li>
+                  <li><a href="#">Going to hunt you</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
+                   <i class="material-icons">person</i>
+                   <p class="hidden-lg hidden-md">{{trainer[1]}} {{trainer[2]}}</p>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="/logout">Log out</a></li>
+                </ul>
+              </li>
+            </ul>
+
+            <form class="navbar-form navbar-right" role="search">
+              <div class="form-group  is-empty">
+                <input type="text" class="form-control" placeholder="Search">
+                <span class="material-input"></span>
+              </div>
+              <button type="submit" class="btn btn-white btn-round btn-just-icon">
+                <i class="material-icons">search</i><div class="ripple-container"></div>
+              </button>
+            </form>
+          </div>
+        </div>
+      </nav>
+
+      <div class="content">
+        <!-- Heading & flash box container -->
+        <div class="container-fluid">
+          <!-- Heading -->
+          <div class="row">
+            <div id="heading" class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+              <h1 style="margin-top: 0;
+                         margin-bottom: 5px; 
+                        position: relative;
+                          top: -22px;">
+                <small>Trainer Dashboard</small>
+              </h1>
+            </div>
+          </div>
+
+          <!-- Flash message reader -->
+          <div class="row-flash row-flash-dashboard">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 main">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {%- for category, msg in messages %}
+                  <!-- Warning message -->
+                  {% if category == "warning" %}
+                    <div class="alert alert-warning">
+                      <div class="container-fluid">
+                        <div class="alert-icon"><i class="material-icons">warning</i></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true"><i class="material-icons">clear</i></span>
+                        </button>
+                        <b>Warning: </b>{{ msg }}
+                      </div>
+                    </div>
+                  
+                  <!-- Error message -->
+                  {% elif category == "error" %}
+                    <div class="alert alert-danger">
+                      <div class="container-fluid">
+                        <div class="alert-icon"><i class="material-icons">error_outline</i></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true"><i class="material-icons">clear</i></span>
+                        </button>
+                        <b>Error: </b>{{ msg }}
+                      </div>
+                    </div>
+                  
+                  <!-- Success message -->
+                  {% elif category == "success" %}
+                    <div class="alert alert-success">
+                      <div class="container-fluid">
+                        <div class="alert-icon"><i class="material-icons">check</i></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true"><i class="material-icons">clear</i></span>
+                        </button>
+                        <b>Success: </b>{{ msg }}
+                      </div>
+                    </div>
+                  
+                  <!-- Info message -->
+                  {% elif category == "info" %}
+                    <div class="alert alert-info">
+                      <div class="container-fluid">
+                        <div class="alert-icon"><i class="material-icons">info_outline</i></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true"><i class="material-icons">clear</i></span>
+                        </button>
+                        <b>Info: </b>{{ msg }}
+                      </div>
+                    </div> 
+
+                  <!-- Any other messages -->
+                  {% else%}
+                    <div class="alert">{{ msg }}</div>
+                  {% endif %}
+                {% endfor -%}
+              {% endif %}
+            {% endwith %}
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Main content container -->
+        <div class="container-fluid">
+          <!-- Info card row -->
+          <div class="row">
+
+            <!-- Trainee info card-->
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header" data-background-color={{human_color}}>
+                  <i class="material-icons">person</i>
+                </div>
+                <div class="card-content">
+                  <p class="category">Trainees</p>
+                  <h3 class="title">{{ trainees|count }}<small></small></h3>
+                </div>
+                <div class="card-footer" data-color={{theme_color}}>
+                  <div class="stats">                    
+                    <i class="material-icons">person_add</i> <a href="/addtrainee">Add Trainee</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Todays events info card-->
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header" data-background-color={{room_color}}>
+                  <i class="material-icons">event_note</i>
+                </div>
+                <div class="card-content">
+                  <p class="category">Today Events</p>
+                  <h3 class="title">{{ events|count }}<small></small></h3>
+                </div>
+                <div class="card-footer" data-color={{theme_color}}>
+                  <div class="stats">
+                    <i class="material-icons">event</i> <a href="/addevent">Add Event</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- List row -->
+          <div id="lists" class="row">
+            <div class="col-xs-12 col-sm-12 
+                          col-md-12 col-lg-12 
+                          main">
+              <!-- List container header -->
+              <div class="container-fluid">
+                <h2 style="margin-top: 0px;margin-bottom:10px;
+                        ">
+                        <small>Lists</small></h2>
+              </div>
+              
+              <!-- Lists -->
+              <div class="card card-nav-tabs">
+                <div class="card-header" data-background-color={{theme_color}}>
+                  <!-- Tab buttons -->
+                  <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+                          <li class="active">
+                            <a href="#traineeList" data-toggle="tab">
+                              <i class="material-icons">person</i>
+                              Trainees
+                              <div class="ripple-container"></div>
+                            </a>
+                          </li>
+                          <li class="">
+                            <a href="#todays_event_list" data-toggle="tab">
+                              <i class="material-icons">event_note</i>
+                              Todays Events
+                              <div class="ripple-container"></div>
+                            </a>
+                          </li>
+                        </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tab contents -->
+                <div class="card-content">
+                  <div class="tab-content">
+                    <!-- Trainer list table -->
+                    <div class="tab-pane active" id="traineeList">
+                      <div class="fresh-table">
+                        <div class="toolbar">
+                          
+                        </div>
+
+                        <table id="fresh-table" class="table">
+                          <thead>
+                            <tr>
+                              <th data-sortable="true">#</th>
+                              <th data-sortable="true">Name</th>
+                              <th data-sortable="true">Surname</th>
+                              <th data-sortable="false">Email</th>
+                              <th data-sortable="false">Telephone</th>
+                              <th data-sortable="true">Weight</th>
+                              <th data-sortable="true">Height</th>
+                              <th data-sortable="false">Additional info</th>
+                              <th data-field="actions" data-formatter="operateFormatter" data-events="operateEvents">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                        
+                            {% for trainee in trainees %}
+                            <tr>
+                              <td>{{loop.index}}</td>
+                              <td>{{trainee[1]}}</td>
+                              <td>{{trainee[2]}}</td>
+                              <td>{{trainee[3]}}</td>
+                              <td>{{trainee[4]}}</td>
+                              <td>{{trainee[5]}}</td>
+                              <td>{{trainee[6]}}</td>
+                              <td>{{trainee[7]}}</td>
+                            </tr>
+                            {%endfor%}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <!-- Today events list table -->
+                    <div class="tab-pane" id="todays_event_list">
+                      <div class="fresh-table">
+                        <div class="toolbar">
+                          
+                        </div>
+
+                        <table id="fresh-table" class="table">
+                          <thead>
+                            <tr>
+                              <th data-sortable="true">#</th>
+                              <th data-sortable="true">Name</th>
+                              <th data-sortable="true">Room</th>
+                              <th data-sortable="true">Start Time</th>
+                              <th data-sortable="true">End Time</th>
+                              <th data-field="actions" data-formatter="operateFormatter" data-events="operateEvents">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                        
+                            {% for event in events %}
+                            <tr>
+                              <td>{{loop.index}}</td>
+                              <td>{{event[2]}}</td>
+                              <td>{{event[4]}}</td>
+                              <td>{{event[0]}}</td>
+                              <td>{{event[1]}}</td>
+                            </tr>
+                            {%endfor%}
+                            
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Legacy nav bar
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -45,7 +473,9 @@
       </div>
     </div>
   </nav>
+  -->
 
+  <!-- Legacy flash message row
   <div class="row">
     <div class="col-sm-12 col-md-12 main">
        
@@ -58,7 +488,9 @@
     {% endwith %}
     </div>
   </div>
+  -->
 
+  <!-- Legacy main content container
   <div class="container-fluid">
     <div class="row">
       <div 
@@ -134,5 +566,90 @@
       </div>
     </div>
   </div>     
+  -->
 </body>
+<!--Table scripts-->
+  <script type="text/javascript" src="../static/js/jquery-1.11.2.min.js"></script>
+
+  <!--
+  This script brokes dropdown menus
+  <script type="text/javascript" src="../static/js/bootstrap.js"></script>
+  -->
+
+  <script type="text/javascript" src="../static/js/bootstrap-table.js"></script>
+
+  <script type="text/javascript">
+      var $table = $('#fresh-table'),
+          $alertBtn = $('#alertBtn'),
+          full_screen = false;
+          
+      $().ready(function(){
+          $table.bootstrapTable({
+              toolbar: ".toolbar",
+  
+              showRefresh: true,
+              search: true,
+              showToggle: true,
+              showColumns: true,
+              pagination: true,
+              striped: true,
+              pageSize: 10,
+              pageList: [10,25,50,100],
+              
+              formatShowingRows: function(pageFrom, pageTo, totalRows){
+                  //do nothing here, we don't want to show the text "showing x of y from..." 
+              },
+              formatRecordsPerPage: function(pageNumber){
+                  return pageNumber + " rows visible";
+              },
+              icons: {
+
+                  refresh: 'fa fa-refresh',
+                  toggle: 'fa fa-th-list',
+                  columns: 'fa fa-columns',
+                  detailOpen: 'fa fa-plus-circle',
+                  detailClose: 'fa fa-minus-circle'
+              }
+          });
+          
+                      
+          
+          $(window).resize(function () {
+              $table.bootstrapTable('resetView');
+          });
+  
+          
+          window.operateEvents = {
+              'click .edit': function (e, value, row, index) {
+                  alert('You click edit icon, row: ' + JSON.stringify(row));
+                  console.log(value, row, index);    
+              },
+              'click .remove': function (e, value, row, index) {
+                  $table.bootstrapTable('remove', {
+                      field: 'id',
+                      values: [row.id]
+                  });
+          
+              }
+          };
+          
+          $alertBtn.click(function () {
+              alert("You pressed on Alert");
+          });
+          
+      });
+          
+  
+      function operateFormatter(value, row, index) {
+          return [
+              '<a rel="tooltip" title="Edit" class="table-action edit" href="javascript:void(0)" title="Edit">',
+                  '<i class="fa fa-edit"></i>',
+              '</a>',
+              '<a rel="tooltip" title="Remove" class="table-action remove" href="javascript:void(0)" title="Remove">',
+                  '<i class="fa fa-remove"></i>',
+              '</a>'
+          ].join('');
+      }
+  </script>
+
 </html>

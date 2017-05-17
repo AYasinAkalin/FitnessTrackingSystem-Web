@@ -29,7 +29,10 @@ def login():
         session["user"] = response
         return redirect("/dashboard")
     else:
-        return "Not authorized"
+        message = "Not authorized."
+        category = "warning"
+        flash(message, category)
+        return redirect("/")
 
 
 @app.route("/dashboard", methods=["GET"])
@@ -40,6 +43,10 @@ def dashboard():
         trainers = cursor.fetchall()  # if multiple values -> fetchall()
         session["trainers"] = trainers
 
+        cursor.execute("select * from users where role=2")  # get trainees sql for counting purpose
+        trainees = cursor.fetchall()  # if multiple values -> fetchall()
+        session["trainees"] = trainees
+
         cursor.execute("select name from equipments")
         equipments = cursor.fetchall()
         session["equipments"] = equipments
@@ -48,7 +55,10 @@ def dashboard():
         rooms = cursor.fetchall()
         session["rooms"] = rooms
 
-        return render_template("adminprofile.html", admin=session["user"], trainers=session["trainers"], equipments=session["equipments"], rooms=session["rooms"])
+        return render_template("adminprofile.html",
+                                admin=session["user"],
+                                trainers=session["trainers"], trainees=session["trainees"],
+                                equipments=session["equipments"], rooms=session["rooms"])
     elif session["user"][4] == 1:  # user role is trainer
         cursor.execute("select users.id,name,surname,email,telephone,weight,height,info from users join trainees on users.id=trainees.id where trainees.trainerId=%s" % session["user"][0])  # my user id
         trainees = cursor.fetchall()
@@ -66,96 +76,143 @@ def dashboard():
 @app.route("/addtrainer", methods=["GET", "POST"])
 def addtrainer():
     if request.method == 'GET':
-        return render_template("addtrainer.html")
+        return render_template("addtrainer.html", user=session["user"])
     else:
-        name = request.form["name"]
-        surname = request.form["surname"]
+        # isAdmin = request.form["admin-checkbox"]
+        # isTrainer = request.form["trainer-checkbox"]
+        # isTrainee = request.form["trainee-checkbox"]
+
+        name = request.form["firstname"]
+        surname = request.form["lastname"]
         email = request.form["email"]
-        password = request.form["password"]
         telephone = request.form["telephone"]
+
+        password = request.form["password"]
+        # willPasswordChange = request.form["force-change-pass"]
+
         cursor = mysql.get_db().cursor()
         sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',1,'%s')" % (name, surname, email, password, telephone)
 
-        cursor.execute(sql)
-        mysql.get_db().commit()
-
-        message = "Trainer added successfully."
-        flash(message)
-        return redirect("/dashboard")
+        try:
+            cursor.execute(sql)
+            mysql.get_db().commit()
+            message = "Trainer added successfully."
+            category = "success"
+        except Exception as e:
+            raise e
+            message = "Error occurred."
+            category = "error"
+        finally:
+            flash(message, category)
+            return redirect("/dashboard")
 
 
 @app.route("/addtrainee", methods=["GET", "POST"])
 def addtrainee():
-    if request.method == 'GET':
-        return render_template("addtrainee.html")
+    cursor = mysql.get_db().cursor()
+    if session["user"][4] == 1:  # user role is trainer
+        if request.method == 'GET':
+            return render_template("addtrainee.html", user=session["user"])
+        else:
+            # isTrainee = request.form["trainee-checkbox"]
+
+            name = request.form["firstname"]
+            surname = request.form["lastname"]
+            email = request.form["email"]
+            telephone = request.form["telephone"]
+
+            weight = request.form["weight"]
+            height = request.form["height"]
+            additional_info = request.form["info"]
+
+            password = request.form["password"]
+            # willPasswordChange = request.form["force-change-pass"]
+
+            trainerId = session["user"][0]
+
+            cursor = mysql.get_db().cursor()
+            # first insert into users
+            sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',2,'%s')" % (name, surname, email, password, telephone)
+            cursor.execute(sql)
+
+            user_id = cursor.lastrowid
+            sql = "Insert into trainees(id,weight,height,info,trainerId) values('%s','%s','%s','%s',%s)" % (user_id, weight, height, additional_info, trainerId)
+            cursor.execute(sql)
+
+            try:
+                mysql.get_db().commit()
+                message = "Trainee added successfully."
+                category = "success"
+            except Exception as e:
+                raise e
+                message = "Error occurred."
+                category = "error"
+            finally:
+                flash(message, category)
+                return redirect("/dashboard")
+
     else:
-        name = request.form["name"]
-        surname = request.form["surname"]
-        email = request.form["email"]
-        password = request.form["password"]
-        telephone = request.form["telephone"]
-        weight = request.form["weight"]
-        height = request.form["height"]
-        additional_info = request.form["info"]
-        trainerId = session["user"][0]
-        cursor = mysql.get_db().cursor()
-        # first insert into users
-        sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',1,'%s')" % (name, surname, email, password, telephone)
-        cursor.execute(sql)
-
-        user_id = cursor.lastrowid
-        sql = "Insert into trainees(id,weight,height,info,trainerId) values('%s','%s','%s','%s',%s)" % (user_id, weight, height, additional_info, trainerId)
-
-        cursor.execute(sql)
-        mysql.get_db().commit()
-
-        message = "Trainee added successfully."
-        flash(message)
+        message = Markup("You can not add any trainee from administrator panel.")
+        category = "warning"
+        flash(message, category)
         return redirect("/dashboard")
 
 
 @app.route("/addequipment", methods=["GET", "POST"])
 def addequipment():
     if request.method == "GET":
-        return render_template("addequipment.html")
+        return render_template("addequipment.html", user=session["user"])
     else:
         name = request.form["name"]
         sql = "Insert into equipments(name) values('%s')" % (name)
-        
+
         cursor = mysql.get_db().cursor()
-        cursor.execute(sql)
-        mysql.get_db().commit()
-    
-        message = "Equipment added successfully."
-        flash(message)
-        return redirect("/dashboard")
+
+        try:
+            cursor.execute(sql)
+            mysql.get_db().commit()
+
+            message = "Equipment added successfully."
+            category = "success"
+        except Exception as e:
+            raise e
+            message = "Error occurred."
+            category = "error"
+        finally:
+            flash(message, category)
+            return redirect("/dashboard")
 
 
 @app.route("/addroom", methods=["GET", "POST"])
 def addroom():
     if request.method == "GET":
-        return render_template("addroom.html")
+        return render_template("addroom.html", user=session["user"])
     else:
         name = request.form["name"]
         number = request.form["number"]
         size = request.form["size"]
         sql = "Insert into rooms(name,number,size) values('%s','%s','%s')" % (name, number, size)
-      
         cursor = mysql.get_db().cursor()
-        cursor.execute(sql)
-        mysql.get_db().commit()
-        # Example markup message
-        '''message = Markup("<h1>Voila! Room is added.</h1>")'''
-        message = "Room added successfully."
-        flash(message)
-        return redirect("/dashboard")
+
+        try:
+            cursor.execute(sql)
+            mysql.get_db().commit()
+            message = "Room added successfully."
+            category = "success"
+        except Exception as e:
+            raise e
+            message = "Error occurred."
+            category = "error"
+        finally:
+            flash(message, category)
+            return redirect("/dashboard")
 
 
 
 @app.route("/addevent", methods=["GET", "POST"])
 def add_event():
     if request.method == "GET":
-        return render_template("addevent.html", rooms=session["rooms"])
+        return render_template("addevent.html", rooms=session["rooms"], user=session["user"])
     else:
         year = request.form["year"]
         month = request.form["month"]
@@ -168,20 +225,26 @@ def add_event():
         cursor = mysql.get_db().cursor()
         room_id = request.form["room"]  # [0] <<- This one makes form to take only one character
         trainer_id = session["user"][0]
-        # TODO: Add Room ID to SQL statement just below
         sql = "INSERT INTO events(startdate, enddate, name, trainerid, roomid) VALUES ('%s', '%s', '%s', '%s', '%s')" % (startdate, enddate, name, trainer_id, room_id)
-      
-        cursor.execute(sql)
-        mysql.get_db().commit()
-        message = "Event added successfully."
-        flash(message)
-        return redirect("dashboard")
+
+        try:
+            cursor.execute(sql)
+            mysql.get_db().commit()
+            message = "Event added successfully."
+            category = "success"
+        except Exception as e:
+            raise e
+            message = "Error occurred."
+            category = "error"
+        finally:
+            flash(message, category)
+            return redirect("/dashboard")
 
 
 @app.route("/addtask", methods=["GET", "POST"])
 def add_task():
     if request.method == "GET":
-        return render_template("addtask.html", trainees=session["trainees"])
+        return render_template("addtask.html", trainees=session["trainees"], user=session["user"])
     else:
         taskName = request.form["taskName"]
         traineeId = request.form["traineeId"]
@@ -189,12 +252,19 @@ def add_task():
         validdate=request.form["validuntil"]
         sql = "INSERT INTO `tasks`(`taskName`, `traineeId`,`info`, `status`,`validuntil`) VALUES ('%s',%s,'%s',0,'%s')" % (taskName, traineeId, info,validdate)
         cursor = mysql.get_db().cursor()
-        cursor.execute(sql)
-        mysql.get_db().commit()
-        message = "Task added successfully"
-        flash(message)
-        return redirect("dashboard")
 
+        try:
+            cursor.execute(sql)
+            mysql.get_db().commit()
+            message = "Task added successfully."
+            category = "success"
+        except Exception as e:
+            raise e
+            message = "Error occurred."
+            category = "error"
+        finally:
+            flash(message, category)
+            return redirect("/dashboard")
 
 @app.route("/logout",methods=["GET"])
 def logout():
@@ -254,7 +324,7 @@ FROM events,joining,rooms WHERE startdate > CURRENT_DATE and joining.eventid=eve
     events = cursor.fetchall()
 
     return jsonify(
-        events = events
+        events=events
     )
 
 @app.route("/ws/task/<int:taskId>/complete", methods=["GET"])
