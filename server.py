@@ -39,7 +39,7 @@ def login():
 def dashboard():
     cursor = mysql.get_db().cursor()
     if session["user"][4] == 0:  # user role is admin
-        cursor.execute("select name,surname,email,telephone from users where role=1")  # get trainers sql
+        cursor.execute("select name,surname,email,telephone,id from users where role=1")  # get trainers sql
         trainers = cursor.fetchall()  # if multiple values -> fetchall()
         session["trainers"] = trainers
 
@@ -271,6 +271,20 @@ def logout():
     session.clear()
     return redirect("/")
 
+@app.route("/trainerwindow/<int:trainerid>",methods=["GET"])
+def trainer_window(trainerid):
+    cursor=mysql.get_db().cursor()
+    sql="SELECT * FROM `events` WHERE events.trainerid=%s and events.startdate<CURRENT_DATE +7 and events.startdate>CURRENT_DATE" % trainerid
+    cursor.execute(sql)
+    trainer_events=cursor.fetchall()
+
+    sql="select * from trainees join users on users.id=trainees.id where trainees.trainerId=%s" % trainerid
+    cursor.execute(sql)
+    trainer_trainees=cursor.fetchall()
+
+    
+    return render_template("trainerwindow.html",trainees=trainer_trainees,events=trainer_events)
+    
 # webServices
 @app.route("/ws/login", methods=["POST"])
 def login_trainee():
