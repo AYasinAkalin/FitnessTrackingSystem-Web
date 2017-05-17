@@ -175,9 +175,9 @@ def addequipment():
         cursor = mysql.get_db().cursor()
 
         try:
-        cursor.execute(sql)
-        mysql.get_db().commit()
-    
+            cursor.execute(sql)
+            mysql.get_db().commit()
+
             message = "Equipment added successfully."
             category = "success"
         except Exception as e:
