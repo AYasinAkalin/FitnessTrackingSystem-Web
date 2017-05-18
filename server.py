@@ -322,6 +322,14 @@ def get_tasks(traineeId):
     return jsonify(
         tasks=tasks
     )
+@app.route("/ws/events",methods=["GET"])
+def mock():
+    cursor = mysql.get_db().cursor()
+    sql="select * from events"
+    cursor.execute(sql)
+    return jsonify(
+        events=cursor.fetchall()
+    )
 
 @app.route("/ws/events/<int:userid>", methods=["GET"])
 def get_events(userid):
@@ -365,6 +373,34 @@ def leave_event(eventId,traineeId):
     cursor.execute(sql)
     mysql.get_db().commit()
     return "OK"
+
+@app.route("/ws/equipments", methods=["GET"])
+def get_equipments():
+    cursor = mysql.get_db().cursor()
+    sql = "select * from equipments"
+    cursor.execute(sql)
+
+    equipments = cursor.fetchall()
+    return jsonify(
+        equipments = equipments
+    )
+
+@app.route("/ws/equipments/use/<int:equipmentId>/<int:traineeId>", methods=["GET"])
+def use_equipment(equipmentId, traineeId):
+    cursor = mysql.get_db().cursor()
+    sql = "update equipments set status=%s where id=%s"%(traineeId, equipmentId)
+    cursor.execute(sql)
+    mysql.get_db().commit()
+    return "OK"
+
+@app.route("/ws/equipments/release/<int:equipmentId>/<int:traineeId>", methods=["GET"])
+def release_equipment(equipmentId, traineeId):
+    cursor = mysql.get_db().cursor()
+    sql = "update equipments set status=0 where id=%s and status=%s"%(equipmentId, traineeId)
+    cursor.execute(sql)
+    mysql.get_db().commit()
+    return "OK"
+
 
 if __name__ == "__main__":
     app.run()

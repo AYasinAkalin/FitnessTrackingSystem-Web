@@ -9,3 +9,4 @@ web.debug.config
 *.pyc
 tmp/
 /tmp
+.idea/
