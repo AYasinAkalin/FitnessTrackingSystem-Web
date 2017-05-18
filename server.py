@@ -21,7 +21,7 @@ def login():
     cursor = mysql.get_db().cursor()
     email = request.form['email']  # formda input fieldda name ne ise onu alır.
     password = request.form['password']
-    sql = "select id,name,surname,email,role from users where email='%s' and password='%s'" % (email, password)
+    sql = "select id,name,surname,email,role from users where email='%s' and password=md5('%s')" % (email, password)
     cursor.execute(sql)
     response = cursor.fetchone()  # if one value -> fetchone()
 
@@ -91,7 +91,7 @@ def addtrainer():
         # willPasswordChange = request.form["force-change-pass"]
 
         cursor = mysql.get_db().cursor()
-        sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',1,'%s')" % (name, surname, email, password, telephone)
+        sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s',md5('%s'),1,'%s')" % (name, surname, email, password, telephone)
 
         try:
             cursor.execute(sql)
@@ -132,7 +132,7 @@ def addtrainee():
 
             cursor = mysql.get_db().cursor()
             # first insert into users
-            sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s','%s',2,'%s')" % (name, surname, email, password, telephone)
+            sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s',md5('%s'),2,'%s')" % (name, surname, email, password, telephone)
             cursor.execute(sql)
 
             user_id = cursor.lastrowid
@@ -291,7 +291,7 @@ def login_trainee():
     email = request.json["email"]
     password = request.json["password"]
     cursor = mysql.get_db().cursor()
-    sql = "select id,name,surname,email,role from users where email='%s' and password='%s'" % (email, password)
+    sql = "select id,name,surname,email,role from users where email='%s' and password=md5('%s')" % (email, password)
     cursor.execute(sql)
     response = cursor.fetchone()  # if one value -> fetchone()
 
