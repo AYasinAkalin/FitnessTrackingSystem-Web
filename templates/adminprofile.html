@@ -420,10 +420,8 @@
                     <!-- Trainer list table -->
                     <div class="tab-pane active" id="trainerList">
                       <div class="fresh-table">
-                        <div class="toolbar">
-                          
-                        </div>
-
+                        <div class="toolbar"><!-- Empty toolbar at the top of table, can be filled --></div>
+                        <!-- Trainer table content -->
                         <table id="fresh-table" class="table">
                           <thead>
                             <tr>
@@ -444,32 +442,37 @@
                               <td>{{trainer[1]}}</td>
                               <td>{{trainer[2]}}</td>
                               <td>{{trainer[3]}}</td>
-
-                              <td>  <a rel="tooltip" title="Like" class="table-action like" href="javascript:trainerwindow({{trainer[4]}})" title="Like">
-                  <i class="material-icons">remove_red_eye</i>
-              </a>
-              <a rel="tooltip" title="Edit" class="table-action edit" href="javascript:void(0)" title="Edit">
-                  <i class="material-icons">mode_edit</i>
-              </a>
-              <a rel="tooltip" title="Remove" class="table-action remove" href="javascript:void(0)" title="Remove">
-                  <i class="material-icons">remove_circle</i>
-              </a>
+                              <!-- Action buttons at each row -->
+                              <td>  
+                                <a rel="tooltip"  
+                                   class="table-action like" 
+                                   href="javascript:trainerwindow({{trainer[4]}})" 
+                                   title="Like">
+                                  <i class="material-icons">remove_red_eye</i>
+                                </a>
+                                <a rel="tooltip"  
+                                   class="table-action edit" 
+                                   href="javascript:void(0)" 
+                                   title="Edit">
+                                  <i class="material-icons">mode_edit</i>
+                                </a>
+                                <a rel="tooltip" 
+                                   class="table-action remove" 
+                                   href="javascript:void(0)" 
+                                   title="Remove">
+                                  <i class="material-icons">remove_circle</i>
+                                </a>
                               </td>
-                             
-
                             </tr>
                             {%endfor%}
                           </tbody>
-                        </table>
+                        </table> <!-- End of trainer table content -->
                       </div>
-                    </div>
+                    </div><!-- End of trainer table container -->
                     <!-- Equipment list table -->
                     <div class="tab-pane" id="equipmentList">
                       <div class="fresh-table">
-                        <div class="toolbar">
-                          
-                        </div>
-
+                        <div class="toolbar"><!-- Empty toolbar at the top of table, can be filled --></div>
                         <table id="fresh-table" class="table">
                           <thead>
                             <tr>
@@ -495,10 +498,7 @@
                     <!-- Room list table -->
                     <div class="tab-pane" id="roomList">
                       <div class="fresh-table">
-                        <div class="toolbar">
-                          
-                        </div>
-
+                        <div class="toolbar"><!-- Empty toolbar at the top of table, can be filled --></div>
                         <table id="fresh-table" class="table">
                           <thead>
                             <tr>
@@ -555,73 +555,56 @@
 This script brokes dropdown menus
 <script type="text/javascript" src="../static/js/bootstrap.js"></script>
 -->
-<script type="text/javascript" src="../static/js/bootstrap-table.js"></script>
+  <script type="text/javascript" src="../static/js/bootstrap-table.js"></script>
 
   <script type="text/javascript">
-      var $table = $('#fresh-table'),
-          $alertBtn = $('#alertBtn'),
-          full_screen = false;
-          
-      $().ready(function(){
-          $table.bootstrapTable({
-              toolbar: ".toolbar",
+    var $table = $('#fresh-table'),
+        $alertBtn = $('#alertBtn'),
+        full_screen = false;
+            
+    $().ready(function(){
+      $table.bootstrapTable({
+        toolbar: ".toolbar",
   
-              showRefresh: true,
-              search: true,
-              showToggle: true,
-              showColumns: true,
-              pagination: true,
-              striped: true,
-              pageSize: 10,
-              pageList: [10,25,50,100],
-              
-              formatShowingRows: function(pageFrom, pageTo, totalRows){
-                  //do nothing here, we don't want to show the text "showing x of y from..." 
-              },
-              formatRecordsPerPage: function(pageNumber){
-                  return pageNumber + " rows visible";
-              },
-              icons: {
+        showRefresh: true,
+        search: true,
+        showToggle: true,
+        showColumns: true,
+        pagination: true,
+        striped: true,
+        pageSize: 10,
+        pageList: [10,25,50,100],
+                
+        formatShowingRows: function(pageFrom, pageTo, totalRows){
+          //do nothing here, we don't want to show the text "showing x of y from..." 
+        },
 
-                  refresh: 'fa fa-refresh',
-                  toggle: 'fa fa-th-list',
-                  columns: 'fa fa-columns',
-                  detailOpen: 'fa fa-plus-circle',
-                  detailClose: 'fa fa-minus-circle'
-              }
-          });
-          
-                      
-          
-          $(window).resize(function () {
-              $table.bootstrapTable('resetView');
-          });
-  
-           
+        formatRecordsPerPage: function(pageNumber){
+          return pageNumber + " rows visible";
+        },
+
+        icons: {
+            refresh: 'fa fa-refresh',
+            toggle: 'fa fa-th-list',
+            columns: 'fa fa-columns',
+            detailOpen: 'fa fa-plus-circle',
+            detailClose: 'fa fa-minus-circle'
+        }
       });
-          
-  
-     
 
-      function trainerwindow(trainerId)
-      {
-        console.log(trainerId);
-        $.get("/trainerwindow/"+trainerId, 
-        function(html){
+      $(window).resize(function () {
+        $table.bootstrapTable('resetView');
+      });
+    }); /* End of $().ready(function) */
 
-          console.log(html);
-          
-          
-          $(html).modal();
-    });
-
-      }
-  </script>
-
- 
-
-
-
-
-
+    function trainerwindow(trainerId)
+    {
+      console.log(trainerId);
+      $.get("/trainerwindow/"+trainerId, 
+      function(html){
+        console.log(html);          
+        $(html).modal();
+      });
+    }
+  </script> 
 </html>
