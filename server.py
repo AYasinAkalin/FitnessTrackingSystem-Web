@@ -2,13 +2,18 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, request, session, json, jsonify, redirect, url_for, flash, Markup
-
+import urllib2
 from flaskext.mysql import MySQL
+
 mysql = MySQL()
 app = Flask(__name__)
 app.secret_key = "adadaxax"
 app.config.from_pyfile("dbconfig.cfg")
 mysql.init_app(app)
+
+# Keys for Google reCaptcha
+SITE_KEY = '6LfGDCIUAAAAAAJ17rzeND2i8lRx21UCZxEixwOo'
+SECRET_KEY = '6LfGDCIUAAAAAASyHxGV1we8ebkhptgD3TzCFWc4'
 
 
 @app.route("/")
@@ -16,23 +21,47 @@ def hello():
     return render_template("login.html")
 
 
+# Helper function for Google reCaptcha
+def checkRecaptcha(response, secretkey):
+    url = 'https://www.google.com/recaptcha/api/siteverify?'
+    url = url + 'secret=' + secretkey
+    url = url + '&response=' + response
+    try:
+        jsonobj = json.loads(urllib2.urlopen(url).read())
+        if jsonobj['success']:
+            return True
+        else:
+            return False
+    except Exception as e:
+        print e
+        return False
+
+
 @app.route("/login", methods=["POST"])
 def login():
     cursor = mysql.get_db().cursor()
     email = request.form['email']  # formda input fieldda name ne ise onu alır.
     password = request.form['password']
+    response = request.form.get('g-recaptcha-response')
     sql = "select id,name,surname,email,role from users where email='%s' and password=md5('%s')" % (email, password)
     cursor.execute(sql)
     response = cursor.fetchone()  # if one value -> fetchone()
 
-    if response:  # there is a user with given info
+    resDic = {"message": 'Not authorized.', "category": 'warning', "link": '/'}
+    # Database answered, recaptcha is verified.
+    if check and response:
         session["user"] = response
-        return redirect("/dashboard")
+        resDic["link"] = "/dashboard"
+        return redirect(resDic["link"])
+    # recaptcha is not verified. Possible bot.
+    elif response:
+        resDic["message"] = "Show us what you got, tissue or metal?"
+        flash(resDic["message"], resDic["category"])
+        return redirect(resDic["link"])
+    # No user is found.
     else:
-        message = "Not authorized."
-        category = "warning"
-        flash(message, category)
-        return redirect("/")
+        flash(resDic["message"], resDic["category"])
+        return redirect(resDic["link"])
 
 
 @app.route("/dashboard", methods=["GET"])
