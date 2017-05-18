@@ -335,13 +335,12 @@ def mock():
 def get_events(userid):
     cursor = mysql.get_db().cursor()
     sql = """select events.id as eventid,startdate,enddate,events.name,
-
 (case when size>COUNT(joining.traineeid) then 0
-when size=COUNT(joining.traineeid) then 1
+when size<=COUNT(joining.traineeid) then 1
 end) as isFull,
 
-(SELECT COUNT(*) from joining,events where events.id=eventid and joining.traineeid=%s) as joining
-FROM events,joining,rooms WHERE startdate > CURRENT_DATE and joining.eventid=events.id and events.roomid=rooms.id""" % userid
+(SELECT COUNT(*) from joining,events where events.id=eventid and joining.traineeid=%s) as joins
+FROM events  join joining on joining.eventid=events.id,rooms  WHERE startdate < CURRENT_DATE+7 and enddate> CURRENT_DATE and rooms.id=events.roomid""" % userid
     cursor.execute(sql)
     events = cursor.fetchall()
 
@@ -363,7 +362,7 @@ def join_event(eventId,traineeId):
     sql="Insert into joining(eventid,traineeid) values(%s,%s)"%(eventId,traineeId)
     cursor.execute(sql)
     mysql.get_db().commit()
-    return "OK"
+    return "joined"
 
 @app.route("/ws/events/leave/<int:eventId>/<int:traineeId>",methods=["GET"])
 def leave_event(eventId,traineeId):
@@ -372,7 +371,7 @@ def leave_event(eventId,traineeId):
     print sql
     cursor.execute(sql)
     mysql.get_db().commit()
-    return "OK"
+    return "left"
 
 @app.route("/ws/equipments", methods=["GET"])
 def get_equipments():
