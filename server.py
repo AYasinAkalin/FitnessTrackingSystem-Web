@@ -4,12 +4,14 @@
 from flask import Flask, render_template, request, session, json, jsonify, redirect, url_for, flash, Markup
 import urllib2
 from flaskext.mysql import MySQL
+from flask_argon2 import Argon2
 
 mysql = MySQL()
 app = Flask(__name__)
 app.secret_key = "adadaxax"
 app.config.from_pyfile("dbconfig.cfg")
 mysql.init_app(app)
+argon2 = Argon2(app)
 
 # Keys for Google reCaptcha
 SITE_KEY = '6LfGDCIUAAAAAAJ17rzeND2i8lRx21UCZxEixwOo'
@@ -43,23 +45,31 @@ def login():
     cursor = mysql.get_db().cursor()
     email = request.form['email']  # formda input fieldda name ne ise onu alır.
     password = request.form['password']
-    sql = "select id,name,surname,email,role from users where email='%s' and password=md5('%s')" % (email, password)
     cursor.execute(sql)
     responseDB = cursor.fetchone()  # if one value -> fetchone()
+
+    # Getting Argon2 hash from database
+    sql = "select id, name, surname, email, role, hashArgon from users where email='%s'" % (email)
+    cursor.execute(sql)
+    response = cursor.fetchone()
+    # print response
+    hashArgonFromDB = response[5]
 
     message = 'Not authorized.'
     category = 'warning'
     link = '/'
+    ticket = argon2.check_password_hash(hashArgonFromDB, password)
+    # print 'password hashes matched? ', ticket
 
     '''Following check is introduced
     because automated tests are not working when recaptcha is enabled.'''
     if mode == "release":
         responseRecapthca = request.form.get('g-recaptcha-response')
         check = checkRecaptcha(responseRecapthca, SECRET_KEY)
-        if check and responseDB:  # Database answered, recaptcha is verified.
-            session["user"] = responseDB
+        if check and ticket:  # Database answered, recaptcha is verified.
+            session["user"] = response
             return redirect("/dashboard")
-        elif responseDB:  # recaptcha is not verified. Possible bot.
+        elif ticket:  # recaptcha is not verified. Possible bot.
             message = "Show us what you got, tissue or metal?"
             flash(message, category)
             return redirect(link)
@@ -67,8 +77,8 @@ def login():
             flash(message, category)
             return redirect(link)
     else:
-        if responseDB:  # there is a user with given info
-            session["user"] = responseDB
+        if ticket:  # there is a user with given info
+            session["user"] = response
             return redirect("/dashboard")
         else:  # No user is found.
             flash(message, category)
