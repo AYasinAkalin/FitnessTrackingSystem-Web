@@ -43,6 +43,11 @@ def login():
     email = request.form['email']  # formda input fieldda name ne ise onu alır.
     password = request.form['password']
     response = request.form.get('g-recaptcha-response')
+
+    if checkRecaptcha(response, SECRET_KEY):
+        check = True  # You are human.
+    else:
+        check = False  # You are bot.
     sql = "select id,name,surname,email,role from users where email='%s' and password=md5('%s')" % (email, password)
     cursor.execute(sql)
     response = cursor.fetchone()  # if one value -> fetchone()
