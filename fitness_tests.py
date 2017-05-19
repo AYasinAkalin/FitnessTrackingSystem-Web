@@ -3,7 +3,7 @@ import server
 from flask import json
 from coverage import coverage
 import os
-cov = coverage(branch=True, omit=['venv/*', 'fitness_tests.py'])
+cov = coverage(branch=True, omit=['venv/*','/Library/*', 'fitness_tests.py'])
 cov.start()
 class FitnessTestCase(unittest.TestCase):
 
@@ -20,7 +20,7 @@ class FitnessTestCase(unittest.TestCase):
 
     def test_not_authorized_login(self):
         rv=self.app.post("/login",data=dict(
-            email="no_email",
+            email="no_email@email",
             password="wrongpass"
         ),follow_redirects=True)
 
@@ -163,7 +163,7 @@ class FitnessTestCase(unittest.TestCase):
 
         rv=self.app.post("/ws/login",
         data=json.dumps(dict(
-            email="wrongmail",
+            email="wrongmail@wrong",
             password="wrongpass"
         )),
         content_type="application/json")
