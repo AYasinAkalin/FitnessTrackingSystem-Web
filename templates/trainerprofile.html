@@ -5,26 +5,6 @@
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
   <meta name="viewport" content="width=device-width" />
 
-  <!-- Legacy imports -->
-    
-    <!-- JQUERY -->
-    <!--Legacy
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    -->
-    
-    <!--Legacy
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    --> 
-    
-    <!-- Legacy
-    <link rel="stylesheet" href="static/admindashboard.css">
-    -->
-    
-    <!-- Latest compiled and minified JavaScript -->
-    <!--Legacy
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    -->
-
   <!-- Style Files -->
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"  />
@@ -62,15 +42,6 @@
 
     <!-- Material Dashboard javascript methods -->
     <script src="../static/js/material-dashboard.js"></script>
-
-    <script type="text/javascript">
-      $(document).ready(function(){
-
-      // Javascript method's body can be found in assets/js/demos.js
-          demo.initDashboardPageCharts();
-
-      });
-    </script>
 
   <!-- Color declerations -->
     {% set theme_color = "blue" %}
@@ -445,128 +416,7 @@
       </div>
     </div>
   </div>
-  
 
-  <!-- Legacy nav bar
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Fitness Training</a>
-      </div>
-      <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Dashboard</a></li>
-          <li><a href="#">Settings</a></li>
-          <li><a href="#">Profile</a></li>
-          <li><a href="#">Help</a></li>
-          <li><a href="/logout">Logout</a></li>
-        </ul>
-        <form class="navbar-form navbar-right">
-          <input type="text" class="form-control" placeholder="Search...">
-        </form>
-      </div>
-    </div>
-  </nav>
-  -->
-
-  <!-- Legacy flash message row
-  <div class="row">
-    <div class="col-sm-12 col-md-12 main">
-       
-       {% with messages = get_flashed_messages() %}
-       {% if messages %}
-            {% for message in messages %}
-             <div class="alert alert-success" role="alert">{{message}}</div>
-             {% endfor %}
-       {% endif %}
-    {% endwith %}
-    </div>
-  </div>
-  -->
-
-  <!-- Legacy main content container
-  <div class="container-fluid">
-    <div class="row">
-      <div 
-           class="col-xs-12 col-xs-offset-0
-                  col-sm-10 col-sm-offset-1
-                  col-md-10 col-md-offset-1
-                  col-lg-8  col-lg-offset-2
-                  main"
-      >
-        <h1 class="page-header">{{trainer[1]}} {{trainer[2]}}</h1>
-
-        <div style= "display: flex; justify-content: space-between;" class="row placeholders">
-          <div class="col-xs-6 col-sm-4 placeholder">
-            <a href="/addtrainee">
-              <img src="http://www.dcfitness.club/img/0967/991.jpg?sitetimestamp=636153174470000000" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            </a>
-            <a href="/addtrainee">
-              <h4>Add Trainee</h4>
-            </a>
-          </div>
-          <div class="col-xs-6 col-sm-4 placeholder">
-            <a href="/addevent">
-              <img src="https://i.ytimg.com/vi/ZEEHTTXctWk/maxresdefault.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            </a>
-            <a href="/addevent">
-              <h4>Add Event</h4>
-            </a>
-          </div>
-          <div class="col-xs-6 col-sm-4 placeholder">
-            <a href="/addtask">
-              <img src="http://www.yeahweworkout.com/upload/20150321130230uid1.gif" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            </a>
-            <a href="/addtask">
-              <h4>Add Task</h4>
-            </a>
-          </div>
-        </div>
-        <div class="sub-container">
-          <h2 style="text-align:center">Trainees List</h2>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Surname</th>
-                  <th>Email</th>
-                  <th>Telephone</th>
-                  <th>Weight</th>
-                  <th>Height</th>
-                  <th>Additional info</th>
-                </tr>
-              </thead>
-              <tbody>
-            
-                {% for trainee in trainees %}
-                <tr>
-                  <td>{{loop.index}}</td>
-                  <td>{{trainee[1]}}</td>
-                  <td>{{trainee[2]}}</td>
-                  <td>{{trainee[3]}}</td>
-                  <td>{{trainee[4]}}</td>
-                  <td>{{trainee[5]}}</td>
-                  <td>{{trainee[6]}}</td>
-                  <td>{{trainee[7]}}</td>
-                </tr>
-                {%endfor%}
-                
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>     
-  -->
 </body>
 <!--Table scripts-->
   <script type="text/javascript" src="../static/js/jquery-1.11.2.min.js"></script>
