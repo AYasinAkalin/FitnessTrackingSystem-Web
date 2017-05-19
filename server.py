@@ -15,6 +15,7 @@ mysql.init_app(app)
 SITE_KEY = '6LfGDCIUAAAAAAJ17rzeND2i8lRx21UCZxEixwOo'
 SECRET_KEY = '6LfGDCIUAAAAAASyHxGV1we8ebkhptgD3TzCFWc4'
 
+mode = "development"  # Change to 'release' to activate reChaptcha
 
 @app.route("/")
 def hello():
@@ -42,32 +43,36 @@ def login():
     cursor = mysql.get_db().cursor()
     email = request.form['email']  # formda input fieldda name ne ise onu alır.
     password = request.form['password']
-    response = request.form.get('g-recaptcha-response')
-
-    if checkRecaptcha(response, SECRET_KEY):
-        check = True  # You are human.
-    else:
-        check = False  # You are bot.
     sql = "select id,name,surname,email,role from users where email='%s' and password=md5('%s')" % (email, password)
     cursor.execute(sql)
-    response = cursor.fetchone()  # if one value -> fetchone()
+    responseDB = cursor.fetchone()  # if one value -> fetchone()
 
-    resDic = {"message": 'Not authorized.', "category": 'warning', "link": '/'}
-    # Database answered, recaptcha is verified.
-    if check and response:
-        session["user"] = response
-        resDic["link"] = "/dashboard"
-        return redirect(resDic["link"])
-    # recaptcha is not verified. Possible bot.
-    elif response:
-        resDic["message"] = "Show us what you got, tissue or metal?"
-        flash(resDic["message"], resDic["category"])
-        return redirect(resDic["link"])
-    # No user is found.
+    message = 'Not authorized.'
+    category = 'warning'
+    link = '/'
+
+    '''Following check is introduced
+    because automated tests are not working when recaptcha is enabled.'''
+    if mode == "release":
+        responseRecapthca = request.form.get('g-recaptcha-response')
+        check = checkRecaptcha(responseRecapthca, SECRET_KEY)
+        if check and responseDB:  # Database answered, recaptcha is verified.
+            session["user"] = responseDB
+            return redirect("/dashboard")
+        elif responseDB:  # recaptcha is not verified. Possible bot.
+            message = "Show us what you got, tissue or metal?"
+            flash(message, category)
+            return redirect(link)
+        else:  # No user is found.
+            flash(message, category)
+            return redirect(link)
     else:
-        flash(resDic["message"], resDic["category"])
-        return redirect(resDic["link"])
-
+        if responseDB:  # there is a user with given info
+            session["user"] = responseDB
+            return redirect("/dashboard")
+        else:  # No user is found.
+            flash(message, category)
+            return redirect(link)
 
 @app.route("/dashboard", methods=["GET"])
 def dashboard():
