@@ -1,14 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+###### LIBRARIES ######
 from flask import Flask, render_template, request, session, json, jsonify, redirect, url_for, flash, Markup
-
+import urllib2
 from flaskext.mysql import MySQL
+from flask_argon2 import Argon2  # Required for Argon2 Encryption
+from passlib.hash import sha256_crypt  # Required for SHA2/SHA256 Encryption
+
+###### OBJECTS ######
 mysql = MySQL()
 app = Flask(__name__)
 app.secret_key = "adadaxax"
 app.config.from_pyfile("dbconfig.cfg")
 mysql.init_app(app)
+argon2 = Argon2(app)
+
+# Keys for Google reCaptcha
+SITE_KEY = '6LfGDCIUAAAAAAJ17rzeND2i8lRx21UCZxEixwOo'
+SECRET_KEY = '6LfGDCIUAAAAAASyHxGV1we8ebkhptgD3TzCFWc4'
+
+modes = ["development", "debug", "release"]
+activeMode = modes[0]  # Change to 'release' to activate reChaptcha
 
 
 @app.route("/")
@@ -16,23 +29,67 @@ def hello():
     return render_template("login.html")
 
 
+# Helper function for Google reCaptcha
+def checkRecaptcha(response, secretkey):
+    url = 'https://www.google.com/recaptcha/api/siteverify?'
+    url = url + 'secret=' + secretkey
+    url = url + '&response=' + response
+    try:
+        jsonobj = json.loads(urllib2.urlopen(url).read())
+        if jsonobj['success']:
+            return True
+        else:
+            return False
+    except Exception as e:
+        print e
+        return False
+
+
 @app.route("/login", methods=["POST"])
 def login():
     cursor = mysql.get_db().cursor()
     email = request.form['email']  # formda input fieldda name ne ise onu alır.
     password = request.form['password']
-    sql = "select id,name,surname,email,role from users where email='%s' and password=md5('%s')" % (email, password)
+
+    # Getting hashes
+    sql = "SELECT id, name, surname, email, role, hashArgon, hashSHA256 FROM users WHERE email='%s'" % (email)
     cursor.execute(sql)
     response = cursor.fetchone()  # if one value -> fetchone()
 
-    if response:  # there is a user with given info
-        session["user"] = response
-        return redirect("/dashboard")
+    if response:
+        hashArgonFromDB = response[5]  # Getting Argon2 hash from database
+        hashSHA256FromDB = response[6]  # Getting SHA2/SHA256 hash from database
+        # Resolving hashes and generation pass ticket
+        ticketArgon = argon2.check_password_hash(hashArgonFromDB, password)
+        ticketSHA256 = sha256_crypt.verify(password, hashSHA256FromDB)
+        ticket = ticketArgon and ticketSHA256
     else:
-        message = "Not authorized."
-        category = "warning"
-        flash(message, category)
-        return redirect("/")
+        ticket = False
+    message = 'Not authorized.'
+    category = 'warning'
+    link = '/'
+    '''Following check is introduced
+    because automated tests are not working when recaptcha is enabled.'''
+    if activeMode == "release":
+        responseRecapthca = request.form.get('g-recaptcha-response')
+        check = checkRecaptcha(responseRecapthca, SECRET_KEY)
+        if check and ticket:  # Database answered, recaptcha is verified.
+            session["user"] = response
+            return redirect("/dashboard")
+        elif ticket:  # recaptcha is not verified. Possible bot.
+            message = "Show us what you got, tissue or metal?"
+            flash(message, category)
+            return redirect(link)
+        else:  # No user is found.
+            flash(message, category)
+            return redirect(link)
+    else:
+        if ticket:  # there is a user with given info
+            session["user"] = response
+            return redirect("/dashboard")
+        else:  # No user is found.
+            flash(message, category)
+            return redirect(link)
 
 
 @app.route("/dashboard", methods=["GET"])
@@ -90,8 +147,11 @@ def addtrainer():
         password = request.form["password"]
         # willPasswordChange = request.form["force-change-pass"]
 
+        hashArgon2 = argon2.generate_password_hash(password)
+        hashSHA256 = sha256_crypt.hash(password)
+
         cursor = mysql.get_db().cursor()
-        sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s',md5('%s'),1,'%s')" % (name, surname, email, password, telephone)
+        sql = "INSERT INTO users(name,surname,email,password,role,telephone, hashArgon, hashSHA256) VALUES('%s','%s','%s',md5('%s'),1,'%s','%s','%s')" % (name, surname, email, password, telephone, hashArgon2, hashSHA256)
 
         try:
             cursor.execute(sql)
@@ -128,15 +188,18 @@ def addtrainee():
             password = request.form["password"]
             # willPasswordChange = request.form["force-change-pass"]
 
+            hashArgon2 = argon2.generate_password_hash(password)
+            hashSHA256 = sha256_crypt.hash(password)
+
             trainerId = session["user"][0]
 
             cursor = mysql.get_db().cursor()
             # first insert into users
-            sql = "Insert into users(name,surname,email,password,role,telephone) values('%s','%s','%s',md5('%s'),2,'%s')" % (name, surname, email, password, telephone)
+            sql = "INSERT INTO users(name, surname, email,password, role, telephone, hashArgon, hashSHA256) VALUES('%s','%s','%s',md5('%s'),2,'%s', '%s', '%s')" % (name, surname, email, password, telephone, hashArgon2, hashSHA256)
             cursor.execute(sql)
 
             user_id = cursor.lastrowid
-            sql = "Insert into trainees(id,weight,height,info,trainerId) values('%s','%s','%s','%s',%s)" % (user_id, weight, height, additional_info, trainerId)
+            sql = "INSERT INTO trainees(id,weight,height,info,trainerId) VALUES('%s','%s','%s','%s',%s)" % (user_id, weight, height, additional_info, trainerId)
             cursor.execute(sql)
 
             try:
@@ -164,7 +227,7 @@ def addequipment():
         return render_template("addequipment.html", user=session["user"])
     else:
         name = request.form["name"]
-        sql = "Insert into equipments(name) values('%s')" % (name)
+        sql = "INSERT INTO equipments(name) VALUES('%s')" % (name)
 
         cursor = mysql.get_db().cursor()
 
@@ -191,7 +254,7 @@ def addroom():
         name = request.form["name"]
         number = request.form["number"]
         size = request.form["size"]
-        sql = "Insert into rooms(name,number,size) values('%s','%s','%s')" % (name, number, size)
+        sql = "INSERT INTO rooms(name,number,size) VALUES('%s','%s','%s')" % (name, number, size)
         cursor = mysql.get_db().cursor()
 
         try:
@@ -266,37 +329,51 @@ def add_task():
             flash(message, category)
             return redirect("/dashboard")
 
+
 @app.route("/logout",methods=["GET"])
 def logout():
     session.clear()
     return redirect("/")
 
+
 @app.route("/trainerwindow/<int:trainerid>",methods=["GET"])
 def trainer_window(trainerid):
     cursor=mysql.get_db().cursor()
-    sql="SELECT * FROM `events` WHERE events.trainerid=%s and events.startdate<CURRENT_DATE +7 and events.startdate>CURRENT_DATE" % trainerid
+    sql="SELECT * FROM `events` WHERE events.trainerid=%s AND events.startdate<CURRENT_DATE +7 AND events.startdate>CURRENT_DATE" % trainerid
     cursor.execute(sql)
     trainer_events=cursor.fetchall()
 
-    sql="select * from trainees join users on users.id=trainees.id where trainees.trainerId=%s" % trainerid
+    sql="SELECT * FROM trainees JOIN users ON users.id=trainees.id WHERE trainees.trainerId=%s" % trainerid
     cursor.execute(sql)
     trainer_trainees=cursor.fetchall()
 
-    
     return render_template("trainerwindow.html",trainees=trainer_trainees,events=trainer_events)
-    
+
+
 # webServices
 @app.route("/ws/login", methods=["POST"])
 def login_trainee():
+    cursor = mysql.get_db().cursor()
     email = request.json["email"]
     password = request.json["password"]
-    cursor = mysql.get_db().cursor()
-    sql = "select id,name,surname,email,role from users where email='%s' and password=md5('%s')" % (email, password)
+
+    # Getting hashes
+    sql = "SELECT id, name, surname, email, role, hashArgon, hashSHA256 FROM users WHERE email='%s'" % (email)
     cursor.execute(sql)
     response = cursor.fetchone()  # if one value -> fetchone()
 
+    # Resolving hashes and generation pass ticket
     if response:
         role = response[4]
+        hashArgonFromDB = response[5]  # Getting Argon2 hash from database
+        hashSHA256FromDB = response[6]  # Getting SHA2/SHA256 hash from database
+        ticketArgon = argon2.check_password_hash(hashArgonFromDB, password)
+        ticketSHA256 = sha256_crypt.verify(password, hashSHA256FromDB)
+        ticket = ticketArgon and ticketSHA256
+    else:
+        ticket = False
+
+    if ticket:
         if role == 2:
             return jsonify(
                 response="OK",
@@ -315,13 +392,15 @@ def login_trainee():
 @app.route("/ws/tasks/<int:traineeId>", methods=["GET"])
 def get_tasks(traineeId):
     cursor = mysql.get_db().cursor()
-    sql = "select id,taskName,info,status,validuntil from tasks where traineeId=%d and  CURRENT_DATE+7 >validuntil" % traineeId
+    sql = "SELECT id,taskName,info,status,validuntil FROM tasks WHERE traineeId=%d AND  CURRENT_DATE+7 >validuntil" % traineeId
     cursor.execute(sql)
     tasks = cursor.fetchall()
 
     return jsonify(
         tasks=tasks
     )
+
+
 @app.route("/ws/events",methods=["GET"])
 def mock():
     cursor = mysql.get_db().cursor()
@@ -330,6 +409,7 @@ def mock():
     return jsonify(
         events=cursor.fetchall()
     )
+
 
 @app.route("/ws/events/<int:userid>", methods=["GET"])
 def get_events(userid):
@@ -348,6 +428,7 @@ FROM events  join joining on joining.eventid=events.id,rooms  WHERE startdate < 
         events=events
     )
 
+
 @app.route("/ws/task/<int:taskId>/complete", methods=["GET"])
 def complete_task(taskId):
     cursor = mysql.get_db().cursor()
@@ -355,6 +436,7 @@ def complete_task(taskId):
     cursor.execute(sql)
     mysql.get_db().commit()
     return "OK"
+
 
 @app.route("/ws/events/join/<int:eventId>/<int:traineeId>",methods=["GET"])
 def join_event(eventId,traineeId):
@@ -364,6 +446,7 @@ def join_event(eventId,traineeId):
     mysql.get_db().commit()
     return "joined"
 
+
 @app.route("/ws/events/leave/<int:eventId>/<int:traineeId>",methods=["GET"])
 def leave_event(eventId,traineeId):
     cursor=mysql.get_db().cursor()
@@ -372,6 +455,7 @@ def leave_event(eventId,traineeId):
     cursor.execute(sql)
     mysql.get_db().commit()
     return "left"
+
 
 @app.route("/ws/equipments", methods=["GET"])
 def get_equipments():
@@ -384,6 +468,7 @@ def get_equipments():
         equipments = equipments
     )
 
+
 @app.route("/ws/equipments/use/<int:equipmentId>/<int:traineeId>", methods=["GET"])
 def use_equipment(equipmentId, traineeId):
     cursor = mysql.get_db().cursor()
@@ -391,6 +476,7 @@ def use_equipment(equipmentId, traineeId):
     cursor.execute(sql)
     mysql.get_db().commit()
     return "OK"
+
 
 @app.route("/ws/equipments/release/<int:equipmentId>/<int:traineeId>", methods=["GET"])
 def release_equipment(equipmentId, traineeId):

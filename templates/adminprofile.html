@@ -3,29 +3,6 @@
 <head>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
   <meta name="viewport" content="width=device-width" />
-  <!--
-    <style>
-      body {
-        padding-top: 50px;
-      }
-    </style>
-  -->
-    <!-- JQUERY -->
-    <!--Legacy
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    -->
-    <!--Legacy
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-     -->
-       
-    <!-- Legacy
-    <link rel="stylesheet" href="static/admindashboard.css">
-    -->
-
-    <!-- Latest compiled and minified JavaScript -->
-    <!--Legacy
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    -->
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"  />
@@ -39,11 +16,6 @@
 
   <!--  Custom fixes -->
   <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/custom-fixes.css') }}" />
-
-  <!--  Material Kit CSS    -->
-  <!-- 
-  <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/material-kit.css') }}" />
-  -->
 
   <!--     Fonts and icons     -->
   <link rel="stylesheet" type='text/css' href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" >
@@ -68,15 +40,6 @@
   <!-- Material Dashboard javascript methods -->
   <script src="../static/js/material-dashboard.js"></script>
 
-
-  <script type="text/javascript">
-      $(document).ready(function(){
-
-      // Javascript method's body can be found in assets/js/demos.js
-          demo.initDashboardPageCharts();
-
-      });
-  </script>
   <title>Fitness Yeah!</title>
 
 <!-- Color declerations -->
@@ -84,7 +47,7 @@
   {% set human_color = "orange" %}
   {% set equipment_color = "purple" %}
   {% set room_color = "green" %}
-  {% set human_color = "orange" %}
+
 </head>
 
 <body link-color={{theme_color}}>
@@ -209,8 +172,8 @@
             <div id="heading" class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
               <h1 style="margin-top: 0;
                          margin-bottom: 5px; 
-                        position: relative;
-                          top: -22px;">
+                         position: relative;
+                         top: -22px;">
                 <small>Administrator Dashboard</small>
               </h1>
             </div>
@@ -517,14 +480,14 @@
                               <td>{{room[0]}}</td>
                               <td>{{room[1]}}</td>
                               <td>{{room[2]}}</td>
-
-                              <td><a rel="tooltip" title="Edit" class="table-action edit" href="javascript:void(0)" title="Edit">
-                  <i class="fa fa-edit"></i>
-              </a>
-              <a rel="tooltip" title="Remove" class="table-action remove" href="javascript:void()" title="Remove">
-                  <i class="fa fa-remove"></i>
-              </a>
-              <td>
+                              <td>
+                                <a rel="tooltip" title="Edit" class="table-action edit" href="javascript:void(0)" title="Edit">
+                                  <i class="fa fa-edit"></i>
+                                </a>
+                                <a rel="tooltip" title="Remove" class="table-action remove" href="javascript:void()" title="Remove">
+                                    <i class="fa fa-remove"></i>
+                                </a>
+                              <td>
 
                             </tr>
                             {%endfor%}
