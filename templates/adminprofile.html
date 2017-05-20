@@ -141,7 +141,7 @@
                 </ul>
               </li>
               <li>
-                <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                    <i class="material-icons">person</i>
                    <p class="hidden-lg hidden-md">{{admin[1]}} {{admin[2]}}</p>
                 </a>
@@ -344,10 +344,10 @@
                         <small>Lists</small></h2>
               </div>
               
-              <!-- Lists -->
+              <!-- Lists (tables)-->
               <div class="card card-nav-tabs">
                 <div class="card-header" data-background-color={{theme_color}}>
-                  <!-- Navigation between tables with tabs -->
+                  <!-- Navigation tab definition -->
                   <div class="nav-tabs-navigation">
                     <div class="nav-tabs-wrapper">
                         <ul class="nav nav-tabs" data-tabs="tabs">
@@ -374,7 +374,7 @@
                           </li>
                         </ul>
                     </div>
-                  </div>
+                  </div> <!-- End of natigation tab definition -->
                 </div>
 
                 <!-- Tab contents -->
@@ -385,7 +385,7 @@
                       <div class="fresh-table">
                         <div class="toolbar"><!-- Empty toolbar at the top of table, can be filled --></div>
                         <!-- Trainer table content -->
-                        <table id="fresh-table" class="table">
+                        <table id="fresh-table-trainer" class="table dummmy_fresh-table-script">
                           <thead>
                             <tr>
                               <th data-sortable="true">#</th>
@@ -432,15 +432,16 @@
                         </table> <!-- End of trainer table content -->
                       </div>
                     </div><!-- End of trainer table container -->
+                    
                     <!-- Equipment list table -->
                     <div class="tab-pane" id="equipmentList">
                       <div class="fresh-table">
                         <div class="toolbar"><!-- Empty toolbar at the top of table, can be filled --></div>
-                        <table id="fresh-table" class="table">
+                        <table id="fresh-table-equipment" class="table dummmy_fresh-table-script">
                           <thead>
                             <tr>
-                              <th>#</th>
-                              <th>Name</th>
+                              <th data-sortable="true">#</th>
+                              <th data-sortable="true">Name</th>
                               <th>Actions</th>
                             </tr>
                           </thead>
@@ -457,18 +458,19 @@
                           </tbody>
                         </table>
                       </div>
-                    </div>
+                    </div><!-- End of equipment table container -->
+
                     <!-- Room list table -->
                     <div class="tab-pane" id="roomList">
                       <div class="fresh-table">
                         <div class="toolbar"><!-- Empty toolbar at the top of table, can be filled --></div>
-                        <table id="fresh-table" class="table">
+                        <table id="fresh-table-room" class="table dummmy_fresh-table-script">
                           <thead>
                             <tr>
-                              <th>#</th>
-                              <th>Name</th>
-                              <th>Room Number</th>
-                              <th>Capacity</th>
+                              <th data-sortable="true">#</th>
+                              <th data-sortable="true">Name</th>
+                              <th data-sortable="true">Room Number</th>
+                              <th data-sortable="true">Capacity</th>
                               <th>Actions</th>
                             </tr>
                           </thead>
@@ -480,26 +482,18 @@
                               <td>{{room[0]}}</td>
                               <td>{{room[1]}}</td>
                               <td>{{room[2]}}</td>
-                              <td>
-                                <a rel="tooltip" title="Edit" class="table-action edit" href="javascript:void(0)" title="Edit">
-                                  <i class="fa fa-edit"></i>
-                                </a>
-                                <a rel="tooltip" title="Remove" class="table-action remove" href="javascript:void()" title="Remove">
-                                    <i class="fa fa-remove"></i>
-                                </a>
-                              <td>
-
+                              <td></td>
                             </tr>
                             {%endfor%}
 
                           </tbody>
                         </table>
                       </div>
-                    </div>
+                    </div><!-- End of room table container -->
                   </div>
-                </div>
+                </div><!-- End of tab contents -->
 
-              </div>
+              </div><!-- End of lists (tables) -->
 
             </div>
           </div>
@@ -521,7 +515,7 @@ This script brokes dropdown menus
   <script type="text/javascript" src="../static/js/bootstrap-table.js"></script>
 
   <script type="text/javascript">
-    var $table = $('#fresh-table'),
+    var $table = $('.dummmy_fresh-table-script'),
         $alertBtn = $('#alertBtn'),
         full_screen = false;
             
