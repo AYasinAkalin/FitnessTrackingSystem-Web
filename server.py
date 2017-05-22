@@ -424,7 +424,6 @@ def trainer_window(trainerid):
              WHERE users.id = '%s'""" % trainerid
     cursor.execute(sql)  # get trainer info
     trainer_info = cursor.fetchone()
-    print "url: ", trainer_info[4]
     session["trainer"] = trainer_info
     # END OF TRAINER DATA PULL
     return render_template("trainerwindow.html",
