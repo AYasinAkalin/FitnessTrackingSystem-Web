@@ -10,3 +10,4 @@ web.debug.config
 tmp/
 /tmp
 .idea/
+static/img/avatars
