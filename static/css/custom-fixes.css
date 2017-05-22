@@ -199,4 +199,16 @@
     color: inherit;
     background-color: var(--blue-color);
   }
+
+ /* Back button definition */
+  .btn-back{
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    z-index: 556;
+    padding: 50px 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 30px
+  }
   
