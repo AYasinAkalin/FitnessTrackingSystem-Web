@@ -380,12 +380,41 @@ def trainer_window(trainerid):
     # END OF EVENT DATA PULL
 
     # TRAINEE DATA PULL FROM DB
-    sql = """SELECT * 
+    sql = """SELECT name, surname, email, telephone
              FROM trainees
                 JOIN users ON users.id=trainees.id
              WHERE trainees.trainerId=%s""" % trainerid
     cursor.execute(sql)
     trainer_trainees = cursor.fetchall()
+    traineeList = []
+
+    ''' Removing private information from trainee '''
+    for trainee in trainer_trainees:
+        trainee = list(trainee)  # Convert trainee tuple to list
+        trainee[0] += " " + trainee[1]  # Combining first name and surname
+
+        # Hiding some characters of email address
+        try:
+            index = trainee[2].find("@")
+            if index <= 4:
+                trainee[2] = trainee[2][0:index] + "*****"
+            else:
+                trainee[2] = trainee[2][0:4] + "*****"
+        except Exception as e:
+            raise e
+
+        # Hiding some digits of phone number
+        try:
+            length = len(trainee[3])
+            if length > 4:
+                trainee[3] = "****" + trainee[3][(length - 4):length]
+            else:
+                trainee[3] = "****" + trainee[3]
+        except Exception as e:
+            raise e
+
+        del trainee[1]  # Removing surname field
+        traineeList.append(trainee)
     # END OF TRAINEE DATA PULL
 
     # TRAINER DATA PULL FROM DB
@@ -397,7 +426,7 @@ def trainer_window(trainerid):
     session["trainer"] = trainer_info
     # END OF TRAINER DATA PULL
     return render_template("trainerwindow.html",
-                            trainees=trainer_trainees,
+                            trainees=traineeList,
                             events=eventsList,
                             trainer=session["trainer"])
 
