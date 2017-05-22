@@ -418,11 +418,13 @@ def trainer_window(trainerid):
     # END OF TRAINEE DATA PULL
 
     # TRAINER DATA PULL FROM DB
-    sql = """SELECT name, surname, email, telephone
+    sql = """SELECT name, surname, email, telephone, large
              FROM users
+                JOIN profilePictures ON profilePictures.id=users.id
              WHERE users.id = '%s'""" % trainerid
     cursor.execute(sql)  # get trainer info
     trainer_info = cursor.fetchone()
+    print "url: ", trainer_info[4]
     session["trainer"] = trainer_info
     # END OF TRAINER DATA PULL
     return render_template("trainerwindow.html",
