@@ -7,6 +7,7 @@ import urllib2
 from flaskext.mysql import MySQL
 from flask_argon2 import Argon2  # Required for Argon2 Encryption
 from passlib.hash import sha256_crypt  # Required for SHA2/SHA256 Encryption
+from datetime import datetime
 
 ###### OBJECTS ######
 mysql = MySQL()
@@ -338,16 +339,97 @@ def logout():
 
 @app.route("/trainerwindow/<int:trainerid>",methods=["GET"])
 def trainer_window(trainerid):
-    cursor=mysql.get_db().cursor()
-    sql="SELECT * FROM `events` WHERE events.trainerid=%s AND events.startdate<CURRENT_DATE +7 AND events.startdate>CURRENT_DATE" % trainerid
+    cursor = mysql.get_db().cursor()
+    # EVENT DATA PULL FROM DB
+    sql = """SELECT * 
+             FROM `events`
+             WHERE events.trainerid='%s'
+                AND events.startdate<CURRENT_DATE + 7
+                AND events.startdate>CURRENT_DATE""" % trainerid
     cursor.execute(sql)
-    trainer_events=cursor.fetchall()
+    eventsTupleFromDB = cursor.fetchall()
+    eventsList = []
 
-    sql="SELECT * FROM trainees JOIN users ON users.id=trainees.id WHERE trainees.trainerId=%s" % trainerid
+    ''' Converting date and time info into simplified form
+    Adding room number to eventsTupleFromDB tuple '''
+    for event in eventsTupleFromDB:
+        eventName = str(event[3])  # Taking name of the event
+
+        startOfEvent = str(event[1])  # Taking and converting start date&time
+        endOfEvent = str(event[2])  # Taking and converting end date&time
+        i = endOfEvent.find(" ")
+        eventStartTime = startOfEvent[(i + 1):(i + 6)]  # Taking only the time
+        eventEndTime = endOfEvent[(i + 1):(i + 6)]  # Taking only the time
+        if startOfEvent > endOfEvent:
+            eventEndTime += " (next day)"  # Adding a message if event ends next day
+
+        startDate = startOfEvent[:i]  # Taking start date of event
+
+        # Sending information imported from tuple to a new tuple
+        newEvent = (eventName, startDate, eventStartTime, eventEndTime)
+
+        # Adding room number info to newEvent from database
+        roomID = event[5]
+        sql = """SELECT `number`
+                 FROM `rooms`
+                 WHERE rooms.id = '%s' """ % roomID
+        cursor.execute(sql)
+        newEvent += cursor.fetchone()  # Room number is added
+
+        eventsList.append(newEvent)  # Sending newEvent to eventsList
+    # END OF EVENT DATA PULL
+
+    # TRAINEE DATA PULL FROM DB
+    sql = """SELECT name, surname, email, telephone
+             FROM trainees
+                JOIN users ON users.id=trainees.id
+             WHERE trainees.trainerId=%s""" % trainerid
     cursor.execute(sql)
-    trainer_trainees=cursor.fetchall()
+    trainer_trainees = cursor.fetchall()
+    traineeList = []
 
-    return render_template("trainerwindow.html",trainees=trainer_trainees,events=trainer_events)
+    ''' Removing private information from trainee '''
+    for trainee in trainer_trainees:
+        trainee = list(trainee)  # Convert trainee tuple to list
+        trainee[0] += " " + trainee[1]  # Combining first name and surname
+
+        # Hiding some characters of email address
+        try:
+            index = trainee[2].find("@")
+            if index <= 4:
+                trainee[2] = trainee[2][0:index] + "*****"
+            else:
+                trainee[2] = trainee[2][0:4] + "*****"
+        except Exception as e:
+            raise e
+
+        # Hiding some digits of phone number
+        try:
+            length = len(trainee[3])
+            if length > 4:
+                trainee[3] = "****" + trainee[3][(length - 4):length]
+            else:
+                trainee[3] = "****" + trainee[3]
+        except Exception as e:
+            raise e
+
+        del trainee[1]  # Removing surname field
+        traineeList.append(trainee)
+    # END OF TRAINEE DATA PULL
+
+    # TRAINER DATA PULL FROM DB
+    sql = """SELECT name, surname, email, telephone, large
+             FROM users
+                JOIN profilePictures ON profilePictures.id=users.id
+             WHERE users.id = '%s'""" % trainerid
+    cursor.execute(sql)  # get trainer info
+    trainer_info = cursor.fetchone()
+    session["trainer"] = trainer_info
+    # END OF TRAINER DATA PULL
+    return render_template("trainerwindow.html",
+                            trainees=traineeList,
+                            events=eventsList,
+                            trainer=session["trainer"])
 
 
 # webServices
