@@ -1,65 +1,145 @@
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Trainer Window</h4>
+<div class="modal fade" id="trainerInfoPanel" role="dialog">
+<!-- Color declerations -->
+  {% set theme_color = "blue" %}
+  {% set human_color = "orange" %}
+  {% set equipment_color = "purple" %}
+  {% set room_color = "green" %}
+
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <!-- Modal header-->
+      <div class="modal-header">
+        <!-- Position and z-index are to put button in front of table, so it can be clicked -->
+        <!-- Padding on both sides are to increase clickable area -->
+        <button type="button" class="close" data-dismiss="modal"
+                style="color: #222; opacity: .5; font-size: 32px; 
+                       position: relative; z-index: 100;
+                       padding-right: 15px; padding-left: 15px">
+            &times;  
+        </button>
+        <h4 class="modal-title"></h4>
+      </div> <!-- End of modal header-->
+      <!-- Modal body-->
+      <div class="modal-body"
+           style="padding-bottom: 0px">
+        <div class="container-fluid"> <!-- Container 1 -->
+          <div class="row"> <!-- Row 1 -->
+
+            <div class="col-md-4">
+              <div class="card card-profile">
+                <div class="card-avatar">
+                  <a href="#">
+                    <img class="img" src="../static/img/faces/marc.jpg" />
+                  </a>
+                </div>
+
+                <div class="content">
+                  <h4 class="category text-gray">{{ trainer[0] }} {{ trainer[1] }}</h4>
+                  <!--<h4 class="card-title">{{ trainer[0] }} {{ trainer[1] }}</h4>-->
+                  <p class="card-content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut quam quis sapien hendrerit.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Table 2 column -->
+            <div class="col-md-8">
+              <div class="card"> <!-- Add 'card-plain' class for streamlined card view -->
+                <!-- Table 2 header -->
+                <div class="card-header" data-background-color={{room_color}}>
+                  <h4 class="title">
+                    Coming Events
+                  </h4>
+                  <p class="category">
+                    Events held by <strong>{{ trainer[0] }} {{ trainer[1] }}</strong> in the next 7 days
+                  </p>
+                </div>
+                <!-- Table 2 body -->
+                <div class="card-content table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th data-sortable="true">Event Name</th>
+                        <th data-sortable="true">Room</th>
+                        <th data-sortable="true">Date</th>
+                        <th data-sortable="true">Starts at</th>
+                        <th data-sortable="true">Ends at</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      {% for event in events %}
+                      <tr>
+                        <td>{{event[0]}}</td>
+                        <td>{{event[4]}}</td>
+                        <td>{{event[1]}}</td>
+                        <td>{{event[2]}}</td>
+                        <td>{{event[3]}}</td>
+                      </tr>
+                      {%endfor%}
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div> <!-- End of Table 2 column -->
+
+            <!-- Table 1 column -->
+            <div class="col-md-12">
+              <div class="card">
+                <!-- Table 1 header -->
+                <div class="card-header" data-background-color={{human_color}}>
+                  <h4 class="title">Trainees</h4>
+                  <p class="category">
+                     Trainees tracked by <strong>{{ trainer[0] }} {{ trainer[1] }}</strong>
+                  </p>
+                </div>
+                <!-- Table 1 body -->
+                <div class="card-content table-responsive">
+                  <table class="table">
+                    <thead class="text-primary">
+                      <tr>
+                        <th data-sortable="true">#</th>
+                        <th data-sortable="true">Name</th>
+                        <th data-sortable="true">Room Number</th>
+                        <th data-sortable="true">Capacity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      {% for trainee in trainees %}
+                      <tr>
+                        <td>{{loop.index}}</td>
+                        <td>{{trainee[0]}}</td>
+                        <td>{{trainee[1]}}</td>
+                        <td>{{trainee[2]}}</td>
+                      </tr>
+                      {%endfor%}
+
+                    </tbody>
+                  </table>
+                </div>
+              </div> 
+            </div> <!-- End of Table 1 column -->
+
+          </div> <!-- End of row 1 -->
+        </div> <!-- End of container 1 column -->
+      </div> <!-- End of modal body-->
+      <!-- Modal footer-->
+      <div class="modal-footer" 
+           style="padding-right: 24px; padding-left: 24px; padding-bottom: 25px">
+        <div class="container-fluid">
+          
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Close
+            </button>
+          
         </div>
-        <div class="modal-body">
-            <table id="fresh-table" class="table">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Name</th>
-                              <th>Room Number</th>
-                              <th>Capacity</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-
-                            {% for trainee in trainees %}
-                            <tr>
-                              <td>{{loop.index}}</td>
-                              <td>{{trainee[0]}}</td>
-                              <td>{{trainee[1]}}</td>
-                              <td>{{trainee[2]}}</td>
-                            </tr>
-                            {%endfor%}
-
-                          </tbody>
-                        </table>
-
-
-
-            <table id="fresh-table" class="table">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Name</th>
-                              <th>Room Number</th>
-                              <th>Capacity</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-
-                            {% for event in events %}
-                            <tr>
-                              <td>{{loop.index}}</td>
-                              <td>{{event[0]}}</td>
-                              <td>{{event[1]}}</td>
-                              <td>{{event[2]}}</td>
-                            </tr>
-                            {%endfor%}
-
-                          </tbody>
-                        </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-      
+      </div> <!-- End of modal footer-->
     </div>
   </div>
+</div>
+
+
