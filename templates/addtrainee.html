@@ -61,6 +61,14 @@
           </div>
       </a>
       -->
+      <!--  Go back to dashboard button  -->
+      <button type="button" class="btn btn-white btn-simple btn-fab btn-round btn-back"
+              data-toggle="tooltip" data-placement="bottom" title="Go back to dashboard">
+        <a href="/dashboard">
+          <i class="material-icons">arrow_back</i>
+        </a>
+      </button>
+
       <!--  'Logged in as...' sliding button  -->
       <div class="logged-in-as">
         <!-- Uses flask to take user name and surname as string, then take boths initials -->
@@ -352,5 +360,12 @@
   
   <!--  More information about jquery.validate here: http://jqueryvalidation.org/  -->
   <script src="../static/js/jquery.validate.min.js"></script>
+
+  <!-- Back button tooltip script -->
+  <!-- Disabled due to design choice 
+  <script type="text/javascript">
+    $('[data-toggle="tooltip"]').tooltip();  
+  </script>
+  -->
 
 </html>
