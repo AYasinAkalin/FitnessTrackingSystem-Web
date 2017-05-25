@@ -73,9 +73,9 @@ class FitnessTestCase(unittest.TestCase):
         rv=self.app.get("/")
         assert rv.status_code==200
 
-    def test_add_trainer(self):
+    def test_add_user(self):
         self.test_admin_login()
-        rv = self.app.post("/addtrainer", data=dict(
+        rv = self.app.post("/adduser", data=dict(
             firstname="testtrainer",
             lastname="testsurname",
             email="testmail@mail",
@@ -84,7 +84,7 @@ class FitnessTestCase(unittest.TestCase):
         ), follow_redirects=True)
         assert "dashboard" in rv.data
 
-        rv=self.app.get("/addtrainer")
+        rv=self.app.get("/adduser")
         assert rv.status_code==200
 
     def test_add_trainee(self):

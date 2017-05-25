@@ -131,10 +131,10 @@ def dashboard():
         return "You are a trainee. Please use mobile."
 
 
-@app.route("/addtrainer", methods=["GET", "POST"])
-def addtrainer():
+@app.route("/adduser", methods=["GET", "POST"])
+def adduser():
     if request.method == 'GET':
-        return render_template("addtrainer.html", user=session["user"])
+        return render_template("adduser.html", user=session["user"])
     else:
         # isAdmin = request.form["admin-checkbox"]
         # isTrainer = request.form["trainer-checkbox"]
