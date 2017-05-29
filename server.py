@@ -278,14 +278,10 @@ def add_event():
     if request.method == "GET":
         return render_template("addevent.html", rooms=session["rooms"], user=session["user"])
     else:
-        year = request.form["year"]
-        month = request.form["month"]
-        day = request.form["day"]
-        starttime = request.form["starttime"]
-        endtime = request.form["endtime"]
+        startdate = request.form["starttime"]
+        enddate = request.form["endtime"]
         name = request.form["name"]
-        startdate = "%s-%s-%s %s" % (year, month, day, starttime)
-        enddate = "%s-%s-%s %s" % (year, month, day, endtime)
+
         cursor = mysql.get_db().cursor()
         room_id = request.form["room"]  # [0] <<- This one makes form to take only one character
         trainer_id = session["user"][0]
