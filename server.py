@@ -496,13 +496,13 @@ def mock():
 @app.route("/ws/events/<int:userid>", methods=["GET"])
 def get_events(userid):
     cursor = mysql.get_db().cursor()
-    sql = """select events.id as eventid,startdate,enddate,events.name,
-(case when size>COUNT(joining.traineeid) then 0
-when size<=COUNT(joining.traineeid) then 1
+    sql = """select events.id as eid,startdate,enddate,events.name,
+(case when size>(select count(*) from joining where joining.eventid=eid) then 0
+when size<=(SELECT COUNT(*) from joining where joining.eventid=eid) then 1
 end) as isFull,
 
-(SELECT COUNT(*) from joining,events where events.id=eventid and joining.traineeid=%s) as joins
-FROM events  join joining on joining.eventid=events.id,rooms  WHERE startdate < CURRENT_DATE+7 and enddate> CURRENT_DATE and rooms.id=events.roomid""" % userid
+(SELECT COUNT(*) from joining where joining.eventid=eid and joining.traineeid=%s) as joins
+FROM events ,rooms  WHERE startdate > CURRENT_DATE and enddate< DATE_ADD(CURRENT_DATE,INTERVAL 7 DAY) and rooms.id=events.roomid""" % userid
     cursor.execute(sql)
     events = cursor.fetchall()
 
