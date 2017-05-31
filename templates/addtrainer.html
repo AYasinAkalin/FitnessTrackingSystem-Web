@@ -1,331 +1,339 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Fitness Yeah!</title>
+    <title>Fitness Yeah!</title>
 
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-  <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
 
-  <!-- Favicons 
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='img/apple-icon.png') }}" />
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}" />
-  -->
-  
-  <!-- Style Files -->
+    <!-- Favicons
+      <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='img/apple-icon.png') }}" />
+      <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}" />
+    -->
+    <!-- Style Files -->
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"  />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
 
     <!--  Material Wizard CSS -->
-    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/material-bootstrap-wizard.css') }}" />
-    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/material-bootstrap-wizard.css') }}" />
+
     <!--  Material Wizard Custom Additions CSS -->
-    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/material-bootstrap-wizard-custom-additions.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/material-bootstrap-wizard-custom-additions.css') }}" />
 
     <!--  Custom fixes -->
-    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/custom-fixes.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom-fixes.css') }}" />
 
-  <!-- Fonts and icons -->
-    <link rel="stylesheet" type='text/css' href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" >
+    <!-- Fonts and icons -->
+    <link rel="stylesheet" type='text/css' href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
     <link rel="stylesheet" type='text/css' href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons'>
     <link rel="stylesheet" type='text/css' href='http://fonts.googleapis.com/css?family=Roboto:400,700,300'>
     <link rel="stylesheet" type='text/css' href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-  <!-- Color declerations -->
+    <script type="text/javascript" src="../static/js/jquery-2.2.4.min.js"></script>
+    <!-- Color declerations -->
     {% set theme_color = "blue" %}
     {% set human_color = "orange" %}
     {% set equipment_color = "purple" %}
     {% set room_color = "green" %}
     {% set human_color = "orange" %}
-  
+
 </head>
 <body link-color={{theme_color}}>
-  
-  <div class="wrapper">
-    <!-- 
-    Activate to add background image. Also remember to activate </div> tag at the bottom of the code
-    <div class="image-container set-full-height" style="background-image: url('{{ url_for('static', filename='IMAGE_FOLDER/FILENAME') }}'); background-size: cover; background-position: top center;"> 
-    -->
-      <!-- Branding -->
-      <!-- 
-      <a href="#">
-           <div class="logo-container">
-              <div class="logo">
-                  <img src="{{ url_for('static', filename='img/logo.png') }}">
-              </div>
-              <div class="brand">
-                  <!-- TODO: Center following text vertically to logo at left hand side -->
-                  <!-- 
-                  G.SEVEN
-              </div>
-          </div>
-      </a>
-      -->
-      <!--  Go back to dashboard button  -->
-      <button type="button" class="btn btn-white btn-simple btn-fab btn-round btn-back"
-              data-toggle="tooltip" data-placement="bottom" title="Go back to dashboard">
-        <a href="/dashboard">
-          <i class="material-icons">arrow_back</i>
+
+    <div class="wrapper">
+        <!--
+        Activate to add background image. Also remember to activate </div> tag at the bottom of the code
+        <div class="image-container set-full-height" style="background-image: url('{{ url_for('static', filename='IMAGE_FOLDER/FILENAME') }}'); background-size: cover; background-position: top center;">
+        -->
+        <!-- Branding -->
+        <!--
+        <a href="#">
+             <div class="logo-container">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}">
+                </div>
+                <div class="brand">
+                    <!-- TODO: Center following text vertically to logo at left hand side -->
+        <!--
+                    G.SEVEN
+                </div>
+            </div>
         </a>
-      </button>
+        -->
+        <!--  Go back to dashboard button  -->
+        <button type="button" class="btn btn-white btn-simple btn-fab btn-round btn-back"
+                data-toggle="tooltip" data-placement="bottom" title="Go back to dashboard">
+            <a href="/dashboard">
+                <i class="material-icons">arrow_back</i>
+            </a>
+        </button>
 
-      <!--  'Logged in as...' sliding button  -->
-      <div class="logged-in-as">
-        <!-- Uses flask to take user name and surname as string, then take boths initials -->
-        <div class="user-initials">{{user[1][0:1]}}{{user[2][0:1]}}</div>
-        <div class="logged-in">Logged in as <strong>{{user[1]}} {{user[2]}}</strong></div>
-      </div>
+        <!--  'Logged in as...' sliding button  -->
+        <div class="logged-in-as">
+            <!-- Uses flask to take user name and surname as string, then take boths initials -->
+            <div class="user-initials">{{user[1][0:1]}}{{user[2][0:1]}}</div>
+            <div class="logged-in">Logged in as <strong>{{user[1]}} {{user[2]}}</strong></div>
+        </div>
 
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-10 col-xs-offset-1
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-10 col-xs-offset-1
                       col-sm-8 col-sm-offset-2
                       col-md-8 col-md-offset-2
                       col-lg-8 col-lg-offset-2">
-            <!-- Wizard container -->
-            <div class="wizard-container">
-              <div class="card wizard-card" data-color={{theme_color}} id="wizardProfile">
-                <form action="/addtrainer" method="post" data-toggle="validator" role="form">
-                  <!-- Header -->
-                  <div class="wizard-header">
-                    <h3 class="wizard-title">
-                      Add Trainer
-                    </h3>
-                    <h5><small>You can change its role below</small></h5>
-                  </div>
+                    <!-- Wizard container -->
+                    <div class="wizard-container">
+                        <div class="card wizard-card" data-color={{theme_color}} id="wizardProfile">
+                            <form action="/addtrainer" method="post" data-toggle="validator" role="form">
+                                <!-- Header -->
+                                <div class="wizard-header">
+                                    <h3 class="wizard-title">
+                                        Add Trainer
+                                    </h3>
+                                    <h5><small>You can change its role below</small></h5>
+                                </div>
 
-                  <!-- Navigation -->
-                  <div class="wizard-navigation">
-                    <ul>
-                      <!-- Disabled due to team mates demand
-                      <li><a href="#role" data-toggle="tab">Account Role</a></li>
-                      -->
-                      <li><a href="#info" data-toggle="tab">Basic Info</a></li>
-                      <li><a href="#password" data-toggle="tab">Password</a></li>
-                    </ul>
-                  </div>
+                                <!-- Navigation -->
+                                <div class="wizard-navigation">
+                                    <ul>
+                                        <!-- Disabled due to team mates demand
+                                        <li><a href="#role" data-toggle="tab">Account Role</a></li>
+                                        -->
+                                        <li><a href="#info" data-toggle="tab">Basic Info</a></li>
+                                        <li><a href="#password" data-toggle="tab">Password</a></li>
+                                    </ul>
+                                </div>
 
-                  <!-- Form contents by tab -->
-                  <div class="tab-content">
-                    <!-- Account type tab -->
-                    <div class="tab-pane" id="role">
-                      <h4 class="info-text"> Select roles for person creating 
-                      <br><small>You can select multiple roles</small></h4>
-                      <div class="row">
-                        <div class="col-sm-10 col-sm-offset-1">
-                          
-                          <!-- admin selection -->
-                          <div class="col-sm-4">
-                            <div class="choice" data-toggle="wizard-checkbox"  rel="tooltip" 
-                                 title="Administrators can add-remove users, equipments, rooms, and look on event time table.">
-                              <!-- TODO: Change 'value="2"' to 1 after changes to DB table are made -->
-                              <!-- 'Disabled' attribute here disables this checkboxes behaviour in background -->
-                              <input type="checkbox" name="admin-checkbox" value="2" disabled> 
-                              
-                              <!-- 'Disabled' here make color changes happens -->
-                              <div class="icon" data-color={{theme_color}} disabled> 
-                                  <i class="material-icons">star</i>
-                              </div>
-                              <h6>Administrator</h6>
-                            </div>
-                          </div> <!-- end of admin selection -->
+                                <!-- Form contents by tab -->
+                                <div class="tab-content">
+                                    <!-- Account type tab -->
+                                    <div class="tab-pane" id="role">
+                                        <h4 class="info-text">
+                                            Select roles for person creating
+                                            <br><small>You can select multiple roles</small>
+                                        </h4>
+                                        <div class="row">
+                                            <div class="col-sm-10 col-sm-offset-1">
 
-                          <!-- trainer selection -->
-                          <div class="col-sm-4">
-                            <div class="choice" data-toggle="wizard-checkbox" rel="tooltip"
-                                 title="Trainers can add-remove trainees, events, tasks for an individual trainee.">
-                              <input type="checkbox" name="trainer-checkbox" value="1">
-                              <div class="icon" data-color={{theme_color}}>
-                                  <i class="material-icons">supervisor_account</i>
-                              </div>
-                              <h6>Trainer</h6>
-                            </div>
-                          </div> <!-- end of trainer selection -->
+                                                <!-- admin selection -->
+                                                <div class="col-sm-4">
+                                                    <div class="choice" data-toggle="wizard-checkbox" rel="tooltip"
+                                                         title="Administrators can add-remove users, equipments, rooms, and look on event time table.">
+                                                        <!-- TODO: Change 'value="2"' to 1 after changes to DB table are made -->
+                                                        <!-- 'Disabled' attribute here disables this checkboxes behaviour in background -->
+                                                        <input type="checkbox" name="admin-checkbox" value="2" disabled>
 
-                          <!-- trainee selection -->
-                          <div class="col-sm-4">
-                            <div class="choice" data-toggle="wizard-checkbox" rel="tooltip"
-                                 title="Trainees can't do shit. They are losers. They don't even have access to website.">
-                              <!-- 'Disabled' attribute here disables this checkboxes behaviour in background -->
-                              <input type="checkbox" name="trainee-checkbox" value="1" disabled>
-                              
-                              <!-- 'Disabled' here make color changes happens -->
-                              <div class="icon" data-color={{theme_color}} disabled>
-                                  <i class="material-icons">person</i>
-                              </div>
-                              <h6>Trainee</h6>
-                            </div>
-                          </div> <!-- end of trainee selection -->
+                                                        <!-- 'Disabled' here make color changes happens -->
+                                                        <div class="icon" data-color={{theme_color}} disabled>
+                                                            <i class="material-icons">star</i>
+                                                        </div>
+                                                        <h6>Administrator</h6>
+                                                    </div>
+                                                </div> <!-- end of admin selection -->
+                                                <!-- trainer selection -->
+                                                <div class="col-sm-4">
+                                                    <div class="choice" data-toggle="wizard-checkbox" rel="tooltip"
+                                                         title="Trainers can add-remove trainees, events, tasks for an individual trainee.">
+                                                        <input type="checkbox" name="trainer-checkbox" value="1">
+                                                        <div class="icon" data-color={{theme_color}}>
+                                                            <i class="material-icons">supervisor_account</i>
+                                                        </div>
+                                                        <h6>Trainer</h6>
+                                                    </div>
+                                                </div> <!-- end of trainer selection -->
+                                                <!-- trainee selection -->
+                                                <div class="col-sm-4">
+                                                    <div class="choice" data-toggle="wizard-checkbox" rel="tooltip"
+                                                         title="Trainees can't do shit. They are losers. They don't even have access to website.">
+                                                        <!-- 'Disabled' attribute here disables this checkboxes behaviour in background -->
+                                                        <input type="checkbox" name="trainee-checkbox" value="1" disabled>
 
+                                                        <!-- 'Disabled' here make color changes happens -->
+                                                        <div class="icon" data-color={{theme_color}} disabled>
+                                                            <i class="material-icons">person</i>
+                                                        </div>
+                                                        <h6>Trainee</h6>
+                                                    </div>
+                                                </div> <!-- end of trainee selection -->
+
+                                            </div>
+                                        </div>
+                                    </div> <!-- End of account type tab -->
+                                    <!-- Basic info tab -->
+                                    <div class="tab-pane" id="info">
+                                        <div class="row">
+                                            <!-- Info text
+                                            <h4 class="info-text"> Let's start with the basic information (with validation)</h4>
+                                            -->
+                                            <!-- Add profile picture
+                                            <div class="col-sm-4 col-sm-offset-4">
+                                              <div class="picture-container">
+                                                <div class="picture">
+                                                  <img src="assets/img/default-avatar.png" class="picture-src" id="wizardPicturePreview" title=""/>
+                                                  <input type="file" id="wizard-picture">
+                                                </div>
+                                                <h6>Choose Picture</h6>
+                                              </div>
+                                            </div>
+                                            -->
+                                            <div class="col-sm-10 col-sm-offset-1">
+
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="material-icons">hdr_weak</i>
+                                                    </span>
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">First Name <small>(required)</small></label>
+                                                        <!-- form control only works when 'name="firstname"'. Fix this -->
+                                                        <input name="firstname" type="text" class="form-control" autofocus required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="material-icons">hdr_strong</i>
+                                                    </span>
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">Last Name <small>(required)</small></label>
+                                                        <!-- form control only works when 'name="lastname"'. Fix this -->
+                                                        <input name="lastname" type="text" class="form-control" required="true ">
+                                                    </div>
+                                                </div>
+
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="material-icons">email</i>
+                                                    </span>
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">E-Mail <small>(required)</small></label>
+                                                        <input name="email" type="email" class="form-control" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="material-icons">phone</i>
+                                                    </span>
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">Telephone number <small>(required)</small></label>
+                                                        <!-- Add " pattern="^\d{4}-\d{3}-\d{4}$" " if needed. -->
+                                                        <input name="telephone" type="tel" class="form-control" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> <!-- End of info row -->
+                                    </div> <!-- End of basic info tab -->
+                                    <!-- Password generation tab -->
+                                    <div class="tab-pane" id="password">
+                                        <div class="row">
+                                            <div class="col-sm-10 col-sm-offset-1">
+                                                <label for="id_password1" class="control-label"></label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="material-icons">lock_outline</i>
+                                                    </span>
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">Password <small>(required)</small> </label>
+                                                        <input id="id_password1"
+                                                               name="password1"
+                                                               type="password"
+                                                               class="form-control"
+                                                               required>
+                                                        <div class="help-block with-errors">Minimum 3 characters</div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="material-icons">lock_outline</i>
+                                                    </span>
+                                                    <div class="form-group label-floating">
+                                                        <label class="control-label">Confirm password <small>(required)</small></label>
+                                                        <input id="id_password2"
+                                                               name="password"
+                                                               type="password"
+                                                               class="form-control"
+                                                               required>
+                                                        <div class="help-block with-errors"></div>
+                                                    </div>
+                                                </div>
+                                                <script type="text/javascript">
+                                                    $("#id_password2").on("input", function (e) {
+
+                                                        if ($("#id_password2").val() === $("#id_password1").val() && $("#id_password2").val().length>2)
+                                                        {
+                                                            $("#finish").removeClass("disabled")
+                                                       
+                                                        }
+                                                        else
+                                                        {
+                                                            $("#finish").addClass("disabled")
+                                                        }
+                                                    })
+                                                </script>
+
+                                                <!-- TODO: Align checkbox with password input forms above -->
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="force-change-pass" value="1">
+                                                        Force user to change password at first login.
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div> <!-- End of password generation tab -->
+                                </div>
+
+                                <!-- Wizard  footer: contains navigation buttons -->
+                                <div class="wizard-footer">
+                                    <!-- Buttons on right -->
+                                    <div class="pull-right">
+                                        <input type='button' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Next' />
+                                        <input type='submit' class='btn btn-finish btn-fill btn-success btn-wd disabled'id="finish" name='Finish' value='Finish' />
+                                    </div>
+
+                                    <!-- Buttons on left -->
+                                    <div class="pull-left">
+                                        <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                </div> <!-- End of wizard footer -->
+
+                            </form>
                         </div>
-                      </div>
-                    </div> <!-- End of account type tab -->                      
+                    </div> <!-- end wizard container -->
+                </div> <!-- end column size & offset div tag -->
+            </div><!-- end row -->
 
-                    <!-- Basic info tab -->
-                    <div class="tab-pane" id="info">
-                      <div class="row">
-                        <!-- Info text 
-                        <h4 class="info-text"> Let's start with the basic information (with validation)</h4>
-                        -->
-                        <!-- Add profile picture
-                        <div class="col-sm-4 col-sm-offset-4">
-                          <div class="picture-container">
-                            <div class="picture">
-                              <img src="assets/img/default-avatar.png" class="picture-src" id="wizardPicturePreview" title=""/>
-                              <input type="file" id="wizard-picture">
-                            </div>
-                            <h6>Choose Picture</h6>
-                          </div>
-                        </div>
-                        -->
-                        <div class="col-sm-10 col-sm-offset-1">
-                          
-                          <div class="input-group">
-                            <span class="input-group-addon">
-                              <i class="material-icons">hdr_weak</i>
-                            </span>
-                            <div class="form-group label-floating">
-                              <label class="control-label">First Name <small>(required)</small></label>
-                              <!-- form control only works when 'name="firstname"'. Fix this -->
-                              <input name="firstname" type="text" class="form-control" autofocus required>
-                            </div>
-                          </div>
-
-                          <div class="input-group">
-                            <span class="input-group-addon">
-                              <i class="material-icons">hdr_strong</i>
-                            </span>
-                            <div class="form-group label-floating">
-                              <label class="control-label">Last Name <small>(required)</small></label>
-                              <!-- form control only works when 'name="lastname"'. Fix this -->
-                              <input name="lastname" type="text" class="form-control" required="true ">
-                            </div>
-                          </div>
-
-                          <div class="input-group">
-                            <span class="input-group-addon">
-                              <i class="material-icons">email</i>
-                            </span>
-                            <div class="form-group label-floating">
-                              <label class="control-label">E-Mail <small>(required)</small></label>
-                              <input name="email" type="email" class="form-control" required>
-                            </div>
-                          </div>
-
-                          <div class="input-group">
-                            <span class="input-group-addon">
-                              <i class="material-icons">phone</i>
-                            </span>
-                            <div class="form-group label-floating">
-                              <label class="control-label">Telephone number <small>(required)</small></label>
-                              <!-- Add " pattern="^\d{4}-\d{3}-\d{4}$" " if needed. -->
-                              <input name="telephone" type="tel" class="form-control" required>
-                            </div>
-                          </div>
-                        </div>
-                      </div> <!-- End of info row -->
-                    </div> <!-- End of basic info tab -->
-
-                    <!-- Password generation tab -->
-                    <div class="tab-pane" id="password">
-                      <div class="row">
-                        <div class="col-sm-10 col-sm-offset-1">
-                        <label for="id_password1" class="control-label"></label>  
-                          <div class="input-group">
-                            <span class="input-group-addon">
-                              <i class="material-icons">lock_outline</i>
-                            </span>                                
-                            <div class="form-group label-floating">
-                              <label class="control-label">Password <small>(required)</small> </label>
-                              <input id="id_password1" 
-                                     name="password1" 
-                                     type="password"
-                                     data-minlength="3" 
-                                     class="form-control" 
-                                     required>
-                                     <div class="help-block with-errors">Minimum 3 characters</div>
-                            </div>
-                          </div>
-
-
-                          <div class="input-group">
-                            <span class="input-group-addon">
-                              <i class="material-icons">lock_outline</i>
-                            </span>                                
-                            <div class="form-group label-floating">
-                                <label class="control-label">Confirm password <small>(required)</small></label>
-                                <input id="id_password2" 
-                                       name="password" 
-                                       type="password" 
-                                       class="form-control"
-                                       data-match="#id_password1" 
-                                       data-match-error="Whoops, these don't match" 
-                                       required>
-                                       <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-
-                          <!-- TODO: Align checkbox with password input forms above -->
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox" name="force-change-pass" value="1">
-                              Force user to change password at first login.
-                            </label>
-                          </div>
-
-                        </div>
-                      </div>
-
-                    </div> <!-- End of password generation tab -->
-                  </div>
-                  
-                  <!-- Wizard  footer: contains navigation buttons -->
-                  <div class="wizard-footer">
-                    <!-- Buttons on right -->
-                    <div class="pull-right">
-                        <input type='button' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Next' />
-                        <input type='submit' class='btn btn-finish btn-fill btn-success btn-wd' name='Finish' value='Finish' />
-                    </div>
-
-                    <!-- Buttons on left -->
-                    <div class="pull-left">
-                        <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
-                    </div>
-
-                    <div class="clearfix"></div>
-                  </div> <!-- End of wizard footer -->
-
-                </form>
-              </div>
-            </div> <!-- end wizard container -->
-          </div> <!-- end column size & offset div tag -->
-        </div><!-- end row -->
-
-      </div> <!-- End of one and only container -->
-    <!-- Disable due to no background
+        </div> <!-- End of one and only container -->
+        <!-- Disable due to no background
+        </div>
+        -->
     </div>
-    -->
-  </div>
-         
+
 </body>
 
 <!--   Core JS Files   -->
-  <script type="text/javascript" src="../static/js/jquery-2.2.4.min.js"></script>
-  <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="../static/js/jquery.bootstrap.js" ></script>
 
-  <!--  Plugin for the Wizard -->
-  <script src="../static/js/material-bootstrap-wizard.js"></script>
-  
-  <!--  More information about jquery.validate here: http://jqueryvalidation.org/  -->
-  <script src="../static/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.bootstrap.js"></script>
 
-  <!-- Back button tooltip script -->
-  <!-- Disabled due to design choice 
-  <script type="text/javascript">
-    $('[data-toggle="tooltip"]').tooltip();  
-  </script>
-  -->
+<!--  Plugin for the Wizard -->
+<script src="../static/js/material-bootstrap-wizard.js"></script>
+
+<!--  More information about jquery.validate here: http://jqueryvalidation.org/  -->
+<script src="../static/js/jquery.validate.min.js"></script>
+
+<!-- Back button tooltip script -->
+<!-- Disabled due to design choice
+<script type="text/javascript">
+  $('[data-toggle="tooltip"]').tooltip();
+</script>
+-->
 
 </html>
