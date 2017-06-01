@@ -27,6 +27,9 @@
   <!--  Material Wizard Custom Additions CSS -->
   <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/material-bootstrap-wizard-custom-additions.css') }}" />
 
+  <!--  Date picker CSS -->
+  <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/datepicker.css') }}" />
+
   <!--  Custom fixes -->
   <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/custom-fixes.css') }}" />
 
@@ -162,8 +165,10 @@
                   <i class="material-icons">event</i>
                 </span>
                 <div class="form-group label-floating">
-                  <label class="control-label">Due date <small>(YYYY/MM/DD)</small></label>
-                  <input name="validuntil" type="date" class="form-control" ">
+                  <label class="control-label">Due date <small></small></label>
+                  <!-- markup -->
+                  <input name="validuntil" id="datepicker" class="datepicker form-control" type="date" />
+                  <!--<input name="validuntil***" id="datepicker" class="datepicker form-control" type="date" value="2017/05/25"/>-->
                 </div>
               </div>
 
@@ -218,11 +223,22 @@
 </body>
 
 <!--   Core JS Files   -->
-<!-- Disabled due to design choice 
 <script type="text/javascript" src="../static/js/jquery-2.2.4.min.js"></script>
 <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../static/js/jquery.bootstrap.js" ></script>
--->
+
+<!-- Data picker -->
+  <script type="text/javascript" src="../static/js/bootstrap-datepicker.js" ></script>
+  <script type="text/javascript">
+    $('#datepicker').datepicker({
+      format: 'yyyy/mm/dd',
+      weekStart: 1,
+      autoclose: true,
+      todayBtn: true,
+      todayHighlight: true
+
+    });
+  </script>
 
 <!--  Plugin for the Wizard -->
 <!-- Disabled due to design choice 
@@ -231,9 +247,7 @@
 
 
 <!--  More information about jquery.validate here: http://jqueryvalidation.org/  -->
-<!-- Disabled due to design choice 
 <script src="../static/js/jquery.validate.min.js"></script>
--->
 
 <!-- Back button tooltip script -->
   <!-- Disabled due to design choice 
