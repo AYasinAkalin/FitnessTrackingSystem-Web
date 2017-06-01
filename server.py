@@ -232,6 +232,8 @@ def addequipment():
 
         cursor = mysql.get_db().cursor()
 
+        message = "Error occurred."
+        category = "error"
         try:
             cursor.execute(sql)
             mysql.get_db().commit()
@@ -240,8 +242,6 @@ def addequipment():
             category = "success"
         except Exception as e:
             raise e
-            message = "Error occurred."
-            category = "error"
         finally:
             flash(message, category)
             return redirect("/dashboard")
@@ -258,6 +258,8 @@ def addroom():
         sql = "INSERT INTO rooms(name,number,size) VALUES('%s','%s','%s')" % (name, number, size)
         cursor = mysql.get_db().cursor()
 
+        message = "Error occurred."
+        category = "error"
         try:
             cursor.execute(sql)
             mysql.get_db().commit()
@@ -265,8 +267,6 @@ def addroom():
             category = "success"
         except Exception as e:
             raise e
-            message = "Error occurred."
-            category = "error"
         finally:
             flash(message, category)
             return redirect("/dashboard")
@@ -287,6 +287,8 @@ def add_event():
         trainer_id = session["user"][0]
         sql = "INSERT INTO events(startdate, enddate, name, trainerid, roomid) VALUES ('%s', '%s', '%s', '%s', '%s')" % (startdate, enddate, name, trainer_id, room_id)
 
+        message = "Error occurred."
+        category = "error"
         try:
             cursor.execute(sql)
             mysql.get_db().commit()
@@ -294,8 +296,6 @@ def add_event():
             category = "success"
         except Exception as e:
             raise e
-            message = "Error occurred."
-            category = "error"
         finally:
             flash(message, category)
             return redirect("/dashboard")
