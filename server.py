@@ -534,6 +534,28 @@ def leave_event(eventId,traineeId):
     mysql.get_db().commit()
     return "left"
 
+@app.route("/ws/messages/gettrainerid/<int:traineeid>", methods=["GET"])
+def get_trainerid(traineeid):
+    cursor = mysql.get_db().cursor()
+    sql = "SELECT trainerId FROM trainees WHERE id =%s"%(traineeid)
+    cursor.execute(sql)
+
+    gettrainerid = cursor.fetchall()
+    return jsonify(
+        gettrainerid = gettrainerid
+    )
+
+@app.route("/ws/messages/send",methods=["POST"])
+def send_message():
+    cursor=mysql.get_db().cursor()
+    idd = request.json["id"]
+    msg = request.json["msg"]
+    trainerId = request.json["trainerid"]
+    sql="Insert into messages(trainerid,traineeid,msg) values(%s,%s,'%s')"%(trainerId,idd,msg)
+
+    cursor.execute(sql)
+    mysql.get_db().commit()
+    return "sent"
 
 @app.route("/ws/equipments", methods=["GET"])
 def get_equipments():
