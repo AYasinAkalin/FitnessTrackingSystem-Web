@@ -126,7 +126,10 @@ def dashboard():
         rooms = cursor.fetchall()
         session["rooms"] = rooms
 
-        return render_template("trainerprofile.html", trainer=session["user"], trainees=session["trainees"], rooms=session["rooms"])
+        cursor.execute("select users.name,users.surname,messages.msg from messages join users on users.id=messages.traineeid where messages.trainerid=%s"%session["user"][0])
+        messages=cursor.fetchall()
+        session["messages"]=messages
+        return render_template("trainerprofile.html", trainer=session["user"], messages=session["messages"],trainees=session["trainees"], rooms=session["rooms"])
     else:  # user role is trainee
         return "You are a trainee. Please use mobile."
 
