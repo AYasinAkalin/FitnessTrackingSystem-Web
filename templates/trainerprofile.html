@@ -345,7 +345,6 @@
                               <th data-sortable="true">Weight</th>
                               <th data-sortable="true">Height</th>
                               <th data-sortable="false">Additional info</th>
-                              <th data-field="actions" data-formatter="operateFormatter" data-events="operateEvents">Actions</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -381,7 +380,6 @@
                               <th data-sortable="true">Room</th>
                               <th data-sortable="true">Start Time</th>
                               <th data-sortable="true">End Time</th>
-                              <th data-field="actions" data-formatter="operateFormatter" data-events="operateEvents">Actions</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -459,45 +457,10 @@
                   detailClose: 'fa fa-minus-circle'
               }
           });
-          
-                      
-          
           $(window).resize(function () {
               $table.bootstrapTable('resetView');
-          });
-  
-          
-          window.operateEvents = {
-              'click .edit': function (e, value, row, index) {
-                  alert('You click edit icon, row: ' + JSON.stringify(row));
-                  console.log(value, row, index);    
-              },
-              'click .remove': function (e, value, row, index) {
-                  $table.bootstrapTable('remove', {
-                      field: 'id',
-                      values: [row.id]
-                  });
-          
-              }
-          };
-          
-          $alertBtn.click(function () {
-              alert("You pressed on Alert");
-          });
-          
+          }); 
       });
-          
-  
-      function operateFormatter(value, row, index) {
-          return [
-              '<a rel="tooltip" title="Edit" class="table-action edit" href="javascript:void(0)" title="Edit">',
-                  '<i class="fa fa-edit"></i>',
-              '</a>',
-              '<a rel="tooltip" title="Remove" class="table-action remove" href="javascript:void(0)" title="Remove">',
-                  '<i class="fa fa-remove"></i>',
-              '</a>'
-          ].join('');
-      }
   </script>
 
 </html>
