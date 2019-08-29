@@ -1,7 +1,7 @@
 appdirs==1.4.3
 click==6.7
 coverage==4.3.4
-Flask==1.0
+Flask==1.1.1
 Flask-MySQL==1.4.0
 itsdangerous==0.24
 Jinja2==2.9.6
